@@ -12,7 +12,7 @@ import { invalidateClienteCache } from '../lib/clienteSupabase';
 import { clearSupabaseClientCache as clearFormularioSupabaseCache } from '../formularios/utils/supabaseClient';
 import { syncAdminCredentialsToOwner } from '../lib/masterSyncService';
 import { invalidateLeadsCache } from './leadsPipelineRoutes';
-import { clearLocalContractsCache } from './assinatura';
+// import { clearLocalContractsCache } from './assinatura'; // REMOVED
 import { supabaseOwner, SUPABASE_CONFIGURED } from '../config/supabaseOwner';
 import { invalidateCredentialsCache } from '../lib/publicCache';
 import fs from 'fs';
@@ -137,28 +137,28 @@ router.delete('/clear-all', authenticateToken, async (req, res) => {
     // 5. Clear all Supabase client caches
     clearSupabaseClientCache(clientId);
     cleared.cache.push('supabaseClientCache');
-    
+
     invalidateClienteCache();
     cleared.cache.push('clienteCache');
-    
+
     clearFormularioSupabaseCache();
     cleared.cache.push('formularioSupabaseCache');
-    
+
     invalidateConnectionTestCache(clientId);
     invalidateConnectionTestCache(tenantId);
     cleared.cache.push('connectionTestCache');
-    
+
     invalidateLeadsCache(tenantId);
     cleared.cache.push('leadsCache');
-    
+
     invalidateCredentialsCache(tenantId);
     cleared.cache.push('publicCredentialsCache');
-    
+
     console.log(`🗑️ [CACHE] Todos os caches Supabase invalidados`);
 
     // 6. Delete local config files (NOT credentials.json structure, NOT contracts, NOT audit)
     const dataDir = path.join(process.cwd(), 'data');
-    
+
     // Delete supabase-config.json
     const supabaseConfigPath = path.join(dataDir, 'supabase-config.json');
     if (fs.existsSync(supabaseConfigPath)) {
@@ -166,7 +166,7 @@ router.delete('/clear-all', authenticateToken, async (req, res) => {
       cleared.files.push('supabase-config.json');
       console.log(`🗑️ [FILE] supabase-config.json deletado`);
     }
-    
+
     // Delete cpf_auto_check_processed.json
     const cpfAutoCheckPath = path.join(dataDir, 'cpf_auto_check_processed.json');
     if (fs.existsSync(cpfAutoCheckPath)) {
@@ -204,18 +204,20 @@ router.delete('/clear-all', authenticateToken, async (req, res) => {
       }
     }
 
-    // 7. Clear in-memory contract cache
+    // 7. Clear in-memory contract cache - REMOVED
+    /*
     try {
       clearLocalContractsCache();
       cleared.cache.push('assinatura_contracts_memory');
     } catch (err) {
       console.warn('⚠️ [CACHE] Erro ao limpar cache de contratos em memória:', err);
     }
+    */
 
     // 8. ⚠️ CRITICAL: Delete ALL local PostgreSQL data (forms, leads, submissions, etc.)
     // User confirmed: all data is saved in Supabase, so local data can be safely deleted
     console.log(`🗑️ [RESET TOTAL] Deletando TODOS os dados locais do PostgreSQL para tenant ${tenantId}...`);
-    
+
     try {
       // Delete form submissions first (foreign key dependency)
       const deletedSubmissions = await db.delete(formSubmissions)
@@ -266,33 +268,33 @@ router.delete('/clear-all', authenticateToken, async (req, res) => {
       try {
         // userId contains the UUID of the admin (set during login as admin.id)
         const adminUuid = req.user!.userId;
-        
+
         // First try to delete by UUID (admin_id is UUID in Supabase Owner)
         const { error } = await supabaseOwner
           .from('admin_supabase_credentials')
           .delete()
           .eq('admin_id', adminUuid);
-        
+
         if (!error) {
           cleared.database.push('admin_supabase_credentials (Supabase Owner)');
           console.log(`🗑️ [SUPABASE OWNER] admin_supabase_credentials deletado para admin UUID ${adminUuid}`);
         } else {
           // If UUID fails, try to find admin by email/tenantId first
           console.warn(`⚠️ [SUPABASE OWNER] Erro ao deletar por UUID, tentando por email...`);
-          
+
           // Get admin by tenantId (project_name contains tenantId)
           const { data: adminCreds } = await supabaseOwner
             .from('admin_supabase_credentials')
             .select('admin_id')
             .ilike('project_name', `%${tenantId}%`)
             .maybeSingle();
-          
+
           if (adminCreds?.admin_id) {
             const { error: deleteError } = await supabaseOwner
               .from('admin_supabase_credentials')
               .delete()
               .eq('admin_id', adminCreds.admin_id);
-            
+
             if (!deleteError) {
               cleared.database.push('admin_supabase_credentials (Supabase Owner - by project_name)');
               console.log(`🗑️ [SUPABASE OWNER] admin_supabase_credentials deletado para admin ${adminCreds.admin_id}`);
@@ -436,7 +438,7 @@ router.put('/:integrationType', authenticateToken, async (req, res) => {
         await db.insert(evolutionApiConfig).values({
           tenantId,
           apiUrl: encryptedApiUrl,
-          apiKey: encryptedApiKey, 
+          apiKey: encryptedApiKey,
           instance: credentials.instance || 'nexus-whatsapp'
         }).execute();
         console.log(`✅ Configuração da Evolution API salva no banco (tenant: ${tenantId})`);
@@ -492,7 +494,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
     if (clientCredentials && clientCredentials.has(integrationType)) {
       const encryptedCredentials = clientCredentials.get(integrationType)!;
       const decryptedCredentials = JSON.parse(decrypt(encryptedCredentials));
-      
+
       return res.json({
         success: true,
         credentials: decryptedCredentials
@@ -502,7 +504,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
     // Se não encontrou na memória, busca do banco de dados COM tenantId
     // 🔐 ADMIN PLATFORM: Usar versão STRICT sem fallbacks para garantir isolamento
     let dbCredentials = null;
-    
+
     if (integrationType === 'supabase') {
       // 🔐 CRITICAL: Usar getSupabaseCredentialsStrict para isolamento de tenant
       // Isso garante que admin novo veja credenciais ZERADAS (não de outro tenant)
@@ -513,7 +515,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
           anon_key: supabaseCreds.anonKey,
           bucket: supabaseCreds.bucket
         };
-        
+
         // Salva na memória para próximas requisições
         const encryptedCreds = encrypt(JSON.stringify(dbCredentials));
         if (!credentialsStorage.has(clientId)) {
@@ -528,7 +530,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
           client_id: pluggyCreds.clientId,
           client_secret: pluggyCreds.clientSecret
         };
-        
+
         // Salva na memória para próximas requisições
         const encryptedCreds = encrypt(JSON.stringify(dbCredentials));
         if (!credentialsStorage.has(clientId)) {
@@ -542,7 +544,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
         dbCredentials = {
           webhook_url: n8nCreds.webhookUrl
         };
-        
+
         // Salva na memória para próximas requisições
         const encryptedCreds = encrypt(JSON.stringify(dbCredentials));
         if (!credentialsStorage.has(clientId)) {
@@ -558,7 +560,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
           api_key: decrypt(evolutionCreds.apiKey),
           instance: evolutionCreds.instance
         };
-        
+
         // Salva na memória para próximas requisições
         const encryptedCreds = encrypt(JSON.stringify(dbCredentials));
         if (!credentialsStorage.has(clientId)) {
@@ -575,7 +577,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
           token_id: decrypt(config.tokenId),
           chave_token: decrypt(config.chaveToken)
         };
-        
+
         const encryptedCreds = encrypt(JSON.stringify(dbCredentials));
         if (!credentialsStorage.has(clientId)) {
           credentialsStorage.set(clientId, new Map());
@@ -583,7 +585,7 @@ router.get('/:integrationType', authenticateToken, async (req, res) => {
         credentialsStorage.get(clientId)!.set(integrationType, encryptedCreds);
       }
     }
-    
+
     if (dbCredentials) {
       return res.json({
         success: true,
@@ -672,7 +674,7 @@ router.post('/test/:integrationType', authenticateConfig, async (req, res) => {
     // ✅ CORREÇÃO: Se credenciais foram enviadas no body, usar elas ao invés de buscar do banco
     let credentials;
     const bodyHasCredentials = req.body && Object.keys(req.body).length > 0;
-    
+
     if (bodyHasCredentials && integrationType === 'supabase') {
       // Usar credenciais do body para Supabase (permite testar antes de salvar)
       credentials = {
@@ -701,54 +703,54 @@ router.post('/test/:integrationType', authenticateConfig, async (req, res) => {
       // Buscar credenciais salvas no banco/storage
       console.log(`[TEST ${integrationType.toUpperCase()}] Buscando credenciais do banco/storage`);
 
-    // For optimization services, get directly from database
-    if (['redis', 'sentry', 'resend', 'cloudflare', 'better_stack'].includes(integrationType)) {
-      // Import credential getters
-      const { 
-        getRedisCredentials, 
-        getSentryCredentials, 
-        getResendCredentials, 
-        getCloudflareCredentials, 
-        getBetterStackCredentials 
-      } = await import('../lib/credentialsDb');
-      
-      // Get credentials based on type
-      if (integrationType === 'redis') {
-        credentials = await getRedisCredentials();
-      } else if (integrationType === 'sentry') {
-        credentials = await getSentryCredentials();
-      } else if (integrationType === 'resend') {
-        credentials = await getResendCredentials();
-      } else if (integrationType === 'cloudflare') {
-        credentials = await getCloudflareCredentials();
-      } else if (integrationType === 'better_stack') {
-        credentials = await getBetterStackCredentials();
+      // For optimization services, get directly from database
+      if (['redis', 'sentry', 'resend', 'cloudflare', 'better_stack'].includes(integrationType)) {
+        // Import credential getters
+        const {
+          getRedisCredentials,
+          getSentryCredentials,
+          getResendCredentials,
+          getCloudflareCredentials,
+          getBetterStackCredentials
+        } = await import('../lib/credentialsDb');
+
+        // Get credentials based on type
+        if (integrationType === 'redis') {
+          credentials = await getRedisCredentials();
+        } else if (integrationType === 'sentry') {
+          credentials = await getSentryCredentials();
+        } else if (integrationType === 'resend') {
+          credentials = await getResendCredentials();
+        } else if (integrationType === 'cloudflare') {
+          credentials = await getCloudflareCredentials();
+        } else if (integrationType === 'better_stack') {
+          credentials = await getBetterStackCredentials();
+        }
+
+        if (!credentials) {
+          return res.status(404).json({
+            success: false,
+            error: 'Credenciais não encontradas. Configure a integração primeiro.'
+          });
+        }
+      } else {
+        // For legacy services, check credentialsStorage
+        const clientCredentials = credentialsStorage.get(clientId);
+        if (!clientCredentials || !clientCredentials.has(integrationType)) {
+          return res.status(404).json({
+            success: false,
+            error: 'Credenciais não encontradas. Configure a integração primeiro.'
+          });
+        }
+
+        const encryptedCredentials = clientCredentials.get(integrationType)!;
+        credentials = JSON.parse(decrypt(encryptedCredentials));
       }
-      
-      if (!credentials) {
-        return res.status(404).json({
-          success: false,
-          error: 'Credenciais não encontradas. Configure a integração primeiro.'
-        });
-      }
-    } else {
-      // For legacy services, check credentialsStorage
-      const clientCredentials = credentialsStorage.get(clientId);
-      if (!clientCredentials || !clientCredentials.has(integrationType)) {
-        return res.status(404).json({
-          success: false,
-          error: 'Credenciais não encontradas. Configure a integração primeiro.'
-        });
-      }
-      
-      const encryptedCredentials = clientCredentials.get(integrationType)!;
-      credentials = JSON.parse(decrypt(encryptedCredentials));
-    }
     } // Fecha o else que busca do banco
 
     // Testar conexão baseado no tipo
     const testResult = await testConnection(integrationType, credentials, clientId);
-    
+
     if (testResult.success) {
       res.json({
         success: true,
@@ -776,55 +778,55 @@ router.post('/test-fast/:integrationType', authenticateConfig, async (req, res) 
   const startTime = Date.now();
   try {
     const { integrationType } = req.params;
-    
+
     if (integrationType !== 'supabase') {
       return res.status(400).json({
         success: false,
         error: 'Fast test only supported for Supabase'
       });
     }
-    
+
     const { supabaseUrl, supabaseAnonKey } = req.body;
-    
+
     if (!supabaseUrl || !supabaseAnonKey) {
       return res.status(400).json({
         success: false,
         error: 'URL e chave do Supabase são necessários'
       });
     }
-    
+
     console.log(`⚡ [FAST-TEST] Starting fast Supabase connection test...`);
-    
+
     // Import Supabase client
     const { createClient } = await import('@supabase/supabase-js');
-    
+
     // Create client with minimal options
     const testClient = createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: false, autoRefreshToken: false }
     });
-    
+
     // 🚀 PERFORMANCE: Use AbortController for 5-second timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
+
     try {
       // Simple query just to test connectivity
       const queryPromise = testClient
         .from('forms')
         .select('id', { count: 'exact', head: true });
-      
+
       // Race with timeout
       const result = await Promise.race([
         queryPromise,
-        new Promise((_, reject) => 
+        new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Connection timeout after 5 seconds')), 5000)
         )
       ]) as any;
-      
+
       clearTimeout(timeoutId);
-      
+
       const elapsed = Date.now() - startTime;
-      
+
       // Check for errors
       if (result.error && !result.error.message.includes('relation') && !result.error.message.includes('does not exist')) {
         console.log(`❌ [FAST-TEST] Failed in ${elapsed}ms:`, result.error.message);
@@ -834,7 +836,7 @@ router.post('/test-fast/:integrationType', authenticateConfig, async (req, res) 
           elapsed
         });
       }
-      
+
       console.log(`✅ [FAST-TEST] Connection successful in ${elapsed}ms`);
       return res.json({
         success: true,
@@ -842,11 +844,11 @@ router.post('/test-fast/:integrationType', authenticateConfig, async (req, res) 
         elapsed,
         data: { url: supabaseUrl }
       });
-      
+
     } catch (error: any) {
       clearTimeout(timeoutId);
       const elapsed = Date.now() - startTime;
-      
+
       if (error.message.includes('timeout')) {
         console.log(`⏱️ [FAST-TEST] Timeout after ${elapsed}ms`);
         return res.json({
@@ -855,7 +857,7 @@ router.post('/test-fast/:integrationType', authenticateConfig, async (req, res) 
           elapsed
         });
       }
-      
+
       console.log(`❌ [FAST-TEST] Error after ${elapsed}ms:`, error.message);
       return res.json({
         success: false,
@@ -863,7 +865,7 @@ router.post('/test-fast/:integrationType', authenticateConfig, async (req, res) 
         elapsed
       });
     }
-    
+
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
     console.error(`❌ [FAST-TEST] Server error after ${elapsed}ms:`, error);
@@ -882,29 +884,29 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         // ✅ Testar diretamente com as credenciais fornecidas (permite testar antes de salvar)
         const { createClient } = await import('@supabase/supabase-js');
-        
+
         // CORREÇÃO: Aceitar tanto anonKey quanto supabaseAnonKey
         const supabaseUrl = credentials.url || credentials.supabaseUrl;
         const supabaseKey = credentials.anonKey || credentials.supabaseAnonKey;
-        
+
         if (!supabaseUrl || !supabaseKey) {
           return {
             success: false,
             error: 'URL e chave do Supabase são necessários'
           };
         }
-        
+
         // Criar cliente temporário para teste com credenciais normalizadas
         const testClient = createClient(supabaseUrl, supabaseKey, {
           auth: { persistSession: false }
         });
-        
+
         // Testar conexão tentando consultar uma tabela
         const { data, error } = await testClient
           .from('forms')
           .select('id', { count: 'exact', head: true })
           .limit(1);
-        
+
         // Se erro não for de tabela inexistente, retornar erro
         if (error && !error.message.includes('relation') && !error.message.includes('does not exist')) {
           console.error('[TEST SUPABASE] Connection failed:', error);
@@ -913,18 +915,18 @@ async function testConnection(type: string, credentials: any, clientId: string):
             error: `Erro na conexão: ${error.message}`
           };
         }
-        
+
         // Conexão bem-sucedida
         console.log('[TEST SUPABASE] Connection successful!');
-        return { 
-          success: true, 
+        return {
+          success: true,
           message: 'Conexão com Supabase estabelecida com sucesso!',
           data: { url: supabaseUrl }
         };
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Supabase: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Supabase: ${error.message}`
         };
       }
 
@@ -943,8 +945,8 @@ async function testConnection(type: string, credentials: any, clientId: string):
           return {
             success: true,
             message: 'Credenciais do Google Calendar configuradas. Complete a autenticação OAuth para obter o refresh token.',
-            data: { 
-              configured: true, 
+            data: {
+              configured: true,
               hasRefreshToken: false,
               needsOAuth: true
             }
@@ -953,7 +955,7 @@ async function testConnection(type: string, credentials: any, clientId: string):
 
         // Se houver refresh_token, testar conexão real com Google Calendar API
         const { google } = await import('googleapis');
-        
+
         const oauth2Client = new google.auth.OAuth2(
           credentials.client_id,
           credentials.client_secret,
@@ -967,20 +969,20 @@ async function testConnection(type: string, credentials: any, clientId: string):
         // Testar acesso ao Google Calendar
         const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
         const calendarList = await calendar.calendarList.list();
-        
-        return { 
-          success: true, 
+
+        return {
+          success: true,
           message: 'Conexão com Google Calendar estabelecida com sucesso!',
-          data: { 
+          data: {
             configured: true,
             hasRefreshToken: true,
-            calendars: calendarList.data.items?.length || 0 
+            calendars: calendarList.data.items?.length || 0
           }
         };
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Google Calendar: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Google Calendar: ${error.message}`
         };
       }
 
@@ -988,7 +990,7 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         // Lazy load googleapis
         const { google } = await import('googleapis');
-        
+
         // Configurar cliente OAuth2 para Google Meet
         const oauth2Client = new google.auth.OAuth2(
           credentials.client_id,
@@ -1005,16 +1007,16 @@ async function testConnection(type: string, credentials: any, clientId: string):
         // Testar acesso básico - verificar se as credenciais são válidas
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
-        
-        return { 
-          success: true, 
+
+        return {
+          success: true,
           message: 'Conexão com Google Meet estabelecida com sucesso!',
           data: { user: userInfo.data.email }
         };
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Google Meet: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Google Meet: ${error.message}`
         };
       }
 
@@ -1022,15 +1024,15 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         // Simular teste de conexão WhatsApp
         // Aqui você implementaria a lógica específica da sua API de WhatsApp
-        return { 
-          success: true, 
+        return {
+          success: true,
           message: 'Configuração WhatsApp salva. Teste real depende da implementação da API.',
           data: { phone: credentials.phone_number }
         };
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão WhatsApp: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão WhatsApp: ${error.message}`
         };
       }
 
@@ -1040,7 +1042,7 @@ async function testConnection(type: string, credentials: any, clientId: string):
         const apiUrl = credentials.apiUrl ?? credentials.api_url;
         const apiKey = credentials.apiKey ?? credentials.api_key;
         const instance = credentials.instance || 'nexus-whatsapp';
-        
+
         // Validar que temos as credenciais necessárias ANTES de fazer qualquer requisição
         if (!apiUrl || !apiKey || !instance) {
           return {
@@ -1048,7 +1050,7 @@ async function testConnection(type: string, credentials: any, clientId: string):
             error: 'URL da API, API Key e nome da instância são obrigatórios para Evolution API'
           };
         }
-        
+
         // Validar que credenciais não são strings vazias
         if (apiUrl.trim() === '' || apiKey.trim() === '' || instance.trim() === '') {
           return {
@@ -1056,10 +1058,10 @@ async function testConnection(type: string, credentials: any, clientId: string):
             error: 'Credenciais da Evolution API não podem ser vazias'
           };
         }
-        
+
         // Normalize URL by removing trailing slash
         const baseUrl = apiUrl.replace(/\/+$/, '');
-        
+
         // Step 1: Check if instance exists
         const fetchResponse = await fetch(`${baseUrl}/instance/fetchInstances`, {
           method: 'GET',
@@ -1071,19 +1073,19 @@ async function testConnection(type: string, credentials: any, clientId: string):
 
         if (fetchResponse.ok) {
           const instances = await fetchResponse.json();
-          
+
           // Find our specific instance
-          const instanceData = Array.isArray(instances) 
+          const instanceData = Array.isArray(instances)
             ? instances.find((i: any) => i.name === instance)
             : instances;
-          
+
           if (instanceData) {
             // Instance exists!
             const connectionStatus = instanceData.connectionStatus || 'close';
-            return { 
-              success: true, 
+            return {
+              success: true,
               message: `Conexão com Evolution API estabelecida! Instância "${instance}" encontrada com status: ${connectionStatus}`,
-              data: { 
+              data: {
                 instance: instance,
                 status: connectionStatus,
                 profileName: instanceData.profileName || 'N/A',
@@ -1093,16 +1095,16 @@ async function testConnection(type: string, credentials: any, clientId: string):
           } else {
             // Instance doesn't exist - List available instances
             console.log(`⚠️ [Evolution API] Instância "${instance}" não encontrada`);
-            
+
             // Get list of available instances
-            const availableInstances = Array.isArray(instances) 
+            const availableInstances = Array.isArray(instances)
               ? instances.map((i: any) => ({
-                  name: i.name,
-                  status: i.connectionStatus || 'close',
-                  profileName: i.profileName || 'N/A'
-                }))
+                name: i.name,
+                status: i.connectionStatus || 'close',
+                profileName: i.profileName || 'N/A'
+              }))
               : [];
-            
+
             if (availableInstances.length > 0) {
               return {
                 success: false,
@@ -1120,15 +1122,15 @@ async function testConnection(type: string, credentials: any, clientId: string):
           }
         } else {
           const errorText = await fetchResponse.text();
-          return { 
-            success: false, 
-            error: `Evolution API retornou status ${fetchResponse.status}: ${errorText}` 
+          return {
+            success: false,
+            error: `Evolution API retornou status ${fetchResponse.status}: ${errorText}`
           };
         }
       } catch (error: any) {
         // Melhorar mensagem de erro para problemas de conectividade
         let errorMessage = error.message || 'Erro desconhecido';
-        
+
         // Detectar erros de timeout/conexão
         if (error.code === 'UND_ERR_CONNECT_TIMEOUT' || errorMessage.includes('Connect Timeout')) {
           errorMessage = `Tempo limite de conexão esgotado. O servidor Evolution API (${credentials.apiUrl || credentials.api_url}) não respondeu. Verifique se o servidor está online e acessível.`;
@@ -1139,9 +1141,9 @@ async function testConnection(type: string, credentials: any, clientId: string):
         } else if (errorMessage.includes('fetch failed')) {
           errorMessage = `Falha na requisição. O servidor Evolution API não está acessível. Verifique se o servidor está online e se o endereço está correto.`;
         }
-        
-        return { 
-          success: false, 
+
+        return {
+          success: false,
           error: errorMessage
         };
       }
@@ -1159,21 +1161,21 @@ async function testConnection(type: string, credentials: any, clientId: string):
 
         if (response.ok) {
           const data = await response.json();
-          return { 
-            success: true, 
+          return {
+            success: true,
             message: 'Conexão com N8N estabelecida com sucesso!',
             data: { status: 'active', workflows: data?.length || 0 }
           };
         } else {
-          return { 
-            success: false, 
-            error: `N8N API retornou status ${response.status}` 
+          return {
+            success: false,
+            error: `N8N API retornou status ${response.status}`
           };
         }
       } catch (error: any) {
-        return { 
-          success: false, 
-          error: `Erro na conexão N8N: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão N8N: ${error.message}`
         };
       }
 
@@ -1181,14 +1183,14 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const tokenId = credentials.token_id;
         const chaveToken = credentials.chave_token;
-        
+
         if (!tokenId || !chaveToken) {
           return { success: false, error: 'Token ID e Chave Token são necessários' };
         }
-        
+
         // Simular teste de conexão (normalmente faria uma chamada HEAD ou consulta simples)
-        return { 
-          success: true, 
+        return {
+          success: true,
           message: 'Credenciais do BigDataCorp validadas com sucesso!',
           data: { tokenId }
         };
@@ -1196,7 +1198,7 @@ async function testConnection(type: string, credentials: any, clientId: string):
         return { success: false, error: `Erro na conexão BigDataCorp: ${error.message}` };
       }
 
-    case 'redis':
+    case 'pluggy':
       try {
         // Testar autenticação Pluggy via API Key
         const response = await fetch('https://api.pluggy.ai/auth', {
@@ -1212,22 +1214,22 @@ async function testConnection(type: string, credentials: any, clientId: string):
 
         if (response.ok) {
           const data = await response.json();
-          return { 
-            success: true, 
+          return {
+            success: true,
             message: 'Credenciais do Pluggy validadas com sucesso!',
             data: { authenticated: true }
           };
         } else {
           const errorData = await response.json().catch(() => ({}));
-          return { 
-            success: false, 
-            error: `Pluggy API retornou status ${response.status}: ${errorData.message || 'Credenciais inválidas'}` 
+          return {
+            success: false,
+            error: `Pluggy API retornou status ${response.status}: ${errorData.message || 'Credenciais inválidas'}`
           };
         }
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Pluggy: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Pluggy: ${error.message}`
         };
       }
 
@@ -1235,14 +1237,14 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const { getRedisCredentials } = await import('../lib/credentialsDb');
         const redisCredentials = await getRedisCredentials();
-        
+
         if (!redisCredentials) {
           return { success: false, error: 'Credenciais do Redis não encontradas' };
         }
-        
+
         // Test Redis connection by trying to ping
         const Redis = (await import('ioredis')).default;
-        
+
         // Configure Redis with TLS support (required for Upstash)
         const redisConfig: any = {
           connectTimeout: 10000,
@@ -1253,35 +1255,35 @@ async function testConnection(type: string, credentials: any, clientId: string):
           },
           reconnectOnError: () => false,
         };
-        
+
         // Enable TLS if URL uses rediss:// or standard redis:// with Upstash
-        const isSecure = redisCredentials.url.startsWith('rediss://') || 
-                        redisCredentials.url.includes('upstash.io');
-        
+        const isSecure = redisCredentials.url.startsWith('rediss://') ||
+          redisCredentials.url.includes('upstash.io');
+
         if (isSecure) {
           redisConfig.tls = {
             rejectUnauthorized: true
           };
         }
-        
+
         // Create Redis client with URL (password is in the URL)
         const redis = new Redis(redisCredentials.url, redisConfig);
-        
+
         // Test connection with timeout
         const pingPromise = redis.ping();
-        const timeoutPromise = new Promise((_, reject) => 
+        const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Timeout na conexão')), 10000)
         );
-        
+
         await Promise.race([pingPromise, timeoutPromise]);
-        
+
         // Clean disconnect
         await redis.quit();
-        
-        return { 
-          success: true, 
+
+        return {
+          success: true,
           message: 'Conexão com Redis estabelecida com sucesso!',
-          data: { 
+          data: {
             url: redisCredentials.url.replace(/:[^:]*@/, ':***@'),
             tls: isSecure
           }
@@ -1289,26 +1291,26 @@ async function testConnection(type: string, credentials: any, clientId: string):
       } catch (error) {
         // CORREÇÃO: Tratar erro específico de limite excedido do Upstash
         const errorMessage = error.message || String(error);
-        
+
         if (errorMessage.includes('max requests limit exceeded')) {
-          return { 
-            success: false, 
+          return {
+            success: false,
             error: '❌ LIMITE DO REDIS EXCEDIDO! Sua conta Upstash atingiu 500.000 comandos/mês. ' +
-                   'Aguarde o próximo mês ou faça upgrade para continuar usando Redis. ' +
-                   'A aplicação funcionará normalmente com cache em memória até lá.'
+              'Aguarde o próximo mês ou faça upgrade para continuar usando Redis. ' +
+              'A aplicação funcionará normalmente com cache em memória até lá.'
           };
         }
-        
+
         if (errorMessage.includes('Timeout')) {
-          return { 
-            success: false, 
+          return {
+            success: false,
             error: 'Timeout na conexão com Redis. Verifique se a URL está correta e se o serviço está disponível.'
           };
         }
-        
-        return { 
-          success: false, 
-          error: `Erro na conexão Redis: ${errorMessage}` 
+
+        return {
+          success: false,
+          error: `Erro na conexão Redis: ${errorMessage}`
         };
       }
 
@@ -1316,11 +1318,11 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const { getSentryCredentials } = await import('../lib/credentialsDb');
         const sentryCredentials = await getSentryCredentials();
-        
+
         if (!sentryCredentials || !sentryCredentials.dsn) {
           return { success: false, error: 'Credenciais do Sentry não encontradas' };
         }
-        
+
         // Test Sentry by sending a test event
         const Sentry = await import('@sentry/node');
         Sentry.init({
@@ -1328,16 +1330,16 @@ async function testConnection(type: string, credentials: any, clientId: string):
           environment: 'test',
           beforeSend: () => null // Don't actually send events during test
         });
-        
-        return { 
-          success: true, 
+
+        return {
+          success: true,
           message: 'DSN do Sentry validado com sucesso!',
           data: { environment: sentryCredentials.environment || 'production' }
         };
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na validação Sentry: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na validação Sentry: ${error.message}`
         };
       }
 
@@ -1345,11 +1347,11 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const { getResendCredentials } = await import('../lib/credentialsDb');
         const resendCredentials = await getResendCredentials();
-        
+
         if (!resendCredentials || !resendCredentials.apiKey) {
           return { success: false, error: 'Credenciais do Resend não encontradas' };
         }
-        
+
         // Test Resend API by verifying the API key
         const response = await fetch('https://api.resend.com/emails', {
           method: 'GET',
@@ -1358,23 +1360,23 @@ async function testConnection(type: string, credentials: any, clientId: string):
             'Content-Type': 'application/json'
           }
         });
-        
+
         if (response.ok || response.status === 200) {
-          return { 
-            success: true, 
+          return {
+            success: true,
             message: 'API Key do Resend validada com sucesso!',
             data: { fromEmail: resendCredentials.fromEmail }
           };
         } else {
-          return { 
-            success: false, 
-            error: `Resend API retornou status ${response.status}` 
+          return {
+            success: false,
+            error: `Resend API retornou status ${response.status}`
           };
         }
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Resend: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Resend: ${error.message}`
         };
       }
 
@@ -1382,15 +1384,15 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const { getCloudflareCredentials } = await import('../lib/credentialsDb');
         const cloudflareCredentials = await getCloudflareCredentials();
-        
+
         if (!cloudflareCredentials || !cloudflareCredentials.zoneId || !cloudflareCredentials.apiToken) {
           return { success: false, error: 'Credenciais do Cloudflare não encontradas' };
         }
-        
+
         console.log('🔍 Testando Cloudflare com Zone ID:', cloudflareCredentials.zoneId.substring(0, 8) + '...');
         console.log('🔑 Comprimento do token:', cloudflareCredentials.apiToken.length);
         console.log('🔑 Token inicia com:', cloudflareCredentials.apiToken.substring(0, 10) + '...');
-        
+
         // Test Cloudflare API by getting zone info
         const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${cloudflareCredentials.zoneId}`, {
           method: 'GET',
@@ -1399,29 +1401,29 @@ async function testConnection(type: string, credentials: any, clientId: string):
             'Content-Type': 'application/json'
           }
         });
-        
+
         const data = await response.json();
         console.log('📄 Resposta da API Cloudflare:', JSON.stringify(data).substring(0, 200));
-        
+
         if (response.ok && data.success) {
-          return { 
-            success: true, 
+          return {
+            success: true,
             message: 'Conexão com Cloudflare estabelecida com sucesso!',
             data: { zoneName: data.result?.name || 'N/A', zoneStatus: data.result?.status || 'N/A' }
           };
         } else {
           const errorMsg = data.errors?.[0]?.message || `Status ${response.status}`;
           console.error('❌ Erro Cloudflare:', errorMsg);
-          return { 
-            success: false, 
-            error: `Cloudflare API: ${errorMsg}` 
+          return {
+            success: false,
+            error: `Cloudflare API: ${errorMsg}`
           };
         }
       } catch (error) {
         console.error('❌ Exceção ao testar Cloudflare:', error);
-        return { 
-          success: false, 
-          error: `Erro na conexão Cloudflare: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Cloudflare: ${error.message}`
         };
       }
 
@@ -1429,17 +1431,17 @@ async function testConnection(type: string, credentials: any, clientId: string):
       try {
         const { getBetterStackCredentials } = await import('../lib/credentialsDb');
         const betterStackCredentials = await getBetterStackCredentials();
-        
+
         if (!betterStackCredentials || !betterStackCredentials.sourceToken) {
           return { success: false, error: 'Credenciais do Better Stack não encontradas' };
         }
-        
+
         // Test Better Stack by sending a test log to the ingesting host
         // Better Stack uses Bearer token authentication per documentation
         const sourceToken = betterStackCredentials.sourceToken.trim();
         const ingestingHost = betterStackCredentials.ingestingHost || 'in.logs.betterstack.com';
         const url = `https://${ingestingHost}`;
-        
+
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -1452,32 +1454,32 @@ async function testConnection(type: string, credentials: any, clientId: string):
             dt: new Date().toISOString()
           })
         });
-        
+
         // Better Stack returns 202 on success
         if (response.ok || response.status === 200 || response.status === 202) {
-          return { 
-            success: true, 
+          return {
+            success: true,
             message: 'Conexão com Better Stack estabelecida com sucesso!',
             data: { status: 'connected' }
           };
         } else {
           const errorText = await response.text().catch(() => 'Unknown error');
-          return { 
-            success: false, 
-            error: `Better Stack API retornou status ${response.status}: ${errorText}` 
+          return {
+            success: false,
+            error: `Better Stack API retornou status ${response.status}: ${errorText}`
           };
         }
       } catch (error) {
-        return { 
-          success: false, 
-          error: `Erro na conexão Better Stack: ${error.message}` 
+        return {
+          success: false,
+          error: `Erro na conexão Better Stack: ${error.message}`
         };
       }
 
     default:
-      return { 
-        success: false, 
-        error: 'Tipo de integração não suportado para teste' 
+      return {
+        success: false,
+        error: 'Tipo de integração não suportado para teste'
       };
   }
 }
@@ -1527,23 +1529,23 @@ router.post('/cache-cleanup', authenticateToken, async (req, res) => {
   try {
     const { runCacheCleanup, getCleanupStatus } = await import('../lib/cacheCleanup');
     const status = getCleanupStatus();
-    
+
     if (status.isRunning) {
-      return res.status(409).json({ 
-        success: false, 
-        message: 'Limpeza já em execução. Aguarde a conclusão.' 
+      return res.status(409).json({
+        success: false,
+        message: 'Limpeza já em execução. Aguarde a conclusão.'
       });
     }
-    
+
     const results = await runCacheCleanup();
-    
+
     const summary = {
       totalDeleted: results.reduce((sum, r) => sum + r.deleted, 0),
       totalSkipped: results.reduce((sum, r) => sum + r.skipped, 0),
       totalErrors: results.filter(r => r.error).length,
       details: results.filter(r => r.deleted > 0 || r.error),
     };
-    
+
     res.json({ success: true, message: 'Limpeza concluída', ...summary });
   } catch (error: any) {
     console.error('[CacheCleanup] Erro manual:', error);

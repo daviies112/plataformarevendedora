@@ -21,68 +21,29 @@
  */
 import { createRoot } from "react-dom/client";
 
+// Renderização normal do app completo
+import "./index.css";
+// import("./App").then(({ default: App }) => { // Dynamic import causing issues? No, it should be fine.
+import App from "./App";
+import { initializeColorScheme } from "./lib/colorScheme";
+
 const path = window.location.pathname;
 
-const isPublicFormRoute = 
-  path.startsWith('/f/') ||
-  path.startsWith('/form/') ||
-  path.startsWith('/formulario/') ||
-  /^\/[^/]+\/form\//.test(path);
+initializeColorScheme();
 
-const isPublicMeetingRoute = 
-  path.startsWith('/reuniao/') ||
-  path.startsWith('/reuniao-publica/');
+createRoot(document.getElementById("root")!).render(<App />);
 
-// Rotas internas de assinatura (não públicas)
-const internalAssinaturaRoutes = [
-  '/assinatura',
-  '/assinatura/criar',
-  '/assinatura/personalizar',
-  '/assinatura/contratos'
-];
+const isPrivateRoute =
+  path !== '/' &&
+  path !== '/login' &&
+  path !== '/reseller-login' &&
+  !path.startsWith('/loja/') &&
+  !path.startsWith('/checkout/');
 
-const isPublicSignatureRoute = 
-  (path.startsWith('/assinar/') ||
-  path.startsWith('/assinatura/')) &&
-  !internalAssinaturaRoutes.includes(path);
-
-if (isPublicFormRoute) {
-  import("./PublicFormApp").then(({ default: PublicFormApp }) => {
-    createRoot(document.getElementById("root")!).render(<PublicFormApp />);
-  });
-} else if (isPublicMeetingRoute) {
-  import("./PublicMeetingApp").then(({ default: PublicMeetingApp }) => {
-    createRoot(document.getElementById("root")!).render(<PublicMeetingApp />);
-  });
-} else if (isPublicSignatureRoute) {
-  // Load CSS first for signature pages - required for proper styling
-  import("./index.css").then(() => {
-    import("./PublicSignatureApp").then(({ default: PublicSignatureApp }) => {
-      createRoot(document.getElementById("root")!).render(<PublicSignatureApp />);
+if (isPrivateRoute) {
+  setTimeout(() => {
+    import("./lib/sentry").then(({ initializeSentry }) => {
+      initializeSentry().catch(console.error);
     });
-  });
-} else {
-  import("./index.css");
-  import("./App").then(({ default: App }) => {
-    import("./lib/colorScheme").then(({ initializeColorScheme }) => {
-      initializeColorScheme();
-    });
-    
-    createRoot(document.getElementById("root")!).render(<App />);
-    
-    const isPrivateRoute = 
-      path !== '/' &&
-      path !== '/login' &&
-      path !== '/reseller-login' &&
-      !path.startsWith('/loja/') &&
-      !path.startsWith('/checkout/');
-    
-    if (isPrivateRoute) {
-      setTimeout(() => {
-        import("./lib/sentry").then(({ initializeSentry }) => {
-          initializeSentry().catch(console.error);
-        });
-      }, 3000);
-    }
-  });
+  }, 3000);
 }

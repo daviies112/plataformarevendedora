@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Carregar .env se existir (com suporte a CRLF do Windows)
+if [ -f .env ]; then
+  # Remove carriage returns e exporta variáveis
+  export $(tr -d '\r' < .env | grep -v '^#' | xargs)
+fi
+
 # ============================================================================
 # VERIFICAÇÃO DE SECRETS ESSENCIAIS - ECONOMIZE CRÉDITOS!
 # ============================================================================
@@ -225,6 +231,9 @@ else
 fi
 echo ""
 
+
 # Start the integrated server (includes Vite middleware + Express backend)
 echo "👤 User configured: $CLIENT_LOGIN_EMAIL"
-PORT=5000 NODE_ENV=development npx -y tsx server/index.ts
+echo "DEBUG: PORT is set to: ${PORT:-5001}"
+PORT=${PORT:-5001} NODE_ENV=${NODE_ENV:-development} npx -y tsx server/index.ts
+

@@ -2,9 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import { supabaseOwner, SUPABASE_CONFIGURED } from '../config/supabaseOwner';
-import { 
-  getAdminCredentials, 
-  getMasterClient, 
+import {
+  getAdminCredentials,
+  getMasterClient,
   getAllAdminsWithCredentials,
   createTenantClient,
   processPendingSyncEvents,
@@ -48,7 +48,7 @@ export function resellerAuthMiddleware(req: Request, _res: Response, next: NextF
   if (req.session?.userEmail && req.session?.userRole === 'reseller') {
     return next();
   }
-  
+
   const authHeader = req.headers.authorization;
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
@@ -65,7 +65,7 @@ export function resellerAuthMiddleware(req: Request, _res: Response, next: NextF
       return next();
     }
   }
-  
+
   next();
 }
 
@@ -88,7 +88,7 @@ const router = express.Router();
 router.get('/test-master', async (_req: Request, res: Response) => {
   try {
     const master = getMasterClient();
-    
+
     if (!master) {
       return res.json({
         status: 'error',
@@ -96,21 +96,21 @@ router.get('/test-master', async (_req: Request, res: Response) => {
         details: 'Configure SUPABASE_URL e SERVICE_ROLE_KEY nos Secrets'
       });
     }
-    
+
     // Tenta listar revendedoras
     const { data: revendedoras, error: revError } = await master
       .from('revendedoras')
       .select('id, email, nome, admin_id, status')
       .limit(5);
-    
+
     // Tenta listar credenciais de admins
     const { data: adminCreds, error: credError } = await master
       .from('admin_supabase_credentials')
       .select('id, admin_id, project_name, supabase_url')
       .limit(5);
-    
+
     const adminsWithCreds = await getAllAdminsWithCredentials();
-    
+
     res.json({
       status: 'connected',
       message: 'Conexão com Supabase Master OK',
@@ -123,8 +123,8 @@ router.get('/test-master', async (_req: Request, res: Response) => {
         admin_supabase_credentials: {
           count: adminCreds?.length || 0,
           error: credError?.message || null,
-          sample: adminCreds?.map(c => ({ 
-            admin_id: c.admin_id, 
+          sample: adminCreds?.map(c => ({
+            admin_id: c.admin_id,
             project_name: c.project_name,
             url: c.supabase_url?.substring(0, 40) + '...'
           }))
@@ -132,7 +132,7 @@ router.get('/test-master', async (_req: Request, res: Response) => {
       },
       adminsConfigurados: adminsWithCreds.length
     });
-    
+
   } catch (error: any) {
     res.status(500).json({
       status: 'error',
@@ -148,31 +148,31 @@ router.get('/migrate-credentials', async (_req: Request, res: Response) => {
     if (!master) {
       return res.status(503).json({ error: 'Supabase Master não configurado' });
     }
-    
+
     // 1. Buscar todos os admins com credenciais
     const admins = await getAllAdminsWithCredentials();
-    
+
     if (!admins.length) {
       return res.json({ status: 'no_admins', message: 'Nenhum admin com credenciais' });
     }
-    
+
     const results: any[] = [];
     let totalSynced = 0;
-    
+
     // 2. Para cada admin, buscar revendedoras e sincronizar credenciais
     for (const admin of admins) {
       const { data: revendedoras, error } = await master
         .from('revendedoras')
         .select('id, email, nome')
         .eq('admin_id', admin.admin_id);
-      
+
       if (error || !revendedoras?.length) {
         results.push({ admin_id: admin.admin_id, error: error?.message || 'Nenhuma revendedora' });
         continue;
       }
-      
+
       const adminResult = { admin_id: admin.admin_id, revendedoras: [] as any[] };
-      
+
       for (const rev of revendedoras) {
         try {
           await pool.query(
@@ -191,19 +191,19 @@ router.get('/migrate-credentials', async (_req: Request, res: Response) => {
           adminResult.revendedoras.push({ email: rev.email, synced: false, error: syncErr.message });
         }
       }
-      
+
       results.push(adminResult);
     }
-    
+
     console.log(`✅ [MIGRATE] Credenciais sincronizadas para ${totalSynced} revendedoras`);
-    
+
     res.json({
       status: 'ok',
       totalSynced,
       admins: admins.length,
       results
     });
-    
+
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }
@@ -213,27 +213,27 @@ router.get('/migrate-credentials', async (_req: Request, res: Response) => {
 router.get('/sync-now', async (_req: Request, res: Response) => {
   try {
     const admins = await getAllAdminsWithCredentials();
-    
+
     if (!admins.length) {
       return res.json({
         status: 'no_admins',
         message: 'Nenhum admin com credenciais configurado no Master'
       });
     }
-    
+
     const results: any[] = [];
-    
+
     for (const admin of admins) {
       try {
         const tenantClient = createTenantClient(admin.credentials);
-        
+
         // Verifica integration_queue
         const { data: queueItems, error: queueError } = await tenantClient
           .from('integration_queue')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(10);
-        
+
         // Verifica contracts com status='signed'
         const { data: contracts, error: contractsError } = await tenantClient
           .from('contracts')
@@ -241,10 +241,10 @@ router.get('/sync-now', async (_req: Request, res: Response) => {
           .eq('status', 'signed')
           .order('created_at', { ascending: false })
           .limit(10);
-        
+
         // Processa eventos pendentes
         const processed = await processPendingSyncEvents(admin.admin_id, tenantClient);
-        
+
         results.push({
           admin_id: admin.admin_id,
           supabase_url: admin.credentials.supabase_url,
@@ -272,13 +272,13 @@ router.get('/sync-now', async (_req: Request, res: Response) => {
         });
       }
     }
-    
+
     res.json({
       status: 'ok',
       admins_checked: admins.length,
       results
     });
-    
+
   } catch (error: any) {
     res.status(500).json({
       status: 'error',
@@ -291,13 +291,13 @@ router.get('/sync-now', async (_req: Request, res: Response) => {
 router.post('/create-from-contract', async (req: Request, res: Response) => {
   try {
     const { admin_id, contract_id, email, cpf, nome, telefone } = req.body;
-    
+
     if (!admin_id || !email || !cpf || !nome) {
-      return res.status(400).json({ 
-        error: 'Campos obrigatórios: admin_id, email, cpf, nome' 
+      return res.status(400).json({
+        error: 'Campos obrigatórios: admin_id, email, cpf, nome'
       });
     }
-    
+
     const revendedoraId = await createRevendedoraFromContract({
       admin_id,
       contract_id: contract_id || 'manual-' + Date.now(),
@@ -306,7 +306,7 @@ router.post('/create-from-contract', async (req: Request, res: Response) => {
       nome,
       telefone
     });
-    
+
     if (revendedoraId) {
       res.json({
         success: true,
@@ -319,7 +319,7 @@ router.post('/create-from-contract', async (req: Request, res: Response) => {
         message: 'Falha ao criar revendedora'
       });
     }
-    
+
   } catch (error: any) {
     res.status(500).json({
       status: 'error',
@@ -356,7 +356,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
     if (isDev && isTestCredentials) {
       console.log('[NEXUS-DEV] Login de desenvolvimento para revendedora de teste');
-      
+
       req.session.userId = 'dev-reseller-1';
       req.session.userEmail = email;
       req.session.userName = 'Revendedora Teste';
@@ -387,9 +387,9 @@ router.post('/login', async (req: Request, res: Response) => {
           console.error('Erro ao salvar sessao:', err);
           return res.status(500).json({ error: 'Erro ao criar sessao' });
         }
-        
+
         console.log('[NEXUS-DEV] Sessão salva com sucesso, sessionID:', req.sessionID);
-        
+
         res.json({
           success: true,
           redirect: '/revendedora/reseller/dashboard',
@@ -417,28 +417,28 @@ router.post('/login', async (req: Request, res: Response) => {
     // 1. Buscar revendedora no banco master por email
     // Primeiro tenta buscar pelo email e depois valida o CPF (formatado ou não)
     console.log('[NEXUS] Buscando revendedora por email:', email);
-    
+
     const { data: revendedoras, error: queryError } = await supabaseOwner
       .from('revendedoras')
-      .select('*, admin_users(company_name)')
+      .select('*')
       .eq('email', email);
-    
-    console.log('[NEXUS] Query result:', { 
-      count: revendedoras?.length || 0, 
+
+    console.log('[NEXUS] Query result:', {
+      count: revendedoras?.length || 0,
       error: queryError?.message,
-      firstRecord: revendedoras?.[0] ? { 
-        email: revendedoras[0].email, 
-        cpf: revendedoras[0].cpf, 
+      firstRecord: revendedoras?.[0] ? {
+        email: revendedoras[0].email,
+        cpf: revendedoras[0].cpf,
         status: revendedoras[0].status,
         admin_id: revendedoras[0].admin_id
       } : null
     });
-    
+
     if (queryError) {
       console.error('[NEXUS] Erro na query:', queryError);
       return res.status(500).json({ error: 'Erro ao buscar revendedora' });
     }
-    
+
     // Encontrar revendedora que bate com o CPF (formatado ou normalizado)
     const revendedora = revendedoras?.find(r => {
       const cpfDb = r.cpf?.replace(/\D/g, ''); // Normaliza CPF do banco
@@ -450,7 +450,7 @@ router.post('/login', async (req: Request, res: Response) => {
       console.log('[NEXUS] Revendedora nao encontrada:', email, 'CPF:', cpfNormalizado.substring(0, 3) + '...');
       return res.status(401).json({ error: 'Email ou CPF invalidos' });
     }
-    
+
     console.log('[NEXUS] Revendedora encontrada:', revendedora.email, 'status:', revendedora.status);
 
     const adminId = revendedora.admin_id;
@@ -467,21 +467,21 @@ router.post('/login', async (req: Request, res: Response) => {
     // 2. Buscar credenciais do Supabase do Admin (para plataforma separada)
     const adminCredentials = await getAdminCredentials(adminId);
     let projectName = 'Plataforma';
-    
+
     if (!adminCredentials) {
       console.warn(`[NEXUS] Credenciais do admin ${adminId} não encontradas no Master`);
       // Continua sem credenciais - pode usar fallback local
     } else {
       console.log(`[NEXUS] Credenciais do admin ${adminId} carregadas`);
       projectName = adminCredentials.project_name || 'Plataforma';
-      
+
       // 2.1. Salvar automaticamente as credenciais no banco local para esta revendedora
       try {
         const checkResult = await pool.query(
           'SELECT id FROM reseller_supabase_configs WHERE reseller_email = $1',
           [revendedora.email]
         );
-        
+
         if (checkResult.rows.length === 0) {
           // Inserir novas credenciais
           await pool.query(
@@ -516,7 +516,7 @@ router.post('/login', async (req: Request, res: Response) => {
     req.session.companySlug = companySlug; // Adicionado para isolamento de URL
     req.session.comissao = Number(revendedora.comissao_padrao);
     req.session.projectName = projectName;
-    
+
     // Auto-preencher credenciais do Admin para a revendedora no banco local se não existirem
     if (adminCredentials) {
       try {
@@ -553,7 +553,7 @@ router.post('/login', async (req: Request, res: Response) => {
         console.error('Erro ao salvar sessao:', err);
         return res.status(500).json({ error: 'Erro ao criar sessao' });
       }
-      
+
       console.log(`✅ [NEXUS] Login revendedora: ${revendedora.email} -> tenant: ${adminId} (creds: ${adminCredentials ? 'OK' : 'N/A'})`);
       console.log('[NEXUS] Session após login:', {
         userId: req.session.userId,
@@ -561,7 +561,7 @@ router.post('/login', async (req: Request, res: Response) => {
         userRole: req.session.userRole,
         sessionId: req.sessionID
       });
-      
+
       res.json({
         success: true,
         redirect: '/revendedora/reseller/dashboard',
@@ -602,7 +602,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const { nome, email, cpf, telefone } = req.body;
-    
+
     // 🔐 SEGURANÇA: adminId derivado da sessão, não do body
     const adminId = req.session.tenantId || req.session.userId;
 
@@ -650,7 +650,7 @@ router.post('/register', async (req: Request, res: Response) => {
     const resellerEmail = email.toLowerCase().trim();
     try {
       const adminCredentials = await getAdminCredentials(adminId);
-      
+
       if (adminCredentials) {
         await pool.query(
           `INSERT INTO reseller_supabase_configs (reseller_email, supabase_url, supabase_anon_key, supabase_service_key, updated_at)
@@ -700,6 +700,28 @@ router.get('/check-session', (req: Request, res: Response) => {
   } else {
     res.json({ authenticated: false });
   }
+});
+
+// GET /api/reseller/supabase-config
+router.get('/supabase-config', (req: Request, res: Response) => {
+  // Retornar as credenciais do Owner definidas no .env
+  // IMPORTANTE: Idealmente deveria ser a Anon Key, mas vamos usar o que temos configurado
+  if (process.env.SUPABASE_OWNER_URL && process.env.SUPABASE_OWNER_KEY) {
+    return res.json({
+      supabase_url: process.env.SUPABASE_OWNER_URL,
+      supabase_anon_key: process.env.SUPABASE_OWNER_KEY
+    });
+  }
+
+  // Fallback para as variáveis de ambiente padrão se disponíveis
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+    return res.json({
+      supabase_url: process.env.SUPABASE_URL,
+      supabase_anon_key: process.env.SUPABASE_ANON_KEY
+    });
+  }
+
+  return res.status(404).json({ error: 'Supabase não configurado no servidor' });
 });
 
 // POST /api/reseller/logout
@@ -763,35 +785,35 @@ router.post('/admin/sync-credentials', async (req: Request, res: Response) => {
     }
 
     const adminId = req.session.tenantId || req.session.userId;
-    
+
     // 1. Buscar credenciais do admin
     const adminCredentials = await getAdminCredentials(adminId);
-    
+
     if (!adminCredentials) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Admin não tem credenciais Supabase configuradas em admin_supabase_credentials',
         adminId
       });
     }
-    
+
     // 2. Buscar todas as revendedoras do admin
     const { data: revendedoras, error: queryError } = await supabaseOwner
       .from('revendedoras')
       .select('id, email, nome')
       .eq('admin_id', adminId);
-    
+
     if (queryError) {
       return res.status(500).json({ error: 'Erro ao buscar revendedoras' });
     }
-    
+
     if (!revendedoras?.length) {
       return res.json({ success: true, synced: 0, message: 'Nenhuma revendedora encontrada' });
     }
-    
+
     // 3. Sincronizar credenciais para cada revendedora
     let syncedCount = 0;
     const syncResults: any[] = [];
-    
+
     for (const rev of revendedoras) {
       try {
         await pool.query(
@@ -810,9 +832,9 @@ router.post('/admin/sync-credentials', async (req: Request, res: Response) => {
         syncResults.push({ email: rev.email, success: false, error: syncError.message });
       }
     }
-    
+
     console.log(`✅ [NEXUS] Credenciais sincronizadas para ${syncedCount}/${revendedoras.length} revendedoras`);
-    
+
     res.json({
       success: true,
       synced: syncedCount,
@@ -959,13 +981,13 @@ router.get('/settings', async (req: Request, res: Response) => {
 async function getAuthenticatedReseller(req: Request): Promise<{ email: string; userId: string; tenantId: string | null } | null> {
   // Check session first
   if (req.session?.userEmail && req.session?.userRole === 'reseller' && req.session?.userId) {
-    return { 
-      email: req.session.userEmail, 
+    return {
+      email: req.session.userEmail,
       userId: req.session.userId,
-      tenantId: req.session.tenantId || null 
+      tenantId: req.session.tenantId || null
     };
   }
-  
+
   // Try to get from JWT token
   const authHeader = req.headers.authorization;
   if (authHeader?.startsWith('Bearer ')) {
@@ -980,10 +1002,10 @@ async function getAuthenticatedReseller(req: Request): Promise<{ email: string; 
       req.session.tenantId = payload.tenantId;
       req.session.comissao = payload.comissao;
       req.session.projectName = payload.projectName;
-      return { 
-        email: payload.userEmail, 
+      return {
+        email: payload.userEmail,
         userId: payload.userId,
-        tenantId: payload.tenantId || null 
+        tenantId: payload.tenantId || null
       };
     } else {
       console.log('[AUTH-DEBUG] JWT token inválido ou não é reseller');
@@ -991,7 +1013,7 @@ async function getAuthenticatedReseller(req: Request): Promise<{ email: string; 
   } else {
     console.log('[AUTH-DEBUG] Sem sessão e sem token JWT');
   }
-  
+
   return null;
 }
 
@@ -1017,7 +1039,7 @@ router.get('/supabase-config', async (req: Request, res: Response) => {
 
     const config = result.rows[0];
     const hasOwnCredentials = !!(config?.supabase_url && config?.supabase_anon_key);
-    
+
     if (hasOwnCredentials) {
       // Retornar URL e anon_key (service_key nunca é exposta no frontend)
       return res.json({
@@ -1028,7 +1050,7 @@ router.get('/supabase-config', async (req: Request, res: Response) => {
         inherited: false
       });
     }
-    
+
     // TRANSITIONAL: Verificar se pode herdar do admin (buscar admin_id do Supabase Master)
     const master = getMasterClient();
     if (master) {
@@ -1037,10 +1059,10 @@ router.get('/supabase-config', async (req: Request, res: Response) => {
         .select('admin_id')
         .eq('email', userEmail)
         .single();
-      
+
       if (revendedora?.admin_id) {
         const adminCreds = await getAdminCredentials(revendedora.admin_id);
-        
+
         if (adminCreds && adminCreds.supabase_url && adminCreds.supabase_anon_key) {
           return res.json({
             supabase_url: adminCreds.supabase_url,
@@ -1053,7 +1075,7 @@ router.get('/supabase-config', async (req: Request, res: Response) => {
       }
     }
 
-    res.json({ 
+    res.json({
       supabase_url: '',
       supabase_anon_key: '',
       has_service_key: false,
@@ -1125,7 +1147,7 @@ router.put('/notifications', async (req: Request, res: Response) => {
 
     const { error } = await master
       .from('revendedoras')
-      .update({ 
+      .update({
         notifications_config: parseResult.data
       })
       .eq('email', req.session.userEmail);
@@ -1168,7 +1190,7 @@ router.put('/supabase-config', async (req: Request, res: Response) => {
       email: auth?.email,
       hasAuthHeader: !!req.headers.authorization
     });
-    
+
     if (!auth) {
       console.log('[supabase-config PUT] Auth failed - returning 401');
       return res.status(401).json({ error: 'Não autenticado' });
@@ -1187,11 +1209,11 @@ router.put('/supabase-config', async (req: Request, res: Response) => {
     // Usar schema apropriado
     const schema = isAlreadyConfigured ? supabaseUpdateSchema : supabaseConfigSchema;
     const parseResult = schema.safeParse(req.body);
-    
+
     if (!parseResult.success) {
-      return res.status(400).json({ 
-        error: 'Dados inválidos', 
-        details: parseResult.error.errors 
+      return res.status(400).json({
+        error: 'Dados inválidos',
+        details: parseResult.error.errors
       });
     }
 
@@ -1203,8 +1225,8 @@ router.put('/supabase-config', async (req: Request, res: Response) => {
     }
 
     // Preparar valores para upsert
-    const finalAnonKey = (supabase_anon_key && supabase_anon_key.length >= 10) 
-      ? supabase_anon_key 
+    const finalAnonKey = (supabase_anon_key && supabase_anon_key.length >= 10)
+      ? supabase_anon_key
       : (currentData?.supabase_anon_key || null);
     const finalServiceKey = supabase_service_key || (currentData?.supabase_service_key || null);
 
@@ -1222,8 +1244,8 @@ router.put('/supabase-config', async (req: Request, res: Response) => {
 
     console.log(`✅ Credenciais Supabase salvas para revendedora: ${userEmail} (banco local)`);
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: 'Credenciais Supabase salvas com sucesso',
       configured: true
     });
@@ -1246,14 +1268,14 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
       tenantId: auth?.tenantId,
       hasAuthHeader: !!req.headers.authorization
     });
-    
+
     if (!auth) {
       console.log('[admin-supabase-credentials PUT] Auth failed - returning 401');
       return res.status(401).json({ error: 'Não autenticado' });
     }
 
     const { supabase_url, supabase_anon_key, supabase_service_key } = req.body;
-    
+
     if (!supabase_url || !supabase_anon_key) {
       return res.status(400).json({ error: 'URL e Anon Key são obrigatórios' });
     }
@@ -1271,11 +1293,11 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
     // Buscar o Supabase Owner para salvar as credenciais
     const { getSupabaseOwnerClient } = await import('../config/supabaseOwner');
     const supabaseOwner = getSupabaseOwnerClient();
-    
+
     if (!supabaseOwner) {
       // Fallback: salvar localmente se Supabase Owner não estiver configurado
       console.log('[admin-supabase-credentials] Supabase Owner não configurado, salvando localmente');
-      
+
       await pool.query(`
         INSERT INTO reseller_supabase_configs (reseller_email, supabase_url, supabase_anon_key, supabase_service_key, updated_at)
         VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
@@ -1286,11 +1308,11 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
           supabase_service_key = COALESCE(EXCLUDED.supabase_service_key, reseller_supabase_configs.supabase_service_key),
           updated_at = CURRENT_TIMESTAMP
       `, [auth.email, supabase_url, supabase_anon_key, supabase_service_key || null]);
-      
+
       console.log(`✅ [admin-supabase-credentials] Credenciais salvas localmente para: ${auth.email}`);
-      
-      return res.json({ 
-        success: true, 
+
+      return res.json({
+        success: true,
         message: 'Credenciais salvas localmente (Supabase Owner não disponível)',
         storage: 'local'
       });
@@ -1305,13 +1327,13 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
         supabase_anon_key: supabase_anon_key,
         supabase_service_role_key: supabase_service_key || null,
         updated_at: new Date().toISOString()
-      }, { 
-        onConflict: 'admin_id' 
+      }, {
+        onConflict: 'admin_id'
       });
 
     if (upsertError) {
       console.error('[admin-supabase-credentials] Erro ao salvar no Supabase Owner:', upsertError);
-      
+
       // Fallback: salvar localmente
       await pool.query(`
         INSERT INTO reseller_supabase_configs (reseller_email, supabase_url, supabase_anon_key, supabase_service_key, updated_at)
@@ -1323,11 +1345,11 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
           supabase_service_key = COALESCE(EXCLUDED.supabase_service_key, reseller_supabase_configs.supabase_service_key),
           updated_at = CURRENT_TIMESTAMP
       `, [auth.email, supabase_url, supabase_anon_key, supabase_service_key || null]);
-      
+
       console.log(`✅ [admin-supabase-credentials] Credenciais salvas localmente (fallback): ${auth.email}`);
-      
-      return res.json({ 
-        success: true, 
+
+      return res.json({
+        success: true,
         message: 'Credenciais salvas localmente (erro ao acessar tabela remota)',
         storage: 'local',
         warning: upsertError.message
@@ -1348,8 +1370,8 @@ router.put('/admin-supabase-credentials', async (req: Request, res: Response) =>
 
     console.log(`✅ [admin-supabase-credentials] Credenciais salvas no Supabase Owner para admin: ${tenantId}`);
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: 'Credenciais salvas com sucesso na tabela admin_supabase_credentials',
       storage: 'supabase_owner',
       admin_id: tenantId
@@ -1411,7 +1433,7 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
     }
 
     if (!credentials) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Credenciais não configuradas',
         message: 'Configure suas credenciais Supabase antes de testar a conexão'
       });
@@ -1423,11 +1445,11 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
 
     // Criar cliente com as credenciais
     const tenantClient = createTenantClient(credentials);
-    
+
     // Testar conexão com query simples - usar tabela que certamente existe
     let connectionSuccess = false;
     let testError: any = null;
-    
+
     // Método 1: Tentar buscar metadados do Supabase (funciona sempre se credenciais válidas)
     try {
       // Usar uma query genérica que funciona em qualquer Supabase
@@ -1435,9 +1457,9 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
         .from('contracts')
         .select('id')
         .limit(1);
-      
+
       console.log(`[SUPABASE-TEST] Query contracts result:`, { hasData: !!data, error: error?.message });
-      
+
       if (!error) {
         connectionSuccess = true;
       } else {
@@ -1452,7 +1474,7 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
       console.log(`[SUPABASE-TEST] Exception ao testar contracts:`, e.message);
       testError = e;
     }
-    
+
     // Método 2: Se ainda não conectou, tentar auth.getSession (sempre funciona)
     if (!connectionSuccess) {
       try {
@@ -1468,16 +1490,16 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
 
     if (connectionSuccess) {
       console.log(`✅ [SUPABASE-TEST] Conexão testada com sucesso para ${userEmail} (inherited: ${isInherited})`);
-      res.json({ 
-        success: true, 
-        message: isInherited 
-          ? 'Conexão OK (usando credenciais herdadas do administrador)' 
+      res.json({
+        success: true,
+        message: isInherited
+          ? 'Conexão OK (usando credenciais herdadas do administrador)'
           : 'Conexão estabelecida com sucesso',
         inherited: isInherited
       });
     } else {
       console.log(`❌ [SUPABASE-TEST] Falha na conexão para ${userEmail}:`, testError?.message || 'unknown error');
-      res.status(400).json({ 
+      res.status(400).json({
         error: 'Falha na conexão',
         message: 'Não foi possível conectar ao Supabase. Verifique se as credenciais estão corretas.'
       });
@@ -1497,7 +1519,7 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
 // Returns { client, adminId } or throws error with specific message
 async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any, adminId: string }> {
   const master = getMasterClient();
-  
+
   // Try Master client first
   if (master) {
     // Get admin_id from reseller
@@ -1512,7 +1534,7 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
       const adminCreds = await getAdminCredentials(revendedora.admin_id);
       if (adminCreds?.supabase_url && adminCreds?.supabase_service_key) {
         console.log('[StoreConfig] Using admin Supabase via Master:', adminCreds.supabase_url.substring(0, 40) + '...');
-        
+
         const { createClient } = await import('@supabase/supabase-js');
         return {
           client: createClient(adminCreds.supabase_url, adminCreds.supabase_service_key),
@@ -1521,7 +1543,7 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
       }
     }
   }
-  
+
   // Fallback: Try config file credentials
   console.log('[StoreConfig] Master not available, trying config file fallback');
   try {
@@ -1531,7 +1553,7 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
       const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       if (config.supabase_url && config.supabase_service_key) {
         console.log('[StoreConfig] Using config file Supabase:', config.supabase_url.substring(0, 40) + '...');
-        
+
         const { createClient } = await import('@supabase/supabase-js');
         return {
           client: createClient(config.supabase_url, config.supabase_service_key),
@@ -1542,7 +1564,7 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
   } catch (e) {
     console.log('[StoreConfig] Config file fallback failed:', e);
   }
-  
+
   console.log('[StoreConfig] No Supabase credentials available');
   throw new Error('SUPABASE_NOT_CONFIGURED');
 }
@@ -1560,7 +1582,7 @@ router.get('/store-config', async (req: Request, res: Response) => {
 
     try {
       const { client: supabase } = await getStoreSupabaseClient(auth.email);
-      
+
       const { data, error } = await supabase
         .from('reseller_stores')
         .select('*')
@@ -1571,7 +1593,7 @@ router.get('/store-config', async (req: Request, res: Response) => {
         // Table might not exist - check error code
         if (error.code === '42P01' || error.message?.includes('does not exist')) {
           console.log('[StoreConfig] Table reseller_stores does not exist in Supabase Cliente');
-          return res.status(503).json({ 
+          return res.status(503).json({
             error: 'TABLE_NOT_FOUND',
             message: 'A tabela reseller_stores não existe no Supabase. Execute o SQL de criação.'
           });
@@ -1580,8 +1602,8 @@ router.get('/store-config', async (req: Request, res: Response) => {
       }
 
       if (data) {
-        console.log('[StoreConfig] Found config in Supabase:', { 
-          resellerId, 
+        console.log('[StoreConfig] Found config in Supabase:', {
+          resellerId,
           productCount: data.product_ids?.length || 0,
           isPublished: data.is_published
         });
@@ -1611,7 +1633,7 @@ router.get('/store-config', async (req: Request, res: Response) => {
       if (supabaseError.message === 'ADMIN_CREDS_NOT_CONFIGURED') {
         return res.status(503).json({ error: 'ADMIN_CREDS_NOT_CONFIGURED', message: 'Credenciais do admin não configuradas' });
       }
-      
+
       console.error('[StoreConfig] Supabase error:', supabaseError.message);
       return res.status(500).json({ error: 'SUPABASE_ERROR', message: supabaseError.message });
     }
@@ -1634,15 +1656,15 @@ router.post('/store-config', async (req: Request, res: Response) => {
     const { product_ids, is_published, store_name, store_slug } = req.body;
 
     console.log('[StoreConfig] Saving config for reseller:', resellerId);
-    console.log('[StoreConfig] Data:', { 
-      productCount: product_ids?.length || 0, 
+    console.log('[StoreConfig] Data:', {
+      productCount: product_ids?.length || 0,
       isPublished: is_published,
       storeName: store_name
     });
 
     try {
       const { client: supabase } = await getStoreSupabaseClient(auth.email);
-      
+
       const storeData = {
         reseller_id: resellerId,
         product_ids: product_ids || [],
@@ -1654,18 +1676,18 @@ router.post('/store-config', async (req: Request, res: Response) => {
 
       const { data, error } = await supabase
         .from('reseller_stores')
-        .upsert(storeData, { 
+        .upsert(storeData, {
           onConflict: 'reseller_id',
-          ignoreDuplicates: false 
+          ignoreDuplicates: false
         })
         .select();
 
       if (error) {
         console.error('[StoreConfig] Supabase upsert error:', error);
-        
+
         // Table might not exist
         if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          return res.status(503).json({ 
+          return res.status(503).json({
             error: 'TABLE_NOT_FOUND',
             message: 'A tabela reseller_stores não existe no Supabase. Execute o SQL de criação.'
           });
@@ -1692,7 +1714,7 @@ router.post('/store-config', async (req: Request, res: Response) => {
       if (supabaseError.message === 'ADMIN_CREDS_NOT_CONFIGURED') {
         return res.status(503).json({ error: 'ADMIN_CREDS_NOT_CONFIGURED', message: 'Credenciais do admin não configuradas' });
       }
-      
+
       console.error('[StoreConfig] Supabase save error:', supabaseError.message);
       return res.status(500).json({ error: 'SUPABASE_ERROR', message: supabaseError.message });
     }
@@ -1714,9 +1736,9 @@ router.get('/reseller/pagarme-recipient', resellerAuthMiddleware, async (req, re
     }
 
     const recipientId = await getResellerRecipientId(auth.userId);
-    
+
     if (!recipientId) {
-      return res.json({ 
+      return res.json({
         hasRecipient: false,
         message: 'Recebedor não cadastrado. Configure seus dados bancários para receber pagamentos.'
       });
@@ -1765,7 +1787,7 @@ router.post('/reseller/pagarme-recipient', resellerAuthMiddleware, async (req, r
     const existingRecipientId = await getResellerRecipientId(auth.userId);
     if (existingRecipientId) {
       console.log('[ResellerRecipient] Recipient already exists:', existingRecipientId);
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Recebedor já cadastrado',
         recipientId: existingRecipientId,
         message: 'Você já possui um recebedor cadastrado. Para alterar dados bancários, use a opção de atualização.'
@@ -1773,17 +1795,17 @@ router.post('/reseller/pagarme-recipient', resellerAuthMiddleware, async (req, r
     }
 
     // Validate request body
-    const { 
-      name, 
-      email, 
-      document, 
+    const {
+      name,
+      email,
+      document,
       motherName,
       birthdate,
       monthlyIncome,
       professionalOccupation,
-      phone, 
-      address, 
-      bankAccount 
+      phone,
+      address,
+      bankAccount
     } = req.body;
 
     if (!name || !email || !document || !motherName || !birthdate) {
@@ -1917,11 +1939,11 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
     }
 
     const { product_id, quantity, notes } = req.body;
-    
+
     if (!product_id) {
       return res.status(400).json({ error: 'ID do produto é obrigatório' });
     }
-    
+
     if (!quantity || quantity < 1) {
       return res.status(400).json({ error: 'Quantidade deve ser pelo menos 1' });
     }
@@ -1945,7 +1967,7 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
     }
 
     const tenantClient = createTenantClient(adminCreds);
-    
+
     console.log('[ProductRequest] Inserting product request for reseller:', auth.userId);
 
     // Primeiro, garantir que o reseller existe no Tenant DB (para satisfazer FK)
@@ -1959,11 +1981,11 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
       nivel: 'bronze',
       email: resellerData.email
     };
-    
+
     const { error: upsertError } = await tenantClient
       .from('resellers')
       .upsert(resellerInsertData, { onConflict: 'id' });
-    
+
     if (upsertError) {
       console.log('[ProductRequest] Reseller upsert failed:', upsertError.message);
     } else {
@@ -1985,16 +2007,16 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
 
     if (insertError) {
       console.error('[ProductRequest] Insert error:', insertError);
-      
+
       // Se o erro for de foreign key, a tabela resellers pode não existir ou ter estrutura diferente
       if (insertError.code === '23503') {
         console.log('[ProductRequest] FK constraint error - attempting direct insert with minimal reseller data');
-        
+
         // Tentar insert direto com todos os campos obrigatórios
         const { error: directInsertError } = await tenantClient
           .from('resellers')
           .insert(resellerInsertData);
-        
+
         if (directInsertError) {
           console.log('[ProductRequest] Direct reseller insert failed:', directInsertError.message);
           // Se a tabela não existir (42P01), informar erro específico
@@ -2004,7 +2026,7 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
         } else {
           console.log('[ProductRequest] Reseller inserted with minimal data');
         }
-        
+
         // Tentar novamente
         const { data: retryData, error: retryError } = await tenantClient
           .from('product_requests')
@@ -2017,19 +2039,19 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
           })
           .select()
           .single();
-          
+
         if (retryError) {
           console.error('[ProductRequest] Insert still failed:', retryError);
           throw new Error('Não foi possível criar a solicitação. Verifique se a tabela "resellers" existe com coluna "id" (UUID) no banco de dados do tenant.');
         }
-        
+
         return res.json({
           success: true,
           data: retryData,
           message: 'Solicitação enviada com sucesso!'
         });
       }
-      
+
       // Outro erro - propagar
       throw insertError;
     }
@@ -2129,8 +2151,8 @@ router.get('/admin/product-requests', resellerAuthMiddleware, async (req, res) =
       .select('*, product:product_id(id, description, reference, image)')
       .order('created_at', { ascending: false });
 
-    console.log('[ProductRequest Admin] Query result:', { 
-      count: data?.length || 0, 
+    console.log('[ProductRequest Admin] Query result:', {
+      count: data?.length || 0,
       error: error?.message || null,
       errorCode: error?.code || null
     });
@@ -2146,21 +2168,21 @@ router.get('/admin/product-requests', resellerAuthMiddleware, async (req, res) =
     // Buscar informações das revendedoras do Owner (colunas que existem: id, nome, email, cpf, admin_id)
     const resellerIds = [...new Set((data || []).map(r => r.reseller_id))];
     let resellersMap: Record<string, any> = {};
-    
+
     console.log('[ProductRequest Admin] Looking up resellers:', resellerIds);
-    
+
     if (resellerIds.length > 0) {
       const { data: resellers, error: resellersError } = await supabaseOwner
         .from('revendedoras')
         .select('id, nome, email')
         .in('id', resellerIds);
-      
+
       if (resellersError) {
         console.error('[ProductRequest Admin] Error fetching resellers:', resellersError);
       } else {
         console.log('[ProductRequest Admin] Found resellers:', resellers);
       }
-      
+
       resellersMap = (resellers || []).reduce((acc, r) => {
         acc[r.id] = r;
         return acc;
@@ -2191,7 +2213,7 @@ router.patch('/admin/product-requests/:id', resellerAuthMiddleware, async (req, 
 
     const { id } = req.params;
     const { status } = req.body;
-    
+
     if (!status) {
       return res.status(400).json({ error: 'Status é obrigatório' });
     }

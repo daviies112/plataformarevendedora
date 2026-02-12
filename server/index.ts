@@ -16,7 +16,7 @@ import { startContractSyncPoller, stopContractSyncPoller } from "./lib/contractS
 import multiTenantAuthRoutes from "./routes/multiTenantAuth";
 import { attachUserData, redirectIfNotAuth, requireAuth } from "./middleware/multiTenantAuth";
 import { SUPABASE_CONFIGURED } from "./config/supabaseOwner";
-import biometricRoutes from "./routes/biometric";
+// import biometricRoutes from "./routes/biometric"; // REMOVED
 import healthRouter from "./routes/health";
 import { cloudflareCache } from "./middleware/cloudflareCache";
 import { smartCompression } from "./middleware/compression";
@@ -158,8 +158,10 @@ app.use((req, res, next) => {
   // Setup multi-tenant authentication routes (público - para login)
   app.use('/api/auth', multiTenantAuthRoutes);
 
-  // Setup biometric authentication routes (público - para login biométrico)
+  // Setup biometric authentication routes - REMOVED
+  /*
   app.use('/api/biometric', biometricRoutes);
+  */
 
   // Health check endpoint (público)
   app.use('/api/health', healthRouter);
@@ -203,7 +205,7 @@ app.use((req, res, next) => {
   });
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const port = 5001;
 
   // Start server and setup Vite in the callback
   server.listen({

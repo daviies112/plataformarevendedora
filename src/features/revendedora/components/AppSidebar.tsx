@@ -10,10 +10,10 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { 
-  LayoutDashboard, 
-  Package, 
-  Users, 
+import {
+  LayoutDashboard,
+  Package,
+  Users,
   Link as LinkIcon,
   Wallet,
   TrendingUp,
@@ -74,7 +74,7 @@ export function AppSidebar({ type = 'reseller', role, companyName = 'UP Vendas',
           </h2>
         </div>
         <p className="text-xs text-muted-foreground">
-          {(type === 'admin' || role === 'admin') ? 'Administrador' : 'Revendedor'}
+          Revendedor
         </p>
       </SidebarHeader>
       <SidebarContent>
@@ -96,8 +96,8 @@ export function AppSidebar({ type = 'reseller', role, companyName = 'UP Vendas',
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="w-full justify-start"
           onClick={() => navigate('/revendedora')}
         >

@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import { Suspense, lazy, useMemo } from 'react';
-import { FormLoader } from '@/features/formularios-platform/components/FormLoader';
 import { usePlatform } from './shared/hooks/usePlatform';
 import { Loader2 } from 'lucide-react';
 
@@ -10,8 +9,8 @@ import MobileApp from './mobile/MobileApp';
 import RevendedoraApp from '@/features/revendedora/RevendedoraApp';
 
 // Rotas públicas - lazy loading para performance (carregam separadamente)
-const ReuniaoPublica = lazy(() => import('@/pages/ReuniaoPublica'));
-const FormularioPublicoWrapper = lazy(() => import('@/features/formularios-platform/pages/FormularioPublicoWrapper'));
+// const ReuniaoPublica = lazy(() => import('@/pages/ReuniaoPublica')); // REMOVED
+// const FormularioPublicoWrapper = lazy(() => import('@/PublicFormApp')); // REMOVED
 const ResellerApp = lazy(() => import('./reseller/ResellerApp'));
 const PublicStore = lazy(() => import('@/features/revendedora/pages/public/PublicStore'));
 const PublicCheckout = lazy(() => import('@/features/revendedora/pages/public/PublicCheckout'));
@@ -37,37 +36,42 @@ const PlatformRouter = () => {
   const { isMobile } = usePlatform();
 
   // Detectar se é uma rota pública de formulário
-  // Padrões: /formulario/:slug/form/:id, /:slug/form/:id, /form/:id, /f/:token
-  const isPublicFormRoute = useMemo(() => {
+  // REMOVED Public Forms Logic
+  const isPublicFormRoute = false;
+  /*
+  useMemo(() => {
     const path = location.pathname;
-    
+
     // /formulario/:companySlug/form/:id - formato com slug da empresa
     if (/^\/formulario\/[^/]+\/form\/[^/]+/.test(path)) {
       return true;
     }
-    
+
     // /:companySlug/form/:id - formato curto com slug da empresa
     if (/^\/[^/]+\/form\/[^/]+/.test(path) && !path.startsWith('/formulario')) {
       return true;
     }
-    
+
     // /form/:id - acesso público direto
     if (/^\/form\/[^/]+/.test(path)) {
       return true;
     }
-    
+
     // /f/:token - acesso com token
     if (/^\/f\/[^/]+/.test(path)) {
       return true;
     }
-    
+
     return false;
   }, [location.pathname]);
+  */
 
   // Se for uma rota pública de formulário, renderizar diretamente
+  /*
   if (isPublicFormRoute) {
     return <FormularioPublicoWrapper />;
   }
+  */
 
   // Se for uma rota pública de loja, renderizar diretamente SEM autenticação
   if (location.pathname.startsWith('/loja/')) {
@@ -80,9 +84,11 @@ const PlatformRouter = () => {
   }
 
   // Se for uma rota publica de reuniao, renderizar diretamente
+  /*
   if (location.pathname.startsWith('/reuniao/') || location.pathname.startsWith('/reuniao-publica/')) {
     return <ReuniaoPublica />;
   }
+  */
 
   // ===== NEXUS: Plataforma Revendedora =====
   // Se for rota de revendedora, renderizar RevendedoraApp diretamente (fora do DesktopApp/MobileApp)

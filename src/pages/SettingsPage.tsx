@@ -31,26 +31,26 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { setColorScheme, getSavedColorScheme, type ColorScheme } from '@/lib/colorScheme';
 
 // Move CollapsibleSection outside to prevent re-renders
-const CollapsibleSection = ({ 
-  id, 
-  title, 
-  description, 
-  icon: Icon, 
+const CollapsibleSection = ({
+  id,
+  title,
+  description,
+  icon: Icon,
   children,
   openSections,
   setOpenSections
-}: { 
-  id: string; 
-  title: string; 
-  description: string; 
-  icon: React.ElementType; 
+}: {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ElementType;
   children: React.ReactNode;
   openSections: Record<string, boolean>;
   setOpenSections: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => (
   <Collapsible
     open={openSections[id]}
-    onOpenChange={(open) => setOpenSections((prev) => ({...prev, [id]: open}))}
+    onOpenChange={(open) => setOpenSections((prev) => ({ ...prev, [id]: open }))}
   >
     <PremiumCard variant="elevated" padding="lg" className="group">
       <CollapsibleTrigger className="w-full">
@@ -72,7 +72,7 @@ const CollapsibleSection = ({
           )} />
         </div>
       </CollapsibleTrigger>
-      
+
       <CollapsibleContent className="mt-6">
         {children}
       </CollapsibleContent>
@@ -219,7 +219,7 @@ const SettingsPage = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  
+
   const [selectedColorScheme, setSelectedColorScheme] = useState<ColorScheme>(() => {
     return getSavedColorScheme();
   });
@@ -249,7 +249,7 @@ const SettingsPage = () => {
     monitoring: false,
     totalexpress: false,
   });
-  
+
   const [generatedN8nApiKey, setGeneratedN8nApiKey] = useState<string | null>(null);
   const [showN8nApiKey, setShowN8nApiKey] = useState(false);
   const [copiedN8nApiKey, setCopiedN8nApiKey] = useState(false);
@@ -259,20 +259,20 @@ const SettingsPage = () => {
   }, []);
 
   const isDark = mounted && (resolvedTheme ?? theme) === 'dark';
-  
+
   const [profileForm, setProfileForm] = useState({
     name: user?.name || '',
     email: user?.email || ''
   });
-  
+
   const [companyForm, setCompanyForm] = useState({
     name: client?.name || '',
     email: client?.email || ''
   });
-  
+
   const [whatsappQRCode, setWhatsappQRCode] = useState<string | null>(null);
   const [uploadingQRCode, setUploadingQRCode] = useState(false);
-  
+
   // Evolution API QR Code states
   const [evolutionQRCode, setEvolutionQRCode] = useState<string | null>(null);
   const [evolutionStatus, setEvolutionStatus] = useState<'idle' | 'loading' | 'ready' | 'connected' | 'error'>('idle');
@@ -334,9 +334,9 @@ const SettingsPage = () => {
       query_cache_ttl: '300',
       aggregation_enabled: 'false'
     },
-    hms100ms: { 
-      app_access_key: '', 
-      app_secret: '', 
+    hms100ms: {
+      app_access_key: '',
+      app_secret: '',
       management_token: '',
       template_id: '',
       api_base_url: 'https://api.100ms.live/v2'
@@ -355,12 +355,12 @@ const SettingsPage = () => {
       auto_actions_enabled: 'false'
     }
   });
-  
+
   const handleSaveProfile = () => {
     updateUser(profileForm);
     localStorage.setItem('user-name', profileForm.name);
     localStorage.setItem('user-email', profileForm.email);
-    
+
     toast({
       title: "Perfil atualizado",
       description: "Suas informações foram salvas com sucesso.",
@@ -371,14 +371,14 @@ const SettingsPage = () => {
     updateClient(companyForm);
     localStorage.setItem('client-name', companyForm.name);
     localStorage.setItem('client-email', companyForm.email);
-    
+
     if (companyForm.name.trim()) {
       const autoSlug = companyForm.name.trim()
         .toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
-      
+
       if (autoSlug) {
         try {
           const res = await fetch('/api/config/company-slug', {
@@ -396,7 +396,7 @@ const SettingsPage = () => {
         }
       }
     }
-    
+
     toast({
       title: "Empresa atualizada",
       description: "As informações da empresa foram salvas com sucesso.",
@@ -407,7 +407,7 @@ const SettingsPage = () => {
     const newSettings = { ...notifications, [type]: value };
     setNotifications(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
-    
+
     toast({
       title: "Notificações atualizadas",
       description: `Notificações via ${type === 'push' ? 'Push' : type === 'email' ? 'Email' : 'WhatsApp'} ${value ? 'ativadas' : 'desativadas'}.`,
@@ -425,21 +425,21 @@ const SettingsPage = () => {
 
   const clearAllTenantCache = async () => {
     console.log('🧹 [Cache] Limpando todo o cache do tenant anterior...');
-    
+
     // Invalidate all queries instead of clearing (more gentle)
     queryClient.invalidateQueries();
-    
+
     try {
-      const { queryClient: formsQueryClient } = await import('@/features/formularios-platform/lib/queryClient');
-      formsQueryClient.invalidateQueries();
-      console.log('✅ [Cache] QueryClient de formulários invalidado');
+      // const { queryClient: formsQueryClient } = await import('@/features/formularios-platform/lib/queryClient');
+      // formsQueryClient.invalidateQueries();
+      console.log('✅ [Cache] QueryClient de formulários invalidado (simulado)');
     } catch (error) {
       console.warn('⚠️ [Cache] Não foi possível invalidar queryClient de formulários:', error);
     }
-    
+
     const tenantSpecificKeys = [
       'leads_cache',
-      'forms_cache', 
+      'forms_cache',
       'contracts_cache',
       'clients_cache',
       'reunioes_cache',
@@ -459,24 +459,24 @@ const SettingsPage = () => {
       'formularios_cache',
       'forms_submissions_cache',
     ];
-    
+
     tenantSpecificKeys.forEach(key => {
       localStorage.removeItem(key);
     });
-    
+
     Object.keys(localStorage).forEach(key => {
       if (key.startsWith('tenant_') || key.startsWith('cache_') || key.startsWith('data_') || key.startsWith('form_')) {
         localStorage.removeItem(key);
       }
     });
-    
+
     window.dispatchEvent(new CustomEvent('tenant-credentials-changed'));
     window.dispatchEvent(new CustomEvent('supabase-config-changed'));
     window.dispatchEvent(new CustomEvent('forms-cache-cleared'));
-    
+
     // REMOVIDO: sessionStorage.clear() e window.location.reload()
     // Isso causava tela branca infinita após salvar credenciais
-    
+
     console.log('✅ [Cache] Cache do tenant limpo com sucesso!');
   };
 
@@ -494,26 +494,26 @@ const SettingsPage = () => {
           supabaseBucket: credentials.bucket || 'receipts'
         }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao salvar configuração');
       }
-      
+
       // Note: credenciais serão salvas no onSuccess APÓS limpar cache antigo
       return { ...(await response.json()), newCredentials: credentials };
     },
     onSuccess: async (data: any) => {
       // IMPORTANTE: Limpa cache ANTES de salvar novas credenciais
       await clearAllTenantCache();
-      
+
       // Salva novas credenciais DEPOIS de limpar cache antigo
       if (data?.newCredentials) {
         localStorage.setItem('supabase_url', data.newCredentials.url);
         localStorage.setItem('supabase_anon_key', data.newCredentials.anon_key);
         console.log('✅ Credenciais do Supabase salvas no localStorage (após limpar cache)');
       }
-      
+
       // 🔐 CRITICAL: Resetar cache de dados para forçar novo fetch na próxima navegação
       // NOTA: refetchQueries não funciona se a query não está montada (usuário está em outra página)
       // resetQueries LIMPA o cache, garantindo um novo fetch quando o usuário navegar para a página
@@ -524,9 +524,9 @@ const SettingsPage = () => {
       queryClient.resetQueries({ queryKey: ['/api/leads'], exact: true });
       queryClient.resetQueries({ queryKey: ['/api/workspace'], exact: true });
       console.log('✅ Cache resetado - formulários serão recarregados na próxima navegação');
-      
+
       refetchCredentials();
-      
+
       toast({
         title: "Integração configurada",
         description: "Credenciais do Supabase salvas! Formulários serão carregados automaticamente.",
@@ -575,12 +575,12 @@ const SettingsPage = () => {
           clientSecret: credentials.client_secret,
         }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao salvar configuração');
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
@@ -611,12 +611,12 @@ const SettingsPage = () => {
           webhookUrl: credentials.webhook_url,
         }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao salvar configuração');
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
@@ -775,12 +775,12 @@ const SettingsPage = () => {
   const handleGenerateEvolutionQR = async () => {
     setEvolutionStatus('loading');
     setEvolutionQRCode(null);
-    
+
     // First check if already connected
     try {
       const statusResponse = await fetch('/api/evolution/status');
       const statusData = await statusResponse.json();
-      
+
       if (statusData.success && statusData.status?.instance?.state === 'open') {
         setEvolutionStatus('connected');
         toast({
@@ -792,7 +792,7 @@ const SettingsPage = () => {
     } catch (e) {
       // Continue to fetch QR Code
     }
-    
+
     // Try to fetch QR Code directly
     fetchEvolutionQRCodeMutation.mutate();
   };
@@ -916,7 +916,7 @@ const SettingsPage = () => {
     mutationFn: async (credentials: any) => {
       const response = await fetch('/api/config/total-express', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -950,7 +950,7 @@ const SettingsPage = () => {
     mutationFn: async (credentials: any) => {
       const response = await fetch('/api/config/total-express/test', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -977,7 +977,7 @@ const SettingsPage = () => {
     mutationFn: async () => {
       const response = await fetch('/api/config/total-express', {
         method: 'DELETE',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         credentials: 'include',
@@ -1134,7 +1134,7 @@ const SettingsPage = () => {
     mutationFn: async () => {
       const response = await fetch("/api/credentials/clear-all", {
         method: "DELETE",
-        headers: { 
+        headers: {
           "Authorization": `Bearer ${localStorage.getItem('token')}`
         },
         credentials: 'include',
@@ -1146,17 +1146,17 @@ const SettingsPage = () => {
       return response.json();
     },
     onSuccess: (data) => {
-      const keysToRemove = Object.keys(localStorage).filter(key => 
-        key.startsWith('supabase_') || 
+      const keysToRemove = Object.keys(localStorage).filter(key =>
+        key.startsWith('supabase_') ||
         key.startsWith('credentials_') ||
         key.startsWith('cache_') ||
         key.startsWith('tenant_')
       );
       keysToRemove.forEach(key => localStorage.removeItem(key));
-      
+
       window.dispatchEvent(new CustomEvent('supabase-config-changed'));
       window.dispatchEvent(new CustomEvent('tenant-credentials-changed'));
-      
+
       // Reset all integration forms to initial empty state
       setIntegrationForms({
         supabase: { url: '', anon_key: '', bucket: 'receipts' },
@@ -1195,9 +1195,9 @@ const SettingsPage = () => {
           query_cache_ttl: '300',
           aggregation_enabled: 'false'
         },
-        hms100ms: { 
-          app_access_key: '', 
-          app_secret: '', 
+        hms100ms: {
+          app_access_key: '',
+          app_secret: '',
           management_token: '',
           template_id: '',
           api_base_url: 'https://api.100ms.live/v2'
@@ -1216,7 +1216,7 @@ const SettingsPage = () => {
           auto_actions_enabled: 'false'
         }
       });
-      
+
       queryClient.invalidateQueries({ queryKey: ['/api/credentials'] });
       // Invalidar caches de configuração
       queryClient.invalidateQueries({ queryKey: ['/api/config/supabase'] });
@@ -1227,7 +1227,7 @@ const SettingsPage = () => {
       queryClient.invalidateQueries({ queryKey: ['/api/config/hms100ms/credentials'] });
       queryClient.invalidateQueries({ queryKey: ['/api/config/bigdatacorp'] });
       queryClient.invalidateQueries({ queryKey: ['/api/config/evolution-api'] });
-      
+
       // 🔐 CRITICAL: Invalidar caches de DADOS para limpar formulários/contratos do frontend
       queryClient.invalidateQueries({ queryKey: ['/api/forms'] });
       queryClient.invalidateQueries({ queryKey: ['/api/formularios'] });
@@ -1239,12 +1239,12 @@ const SettingsPage = () => {
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard'] });
       queryClient.invalidateQueries({ queryKey: ['/api/workspace'] });
       queryClient.invalidateQueries({ queryKey: ['/api/company-slug'] });
-      
+
       // Limpar TODO o cache do TanStack Query para garantir fresh data
       queryClient.clear();
-      
+
       refetchCredentials();
-      
+
       toast({
         title: "Credenciais limpas",
         description: `Removido: ${data.cleared?.database?.length || 0} configurações do banco, ${data.cleared?.cache?.length || 0} caches, ${data.cleared?.files?.length || 0} arquivos.`,
@@ -1446,7 +1446,7 @@ const SettingsPage = () => {
     mutationFn: async () => {
       const response = await fetch('/api/n8n/api-key/generate', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -1479,7 +1479,7 @@ const SettingsPage = () => {
     mutationFn: async () => {
       const response = await fetch('/api/n8n/api-key', {
         method: 'DELETE',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
       });
@@ -1736,7 +1736,7 @@ const SettingsPage = () => {
           password: '',
           reid: totalExpressConfig.reid || '',
           service_type: totalExpressConfig.serviceType || 'EXP',
-          profit_margin: totalExpressConfig.profitMargin 
+          profit_margin: totalExpressConfig.profitMargin
             ? Math.round((totalExpressConfig.profitMargin - 1) * 100).toString()
             : '40',
           test_mode: totalExpressConfig.testMode || false
@@ -1747,7 +1747,7 @@ const SettingsPage = () => {
 
   const handleSaveIntegration = (integrationType: string) => {
     const credentials = integrationForms[integrationType as keyof typeof integrationForms];
-    
+
     if (integrationType === 'supabase') {
       if (!credentials.url || !credentials.anon_key) {
         toast({
@@ -1853,7 +1853,7 @@ const SettingsPage = () => {
     try {
       // ✅ CORREÇÃO: Enviar as credenciais necessárias para cada tipo de integração
       let testPayload = {};
-      
+
       if (integrationType === 'supabase') {
         const sbRes = await apiRequest('POST', '/api/config/supabase/test', {
           supabaseUrl: integrationForms.supabase.url,
@@ -1910,7 +1910,7 @@ const SettingsPage = () => {
         });
         return;
       }
-      
+
       console.log(`🚀 [TEST] Enviando teste para ${integrationType}:`, testPayload);
       const res = await apiRequest('POST', `/api/credentials/test/${integrationType}`, testPayload);
       const response = await res.json();
@@ -2006,7 +2006,7 @@ const SettingsPage = () => {
         "px-4 md:px-6 lg:px-8",
         isMobile && "pb-24"
       )}>
-        
+
         {/* Premium Header */}
         <div>
           <div className="flex items-start gap-4 lg:gap-3">
@@ -2026,7 +2026,7 @@ const SettingsPage = () => {
 
         {/* Settings Sections */}
         <div className="space-y-4">
-          
+
           {/* Profile Section */}
           <CollapsibleSection
             openSections={openSections}
@@ -2040,7 +2040,7 @@ const SettingsPage = () => {
               <PremiumInput
                 label="Nome"
                 value={profileForm.name}
-                onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
+                onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
                 placeholder="Seu nome"
                 data-testid="input-name"
               />
@@ -2048,7 +2048,7 @@ const SettingsPage = () => {
                 label="Email"
                 type="email"
                 value={profileForm.email}
-                onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
+                onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                 placeholder="seu@email.com"
                 data-testid="input-email"
               />
@@ -2058,16 +2058,16 @@ const SettingsPage = () => {
                   {user?.role === 'admin' ? 'Administrador' : 'Visualizador'}
                 </Badge>
               </div>
-              <PremiumButton 
-                onClick={handleSaveProfile} 
+              <PremiumButton
+                onClick={handleSaveProfile}
                 data-testid="button-save-profile"
                 variant="primary"
               >
                 Salvar Alterações
               </PremiumButton>
-              
+
               <div className="pt-4 border-t border-border mt-4">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => {
                     logout();
                     navigate('/login');
@@ -2096,7 +2096,7 @@ const SettingsPage = () => {
               <PremiumInput
                 label="Nome da Empresa"
                 value={companyForm.name}
-                onChange={(e) => setCompanyForm({...companyForm, name: e.target.value})}
+                onChange={(e) => setCompanyForm({ ...companyForm, name: e.target.value })}
                 placeholder="Nome da sua empresa"
                 data-testid="input-company-name"
               />
@@ -2104,12 +2104,12 @@ const SettingsPage = () => {
                 label="Email da Empresa"
                 type="email"
                 value={companyForm.email}
-                onChange={(e) => setCompanyForm({...companyForm, email: e.target.value})}
+                onChange={(e) => setCompanyForm({ ...companyForm, email: e.target.value })}
                 placeholder="contato@empresa.com"
                 data-testid="input-company-email"
               />
-              <PremiumButton 
-                onClick={handleSaveCompany} 
+              <PremiumButton
+                onClick={handleSaveCompany}
                 data-testid="button-save-company"
                 variant="primary"
               >
@@ -2170,8 +2170,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'golden' 
-                        ? "border-[hsl(45,100%,85%)] bg-[hsl(45,100%,85%)]/10" 
+                      selectedColorScheme === 'golden'
+                        ? "border-[hsl(45,100%,85%)] bg-[hsl(45,100%,85%)]/10"
                         : "border-border hover:border-[hsl(45,100%,85%)]/50"
                     )}
                   >
@@ -2191,8 +2191,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'blue' 
-                        ? "border-[hsl(217,91%,60%)] bg-[hsl(217,91%,60%)]/10" 
+                      selectedColorScheme === 'blue'
+                        ? "border-[hsl(217,91%,60%)] bg-[hsl(217,91%,60%)]/10"
                         : "border-border hover:border-[hsl(217,91%,60%)]/50"
                     )}
                   >
@@ -2212,8 +2212,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'purple' 
-                        ? "border-[hsl(271,91%,65%)] bg-[hsl(271,91%,65%)]/10" 
+                      selectedColorScheme === 'purple'
+                        ? "border-[hsl(271,91%,65%)] bg-[hsl(271,91%,65%)]/10"
                         : "border-border hover:border-[hsl(271,91%,65%)]/50"
                     )}
                   >
@@ -2233,8 +2233,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'green' 
-                        ? "border-[hsl(142,71%,45%)] bg-[hsl(142,71%,45%)]/10" 
+                      selectedColorScheme === 'green'
+                        ? "border-[hsl(142,71%,45%)] bg-[hsl(142,71%,45%)]/10"
                         : "border-border hover:border-[hsl(142,71%,45%)]/50"
                     )}
                   >
@@ -2254,8 +2254,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'pink' 
-                        ? "border-[hsl(330,81%,60%)] bg-[hsl(330,81%,60%)]/10" 
+                      selectedColorScheme === 'pink'
+                        ? "border-[hsl(330,81%,60%)] bg-[hsl(330,81%,60%)]/10"
                         : "border-border hover:border-[hsl(330,81%,60%)]/50"
                     )}
                   >
@@ -2275,8 +2275,8 @@ const SettingsPage = () => {
                     }}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105",
-                      selectedColorScheme === 'orange' 
-                        ? "border-[hsl(25,95%,53%)] bg-[hsl(25,95%,53%)]/10" 
+                      selectedColorScheme === 'orange'
+                        ? "border-[hsl(25,95%,53%)] bg-[hsl(25,95%,53%)]/10"
                         : "border-border hover:border-[hsl(25,95%,53%)]/50"
                     )}
                   >
@@ -2336,7 +2336,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="URL da API"
                 value={integrationForms.evolution_api.api_url}
@@ -2347,7 +2347,7 @@ const SettingsPage = () => {
                 placeholder="https://api.evolutionapi.com"
                 data-testid="input-evolution-url"
               />
-              
+
               <PremiumInput
                 label="API Key"
                 type="password"
@@ -2359,7 +2359,7 @@ const SettingsPage = () => {
                 placeholder="Sua API Key"
                 data-testid="input-evolution-api-key"
               />
-              
+
               <PremiumInput
                 label="Nome da Instância"
                 value={integrationForms.evolution_api.instance}
@@ -2405,9 +2405,9 @@ const SettingsPage = () => {
                       </div>
                       <p className="text-sm text-muted-foreground">segundos restantes</p>
                     </div>
-                    <img 
-                      src={evolutionQRCode} 
-                      alt="WhatsApp QR Code" 
+                    <img
+                      src={evolutionQRCode}
+                      alt="WhatsApp QR Code"
                       className="max-w-[280px] mx-auto rounded-lg border-4 border-primary/20 mb-4"
                       data-testid="img-evolution-qrcode"
                     />
@@ -2467,9 +2467,9 @@ const SettingsPage = () => {
                 <div className="space-y-3 pt-4 border-t border-border/50">
                   <Label className="text-base font-semibold">QR Code (Upload Manual)</Label>
                   <PremiumCard variant="outlined" padding="md">
-                    <img 
-                      src={whatsappQRCode} 
-                      alt="WhatsApp QR Code" 
+                    <img
+                      src={whatsappQRCode}
+                      alt="WhatsApp QR Code"
                       className="w-full max-w-xs mx-auto rounded-lg"
                     />
                   </PremiumCard>
@@ -2498,7 +2498,7 @@ const SettingsPage = () => {
               </div>
 
               <div className="flex flex-wrap gap-3 pt-4 border-t border-border/50">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('evolution_api')}
                   isLoading={saveEvolutionApiMutation.isPending}
                   data-testid="button-save-evolution"
@@ -2506,7 +2506,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('evolution_api')}
                   disabled={!evolutionCredentials?.success}
@@ -2535,7 +2535,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="URL do Projeto Supabase"
                 value={integrationForms.supabase.url}
@@ -2546,7 +2546,7 @@ const SettingsPage = () => {
                 placeholder="https://xxxxxxxxxxx.supabase.co"
                 data-testid="input-supabase-url"
               />
-              
+
               <PremiumInput
                 label="Chave Anônima (anon/public)"
                 type="password"
@@ -2558,7 +2558,7 @@ const SettingsPage = () => {
                 placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 data-testid="input-supabase-anon-key"
               />
-              
+
               <PremiumInput
                 label="Bucket de Armazenamento"
                 value={integrationForms.supabase.bucket}
@@ -2571,7 +2571,7 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('supabase')}
                   isLoading={saveSupabaseMutation.isPending}
                   data-testid="button-save-supabase"
@@ -2579,7 +2579,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('supabase')}
                   disabled={!credentialsStatus?.credentials?.supabase_configured}
@@ -2608,7 +2608,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="Client ID"
                 value={integrationForms.google_calendar.client_id}
@@ -2619,7 +2619,7 @@ const SettingsPage = () => {
                 placeholder="123456789-abcdef.apps.googleusercontent.com"
                 data-testid="input-google-client-id"
               />
-              
+
               <PremiumInput
                 label="Client Secret"
                 type="password"
@@ -2631,7 +2631,7 @@ const SettingsPage = () => {
                 placeholder="GOCSPX-example-secret-key"
                 data-testid="input-google-client-secret"
               />
-              
+
               <PremiumInput
                 label="Refresh Token"
                 type="password"
@@ -2645,7 +2645,7 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('google_calendar')}
                   isLoading={saveGoogleCalendarMutation.isPending}
                   data-testid="button-save-google-calendar"
@@ -2653,7 +2653,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('google_calendar')}
                   disabled={!credentialsStatus?.credentials?.google_calendar}
@@ -2682,7 +2682,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="ID do Cliente"
                 value={integrationForms.pluggy.client_id}
@@ -2693,7 +2693,7 @@ const SettingsPage = () => {
                 placeholder="Seu Client ID"
                 data-testid="input-pluggy-client-id"
               />
-              
+
               <PremiumInput
                 label="Segredo do Cliente"
                 type="password"
@@ -2707,7 +2707,7 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('pluggy')}
                   isLoading={savePluggyMutation.isPending}
                   data-testid="button-save-pluggy"
@@ -2715,7 +2715,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('pluggy')}
                   disabled={!pluggyCredentials?.configured}
@@ -2783,7 +2783,7 @@ const SettingsPage = () => {
                   </p>
                 </div>
               )}
-              
+
               <PremiumInput
                 label="URL do Webhook"
                 value={integrationForms.n8n.webhook_url}
@@ -2796,7 +2796,7 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('n8n')}
                   isLoading={saveN8nMutation.isPending}
                   data-testid="button-save-n8n"
@@ -2804,7 +2804,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('n8n')}
                   disabled={!n8nCredentials?.configured}
@@ -2835,7 +2835,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="redis://..."
               />
-              
+
               <PremiumInput
                 label="Redis Token (opcional)"
                 type="password"
@@ -2848,14 +2848,14 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('redis')}
                   isLoading={saveRedisMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('redis')}
                   disabled={!redisCredentials?.success}
@@ -2886,7 +2886,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="https://...@sentry.io/..."
               />
-              
+
               <PremiumInput
                 label="Environment"
                 value={integrationForms.sentry.environment}
@@ -2898,14 +2898,14 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('sentry')}
                   isLoading={saveSentryMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('sentry')}
                   disabled={!sentryCredentials?.success}
@@ -2935,7 +2935,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="Zone ID"
               />
-              
+
               <PremiumInput
                 label="API Token"
                 type="password"
@@ -2948,14 +2948,14 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('cloudflare')}
                   isLoading={saveCloudflareMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('cloudflare')}
                   disabled={!cloudflareCredentials?.success}
@@ -2986,7 +2986,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="Source Token (ex: Gv2bG4...)"
               />
-              
+
               <PremiumInput
                 label="Ingesting Host (Opcional)"
                 value={integrationForms.better_stack.ingesting_host}
@@ -2998,14 +2998,14 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('better_stack')}
                   isLoading={saveBetterStackMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('better_stack')}
                   disabled={!betterStackCredentials?.success}
@@ -3033,7 +3033,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="TOKEN_ID"
                 type="password"
@@ -3044,7 +3044,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="ID do Token BigDataCorp"
               />
-              
+
               <PremiumInput
                 label="CHAVE_TOKEN"
                 type="password"
@@ -3055,16 +3055,16 @@ const SettingsPage = () => {
                 })}
                 placeholder="Chave do Token BigDataCorp"
               />
-              
+
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('bigdatacorp')}
                   isLoading={saveBigdatacorpMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('bigdatacorp')}
                   disabled={!bigdatacorpStatus?.configured}
@@ -3100,7 +3100,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <PremiumInput
                   label="Usuário *"
@@ -3112,7 +3112,7 @@ const SettingsPage = () => {
                   placeholder="Usuário TotalExpress"
                   data-testid="input-totalexpress-user"
                 />
-                
+
                 <div className="space-y-2">
                   <Label>Senha {!totalExpressConfig?.configured && "*"}</Label>
                   <div className="flex gap-2">
@@ -3128,13 +3128,13 @@ const SettingsPage = () => {
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {totalExpressConfig?.configured 
-                      ? "Deixe em branco para manter a senha atual" 
+                    {totalExpressConfig?.configured
+                      ? "Deixe em branco para manter a senha atual"
                       : "Senha de acesso à API"}
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <PremiumInput
                   label="REID *"
@@ -3146,11 +3146,11 @@ const SettingsPage = () => {
                   placeholder="Código REID"
                   data-testid="input-totalexpress-reid"
                 />
-                
+
                 <div className="space-y-2">
                   <Label>Tipo de Serviço</Label>
-                  <Select 
-                    value={integrationForms.totalexpress.service_type} 
+                  <Select
+                    value={integrationForms.totalexpress.service_type}
                     onValueChange={(value) => setIntegrationForms({
                       ...integrationForms,
                       totalexpress: { ...integrationForms.totalexpress, service_type: value }
@@ -3181,7 +3181,7 @@ const SettingsPage = () => {
                   placeholder="40"
                   data-testid="input-totalexpress-margin"
                 />
-                
+
                 <div className="space-y-2">
                   <Label>Modo de Teste</Label>
                   <PremiumSwitch
@@ -3198,13 +3198,13 @@ const SettingsPage = () => {
 
               <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>Sobre o REID:</strong> O REID é o código de identificação do remetente associado à sua conta TotalExpress. 
+                  <strong>Sobre o REID:</strong> O REID é o código de identificação do remetente associado à sua conta TotalExpress.
                   Cada REID está vinculado a um CEP de origem. Para diferentes origens, configure diferentes REIDs.
                 </p>
               </div>
-              
+
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => {
                     if (!integrationForms.totalexpress.user || !integrationForms.totalexpress.reid) {
                       toast({ title: "Erro", description: "Por favor, preencha usuário e REID", variant: "destructive" });
@@ -3222,7 +3222,7 @@ const SettingsPage = () => {
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => {
                     if (!integrationForms.totalexpress.user || !integrationForms.totalexpress.reid) {
@@ -3237,7 +3237,7 @@ const SettingsPage = () => {
                   {testTotalExpressMutation.isPending ? "Testando..." : "Testar Conexão"}
                 </PremiumButton>
                 {totalExpressConfig?.configured && (
-                  <PremiumButton 
+                  <PremiumButton
                     variant="outline"
                     onClick={() => deleteTotalExpressMutation.mutate()}
                     disabled={deleteTotalExpressMutation.isPending}
@@ -3267,7 +3267,7 @@ const SettingsPage = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <PremiumInput
                 label="URL do Supabase Master"
                 value={integrationForms.supabase_master.url}
@@ -3277,7 +3277,7 @@ const SettingsPage = () => {
                 })}
                 placeholder="https://xxx.supabase.co"
               />
-              
+
               <PremiumInput
                 label="Service Role Key"
                 type="password"
@@ -3290,14 +3290,14 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-3">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('supabase_master')}
                   isLoading={saveSupabaseMasterMutation.isPending}
                   variant="primary"
                 >
                   Salvar Configuração
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   variant="secondary"
                   onClick={() => handleTestConnection('supabase_master')}
                   disabled={!supabaseMasterStatus?.configured}
@@ -3424,7 +3424,7 @@ const SettingsPage = () => {
                 })}
               />
 
-              <PremiumButton 
+              <PremiumButton
                 onClick={() => handleSaveIntegration('cache')}
                 isLoading={saveCacheMutation.isPending}
                 variant="primary"
@@ -3498,7 +3498,7 @@ const SettingsPage = () => {
                 })}
               />
 
-              <PremiumButton 
+              <PremiumButton
                 onClick={() => handleSaveIntegration('optimizer')}
                 isLoading={saveOptimizerMutation.isPending}
                 variant="primary"
@@ -3583,7 +3583,7 @@ const SettingsPage = () => {
               />
 
               <div className="flex gap-2">
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => testHms100msMutation.mutate({
                     app_access_key: integrationForms.hms100ms?.app_access_key || '',
                     app_secret: integrationForms.hms100ms?.app_secret || '',
@@ -3595,7 +3595,7 @@ const SettingsPage = () => {
                 >
                   {testHms100msMutation.isPending ? "Testando..." : "Testar Conexão 100ms"}
                 </PremiumButton>
-                <PremiumButton 
+                <PremiumButton
                   onClick={() => handleSaveIntegration('hms100ms')}
                   variant="primary"
                   data-testid="button-save-100ms"
@@ -3834,7 +3834,7 @@ const SettingsPage = () => {
                 />
               )}
 
-              <PremiumButton 
+              <PremiumButton
                 onClick={() => handleSaveIntegration('monitoring')}
                 isLoading={saveMonitoringMutation.isPending}
                 variant="primary"

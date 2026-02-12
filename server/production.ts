@@ -9,7 +9,7 @@ export function log(message: string) {
     second: "2-digit",
     hour12: true,
   });
-  console.log(`${formattedTime} [express] ${message}`);
+  console.log(`🚀 Iniciando servidor integrado (Express + Vite)...`);
 }
 export function serveStatic(app: Express) {
   const distPath = path.resolve(process.cwd(), "dist");

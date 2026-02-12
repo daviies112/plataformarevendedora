@@ -19,26 +19,7 @@ export { CompanyProvider, useCompany } from './contexts/CompanyContext';
 // ============================================================================
 // LAYOUTS
 // ============================================================================
-export { AdminLayout } from './layouts/AdminLayout';
 export { ResellerLayout } from './layouts/ResellerLayout';
-
-// ============================================================================
-// ADMIN PAGES
-// ============================================================================
-export { default as AdminDashboard } from './pages/admin/Dashboard';
-export { default as AdminProducts } from './pages/admin/Products';
-export { default as AdminOrders } from './pages/admin/Orders';
-export { default as AdminResellers } from './pages/admin/Resellers';
-export { default as AdminResellerDetails } from './pages/admin/ResellerDetails';
-export { default as AdminCommissions } from './pages/admin/Commissions';
-export { default as AdminCommissionConfiguration } from './pages/admin/CommissionConfiguration';
-export { default as AdminProductRequests } from './pages/admin/ProductRequests';
-export { default as AdminAnalytics } from './pages/admin/Analytics';
-export { default as AdminSettings } from './pages/admin/Settings';
-export { default as AdminBranding } from './pages/admin/Branding';
-export { default as AdminGamification } from './pages/admin/Gamification';
-export { default as AdminEvolutionConfig } from './pages/admin/EvolutionConfig';
-export { default as AdminProductForm } from './pages/admin/ProductForm';
 
 // ============================================================================
 // RESELLER PAGES

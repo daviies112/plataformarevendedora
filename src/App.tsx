@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, useLocation } from "react-router-dom";
+import { BrowserRouter, useLocation, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
@@ -16,12 +16,12 @@ import PlatformRouter from './platforms/PlatformRouter';
 
 // ✅ OTIMIZAÇÃO CRÍTICA: FormularioPublicoWrapper usa import ESTÁTICO
 // para eliminar delay de 15 segundos em rotas públicas
-import FormularioPublicoWrapper from './features/formularios-platform/pages/FormularioPublicoWrapper';
+// import FormularioPublicoWrapper from './PublicFormApp'; // REMOVED
 
 // Outras páginas usam lazy loading (não são críticas para tempo de carga)
-const AssinaturaClientPage = lazy(() => import('./pages/AssinaturaClientPage'));
-const AssinaturaFromMeeting = lazy(() => import('./pages/AssinaturaFromMeeting'));
-const ReuniaoPublica = lazy(() => import('./pages/ReuniaoPublica'));
+// const AssinaturaClientPage = lazy(() => import('./pages/AssinaturaClientPage')); // REMOVED
+// const AssinaturaFromMeeting = lazy(() => import('./pages/AssinaturaFromMeeting')); // REMOVED
+// const ReuniaoPublica = lazy(() => import('./pages/ReuniaoPublica')); // REMOVED
 const PublicStore = lazy(() => import('./features/revendedora/pages/public/PublicStore'));
 const PublicCheckout = lazy(() => import('./features/revendedora/pages/public/PublicCheckout'));
 const LoginPage = lazy(() => import('./pages/Index'));
@@ -39,11 +39,11 @@ const MinimalSkeleton = () => (
 );
 
 // ✅ Rotas internas de assinatura (não públicas)
-const internalAssinaturaRoutes = [
-  '/assinatura',
-  '/assinatura/criar',
-  '/assinatura/personalizar',
-  '/assinatura/contratos'
+const internalAssinaturaRoutes: string[] = [
+  // '/assinatura',
+  // '/assinatura/criar',
+  // '/assinatura/personalizar',
+  // '/assinatura/contratos'
 ];
 
 // ✅ Função centralizada para verificar se é rota pública
@@ -57,16 +57,16 @@ const isPublicRoute = (path: string): boolean => {
     path === '/' ||
     path === '/login' ||
 
-    path.startsWith('/assinar/') ||
-    path.startsWith('/assinatura/') ||
-    path.startsWith('/f/') ||
-    path.startsWith('/form/') ||
-    path.startsWith('/formulario/') ||
-    path.startsWith('/reuniao/') ||
-    path.startsWith('/reuniao-publica/') ||
+    // path.startsWith('/assinar/') ||
+    // path.startsWith('/assinatura/') ||
+    // path.startsWith('/f/') ||
+    // path.startsWith('/form/') ||
+    // path.startsWith('/formulario/') ||
+    // path.startsWith('/reuniao/') ||
+    // path.startsWith('/reuniao-publica/') ||
     path.startsWith('/loja/') ||
-    path.startsWith('/checkout/') ||
-    /^\/[^/]+\/form\//.test(path)
+    path.startsWith('/checkout/')
+    // /^\/[^/]+\/form\//.test(path)
   );
 };
 
@@ -75,8 +75,8 @@ const prefetchPublicRoutes = () => {
   if (typeof requestIdleCallback !== 'undefined') {
     requestIdleCallback(() => {
       // Prefetch rotas mais usadas
-      import('./pages/AssinaturaClientPage');
-      import('./features/formularios-platform/pages/FormularioPublicoWrapper');
+      // import('./pages/AssinaturaClientPage'); // REMOVED
+      // import('./PublicFormApp'); // REMOVED
     }, { timeout: 2000 });
   }
 };
@@ -91,7 +91,8 @@ const PublicRoutes = () => {
     prefetchPublicRoutes();
   }
 
-  // Assinaturas
+  // Assinaturas - REMOVED
+  /*
   if (path.startsWith('/assinar/')) {
     return (
       <Suspense fallback={<MinimalSkeleton />}>
@@ -108,16 +109,20 @@ const PublicRoutes = () => {
       </Suspense>
     );
   }
+  */
 
-  // Formulários públicos - SEM Suspense/lazy para carregamento instantâneo
+  // Formulários públicos - REMOVED
+  /*
   if (path.startsWith('/f/') ||
     path.startsWith('/form/') ||
     path.startsWith('/formulario/') ||
     /^\/[^/]+\/form\//.test(path)) {
     return <FormularioPublicoWrapper />;
   }
+  */
 
-  // Reuniões públicas
+  // Reuniões públicas - REMOVED
+  /*
   if (path.startsWith('/reuniao/') || path.startsWith('/reuniao-publica/')) {
     return (
       <Suspense fallback={<MinimalSkeleton />}>
@@ -125,6 +130,7 @@ const PublicRoutes = () => {
       </Suspense>
     );
   }
+  */
 
   // Loja pública
   if (path.startsWith('/loja/')) {
@@ -144,8 +150,8 @@ const PublicRoutes = () => {
     );
   }
 
-  // Login principal
-  if (path === '/login' || path === '/') {
+  // Login principal (Redirecionamento para Revendedora)
+  if (path === '/login') {
     return (
       <AuthProvider>
         <Suspense fallback={<MinimalSkeleton />}>
@@ -153,6 +159,13 @@ const PublicRoutes = () => {
         </Suspense>
       </AuthProvider>
     );
+  }
+
+  // Redirecionamento da raiz para a plataforma revendedora
+  if (path === '/') {
+    // window.location.href = '/revendedora';
+    // return null;
+    return <Navigate to="/revendedora" replace />;
   }
 
 

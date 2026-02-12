@@ -1,34 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  LayoutDashboard,
-  BarChart3,
-  Calendar,
-  Layers,
-  Settings,
-  Crown,
-  Receipt,
-  FileText,
-  MessageSquare,
-  Package,
-  Trello,
-  Shield,
-  ShoppingBag,
-  Video,
-  FileSignature,
-  Truck,
-  ChevronDown,
-  Calculator,
-  ListOrdered,
-  Search
-} from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  LayoutDashboard,
+  Crown,
+  Wallet,
+  ShoppingBag,
+  Trophy,
+  Users,
+  Settings
+} from "lucide-react";
 import { WalletBadge } from "@/components/WalletBadge";
 
 const HeaderNavigation = () => {
@@ -37,82 +18,49 @@ const HeaderNavigation = () => {
   const { user, logout } = useAuth();
 
   const navItems = [
-    { 
-      path: "/formulario", 
-      label: "Formulário", 
-      icon: FileText,
-      active: location.pathname === "/formulario"
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      active: location.pathname === "/dashboard"
     },
-    { 
-      path: "/calendar", 
-      label: "Calendário", 
-      icon: Calendar,
-      active: location.pathname === "/calendar"
-    },
-    { 
-      path: "/workspace", 
-      label: "Workspace", 
-      icon: Layers,
-      active: location.pathname === "/workspace"
-    },
-    { 
-      path: "/faturamento", 
-      label: "Faturamento", 
-      icon: Receipt,
-      active: location.pathname.startsWith("/faturamento")
-    },
-    { 
-      path: "/whatsapp-platform", 
-      label: "WhatsApp", 
-      icon: MessageSquare,
-      active: location.pathname === "/whatsapp-platform"
-    },
-    { 
-      path: "/produto", 
-      label: "Etiqueta", 
-      icon: Package,
-      active: location.pathname === "/produto" && !location.pathname.startsWith("/produto/admin"),
-      onClick: () => navigate("/produto?page=produto-list")
-    },
-    { 
-      path: "/vendas", 
-      label: "Vendas", 
+    {
+      path: "/vendas",
+      label: "Vendas",
       icon: Crown,
-      active: location.pathname.startsWith("/vendas")
+      active: location.pathname.startsWith("/vendas") && !location.pathname.startsWith("/vendas/gamification")
     },
-    { 
-      path: "/kanban", 
-      label: "Kanban", 
-      icon: Trello,
-      active: location.pathname === "/kanban"
+    {
+      path: "/financeiro",
+      label: "Financeiro",
+      icon: Wallet,
+      active: location.pathname === "/financeiro"
     },
-    { 
-      path: "/reuniao", 
-      label: "Reunião", 
-      icon: Video,
-      active: location.pathname.startsWith("/reuniao")
-    },
-    { 
-      path: "/consultar-cpf", 
-      label: "Consultar CPF", 
-      icon: Shield,
-      active: location.pathname === "/consultar-cpf"
-    },
-    { 
-      path: "/revendedora", 
-      label: "Revendedora", 
+    {
+      path: "/revendedora",
+      label: "Minha Loja",
       icon: ShoppingBag,
       active: location.pathname.startsWith("/revendedora")
     },
-    { 
-      path: "/assinatura/personalizar", 
-      label: "Assinatura", 
-      icon: FileSignature,
-      active: location.pathname.startsWith("/assinatura")
+    {
+      path: "/vendas/gamification",
+      label: "Gamificação",
+      icon: Trophy,
+      active: location.pathname === "/vendas/gamification"
+    },
+    {
+      path: "/equipe",
+      label: "Equipe",
+      icon: Users,
+      active: location.pathname === "/equipe"
+    },
+    {
+      path: "/settings",
+      label: "Configurações",
+      icon: Settings,
+      active: location.pathname === "/settings"
     }
   ];
-
-  const isEnvioActive = location.pathname.startsWith("/envio");
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/95 backdrop-blur-xl border-b border-white/10">
@@ -132,44 +80,6 @@ const HeaderNavigation = () => {
                 {item.label}
               </Button>
             ))}
-            
-            {/* Envio Dropdown Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant={isEnvioActive ? "default" : "ghost"}
-                  size="sm"
-                  className={`h-10 px-3 whitespace-nowrap flex-shrink-0 hover:bg-transparent hover:text-inherit ${isEnvioActive ? '!bg-primary !text-black' : 'text-gray-400 hover:text-white'}`}
-                >
-                  <Truck className="w-4 h-4 mr-1.5" />
-                  Envio
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuItem 
-                  onClick={() => navigate("/envio")}
-                  className={location.pathname === "/envio" ? "bg-accent" : ""}
-                >
-                  <Calculator className="w-4 h-4 mr-2" />
-                  Cotação de Frete
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => navigate("/envio/lista")}
-                  className={location.pathname === "/envio/lista" ? "bg-accent" : ""}
-                >
-                  <ListOrdered className="w-4 h-4 mr-2" />
-                  Meus Envios
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => navigate("/envio/rastreamento")}
-                  className={location.pathname === "/envio/rastreamento" ? "bg-accent" : ""}
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Rastreamento
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </nav>
 
           {/* Wallet Balance & Settings */}
