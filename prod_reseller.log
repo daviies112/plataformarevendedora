@@ -1,0 +1,651 @@
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+[SUPABASE_OWNER] Usando credenciais dos secrets SUPABASE_OWNER_URL/KEY
+🐘 Initializing database connection...
+ℹ️ Redis não configurado - usando cache em memória
+✅ Formulários database connection configured
+📄 [FormPoller] Estado carregado: 6 submissions processadas
+📄 [CPFAutoCheck] Estado carregado: 1 consultas processadas
+📄 [CPFPoller] Estado carregado: 0 consultas processadas
+📄 Estado da automação carregado do arquivo com sucesso
+ℹ️  [RESEND] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+[Pagar.me] ✅ Usando credenciais de PRODUÇÃO
+[STARTUP] Loading server modules...
+[STARTUP] All modules loaded, creating Express app...
+[STARTUP] Express app created
+ℹ️  [SENTRY] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+Warning: connect.session() MemoryStore is not
+designed for a production environment, as it will leak
+memory, and will not scale past a single process.
+⚠️ Resend não configurado - Emails desativados
+⚠️ Sentry não configurado - Monitoramento desativado
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Split Routes] Registering split routes early
+11:19:22 PM [express] 🔐 Multi-tenant authentication enabled
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Horarios] Rotas registradas
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ Handler registrado para job type: send_email
+✅ Handler registrado para job type: track_event
+✅ Handler registrado para job type: push_notification
+✅ Handler registrado para job type: process_upload
+✅ Handler registrado para job type: sync_form_submission
+🚀 Iniciando processamento da fila: emails
+🚀 Iniciando processamento da fila: analytics
+🚀 Iniciando processamento da fila: notifications
+🚀 Iniciando processamento da fila: data-processing
+✅ Todas as filas de background jobs inicializadas
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔍 Buscando tenants do banco de dados...
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+⏰ [FormSync] Sincronização automática iniciada - verificação a cada 2 minutos
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+⏰ [FormMappingSync] Job de sincronização iniciado - verificação a cada 5 minutos
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+⏰ [CPFSync] Sincronização automática iniciada - verificação a cada 3 minutos
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Starting limit monitor (interval: 300s)
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+🚀 Starting automatic alerting (interval: 5min)
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [ContractSync] Iniciando poller de sincronização de contratos...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🧹 [CacheCleanup] Scheduler iniciado - limpeza a cada 24h
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ [SUPABASE] 2 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 2 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: system
+✅ Database connection established and verified
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🚀 Iniciando servidor integrado (Express + Vite)...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📊 [FormPoller] Tenant system: 2 submissions não sincronizadas ou atualizadas
+📥 Job adicionado à fila: sync_form_submission (1771715962627-tm8meotdq)
+✅ [FormPoller] Submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 enfileirada para sincronização (tenant: system, cpf: sim, instagram: sim)
+📥 Job adicionado à fila: sync_form_submission (1771715962629-ov5u6qlb8)
+✅ [FormPoller] Submission 25fa1351-8280-44a4-a81d-2db92f77625f enfileirada para sincronização (tenant: system, cpf: sim, instagram: sim)
+✅ [FormPoller] Tenant system: 2 submissions enfileiradas
+
+🔄 [FormPoller] Processando tenant: emericks-tenant
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ 2 tenants encontrados no banco de dados
+🔍 Verificando novos clientes para cliente system (tenant: system)
+🔍 Iniciando detecção de novos clientes para system/system
+⏰ Automação iniciada para system/system - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: system
+🔍 Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+🔍 Iniciando detecção de novos clientes para emericks-tenant/emericks-tenant
+⏰ Automação iniciada para emericks-tenant/emericks-tenant - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: emericks-tenant
+🚀 Automação iniciada para 2 tenants
+⚙️ Configuração: verificação a cada 2 minutos
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para emericks-tenant (ou fallback)
+📊 [FormMappingSync] Encontrados 2 tenant(s) para sincronizar
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para system (ou fallback)
+📊 [FormPoller] Tenant emericks-tenant: 2 submissions não sincronizadas ou atualizadas
+📥 Job adicionado à fila: sync_form_submission (1771715963075-zhxy4nbv6)
+✅ [FormPoller] Submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 enfileirada para sincronização (tenant: emericks-tenant, cpf: sim, instagram: sim)
+📥 Job adicionado à fila: sync_form_submission (1771715963075-0jr1qe2tr)
+✅ [FormPoller] Submission 25fa1351-8280-44a4-a81d-2db92f77625f enfileirada para sincronização (tenant: emericks-tenant, cpf: sim, instagram: sim)
+✅ [FormPoller] Tenant emericks-tenant: 2 submissions enfileiradas
+
+✅ [FormPoller] Polling concluído: 4 submissions enfileiradas de 2 tenant(s)
+✅ [FormSync] Sincronização concluída: 4 submissions enfileiradas
+🔍 [FormMappingSync] Sincronizando tenant: system
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+🔍 [SUPABASE] Buscando credenciais para tenant system...
+📊 [CPFPoller] 3 resultados pendentes - buscando telefones via form_submissions...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando credenciais do tenant: system
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: http://103.199.187.145:8100
+✅ [MULTI-TENANT] 0 registros encontrados para system
+🆕 Inicializando cache para system/system com 0 clientes
+✅ Cache atualizado para system-system: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+🆕 Inicializando cache para emericks-tenant/emericks-tenant com 0 clientes
+✅ Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+⚙️ Processando job: sync_form_submission (1771715962627-tm8meotdq)
+🔄 [Queue] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 para lead (tenant: system, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+📞 [LeadSync] Telefone normalizado: (31) 99226-7220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+ℹ️ [CPFPoller] CPF 145... sem telefone em form_submissions - marcado como processado
+📋 [FormMappingSync] Encontrados 1 formulário(s) no tenant system
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: system
+ℹ️ [CPFPoller] CPF 145... sem telefone em form_submissions - marcado como processado
+⚙️ Processando job: sync_form_submission (1771715962627-tm8meotdq)
+🔄 [Queue] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 para lead (tenant: system, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+📞 [LeadSync] Telefone normalizado: (31) 99226-7220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+📋 [FormMappingSync] CompanySlug para tenant system: nexus-intelligence (from hms100msConfig)
+ℹ️ [CPFPoller] CPF 145... sem telefone em form_submissions - marcado como processado
+📊 [CPFPoller] 0 resultados com telefone encontrado (de 3 pendentes)
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: system
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ [FormMappingSync] Tenant system sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emericks-tenant
+🔍 [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+✅ [SUPABASE] Usando credenciais do tenant: emericks-tenant
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 1 formulário(s) no tenant emericks-tenant
+❌ [CPFPoller] Erro ao buscar do Master: Invalid API key
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+📋 [FormMappingSync] CompanySlug para tenant emericks-tenant: emericks (from hms100msConfig)
+ℹ️ [LeadSync] Modo PostgreSQL local detectado
+✅ [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 2 formulário(s) sincronizado(s), 0 erro(s)
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: system
+ℹ️ [LeadSync] Modo PostgreSQL local detectado
+📊 [CPFAutoCheck] Tenant system: 2 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant system: IDs encontrados: 25fa1351, 6aed9aeb
+📋 [CPFAutoCheck] Tenant system: 2 submissions pendentes
+🔔 [CPFAutoCheck] 2026-02-21T23:19:23.736Z - TRIGGER recebido
+   📋 Submission ID: 25fa1351-8280-44a4-a81d-2db92f77625f
+   🏢 Tenant: system...
+   📋 CPF: 145...79
+🔍 [CPFAutoCheck] Chamando checkCompliance() para submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:23 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:23 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 25fa1351-8280-44a4-a81d-2db92f77625f
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+11:19:23 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 25fa1351-8280-44a4-a81d-2db92f77625f: Invalid API key
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715962627-tm8meotdq)
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715962627-tm8meotdq)
+11:19:23 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 25fa1351-8280-44a4-a81d-2db92f77625f - ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93 | Status: approved
+11:19:23 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:23 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 25fa1351-8280-44a4-a81d-2db92f77625f
+11:19:23 PM [express]    📋 Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+11:19:23 PM [express]    📊 Status: approved
+11:19:23 PM [express]    📈 Risk Score: 2
+11:19:23 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [CPFAutoCheck] Consulta concluída para submission 25fa1351-8280-44a4-a81d-2db92f77625f:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+⚙️ Processando job: sync_form_submission (1771715962629-ov5u6qlb8)
+🔄 [Queue] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f para lead (tenant: system, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+📞 [LeadSync] Telefone normalizado: (31) 92267-220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: system
+⚠️ [CPFAutoCheck] Tenant tracking update by ID warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+⚠️ [CPFAutoCheck] Tenant tracking update by phone warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+⚙️ Processando job: sync_form_submission (1771715962629-ov5u6qlb8)
+🔄 [Queue] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f para lead (tenant: system, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+📞 [LeadSync] Telefone normalizado: (31) 92267-220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: system
+⚠️ [CPFAutoCheck] Tenant tracking update by raw phone warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+✅ [CPFAutoCheck] Tenant tracking updated for submission 25fa1351-8280-44a4-a81d-2db92f77625f
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715962629-ov5u6qlb8)
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+⚙️ Processando job: sync_form_submission (1771715963075-zhxy4nbv6)
+🔄 [Queue] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 para lead (tenant: emericks-tenant, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+📞 [LeadSync] Telefone normalizado: (31) 99226-7220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: emericks-tenant
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715962629-ov5u6qlb8)
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+⚙️ Processando job: sync_form_submission (1771715963075-zhxy4nbv6)
+🔄 [Queue] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 para lead (tenant: emericks-tenant, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+📞 [LeadSync] Telefone normalizado: (31) 99226-7220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: emericks-tenant
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715963075-zhxy4nbv6)
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+⚙️ Processando job: sync_form_submission (1771715963075-0jr1qe2tr)
+🔄 [Queue] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f para lead (tenant: emericks-tenant, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+📞 [LeadSync] Telefone normalizado: (31) 92267-220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715963075-zhxy4nbv6)
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: emericks-tenant
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+⚙️ Processando job: sync_form_submission (1771715963075-0jr1qe2tr)
+🔄 [Queue] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f para lead (tenant: emericks-tenant, formStatus: completed)
+🔄 [LeadSync] Sincronizando submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+📞 [LeadSync] Telefone normalizado: (31) 92267-220 → +5531992267220
+📊 [LeadSync] Status determinado: formStatus=completed, qualificationStatus=approved, pipelineStatus=formulario-aprovado, pontuacao=0
+🆔 [LeadSync] CPF normalizado: 145.155.666-79 → 14515566679
+🔍 [SUPABASE] Buscando credenciais do banco de dados (supabase_config)...
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: system)
+✅ [SUPABASE] Usando cliente cache (banco)
+🗄️ [LeadSync] Sincronizando lead no PostgreSQL local
+🏢 [LeadSync] Tenant ID: emericks-tenant
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715963075-0jr1qe2tr)
+⚠️ [LeadSync] Nenhuma etiqueta encontrada - lead será criado sem etiqueta
+🔄 [LeadSync] Atualizando lead existente: 69f48707-4b17-4240-b166-52ee276a7f38
+🆔 [LeadSync] CPF atualizado no lead: 14515566679
+✅ [LeadSync] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso! (pipeline: formulario-aprovado)
+🔄 [LeadSync] RECONSULTANDO CPF para lead 69f48707-4b17-4240-b166-52ee276a7f38 (cpfStatus anterior=approved)...
+   📋 qualificationStatus=approved, cpfStatus=approved, cpfCheckedAt=Tue Feb 17 2026 20:13:08 GMT+0000 (Coordinated Universal Time)
+✅ [Queue] Lead 69f48707-4b17-4240-b166-52ee276a7f38 atualizado com sucesso (pipeline: formulario-aprovado)
+✅ Job concluído: sync_form_submission (1771715963075-0jr1qe2tr)
+🔔 [CPFAutoCheck] 2026-02-21T23:19:24.970Z - TRIGGER recebido
+   📋 Submission ID: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+   🏢 Tenant: system...
+   📋 CPF: 145...79
+🔍 [CPFAutoCheck] Chamando checkCompliance() para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:24 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:24 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1: Invalid API key
+11:19:25 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 - ID: d18faaec-cba4-455f-856a-4a9afb14c65a | Status: approved
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:25 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:25 PM [express]    📋 Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+11:19:25 PM [express]    📊 Status: approved
+11:19:25 PM [express]    📈 Risk Score: 2
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [CPFAutoCheck] Consulta concluída para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+⚠️ [CPFAutoCheck] Tenant tracking update by ID warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+⚠️ [CPFAutoCheck] Tenant tracking update by phone warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+⚠️ [CPFAutoCheck] Tenant tracking update by raw phone warning: Could not find the 'nome' column of 'form_submissions_compliance_tracking' in the schema cache
+✅ [CPFAutoCheck] Tenant tracking updated for submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.344Z - TRIGGER recebido
+   📋 Submission ID: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: system...
+[bigdatacorp] getCredentials chamado com tenantId: system
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.350Z - TRIGGER recebido
+   📋 Submission ID: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: system...
+[bigdatacorp] getCredentials chamado com tenantId: system
+[bigdatacorp] Registros encontrados no DB para tenant system: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: system
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+   📋 CPF: 145...79
+   👤 Nome: teste
+   📱 Telefone: +5531992267220
+[bigdatacorp] Registros encontrados no DB para tenant system: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: system
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+   📋 CPF: 145...79
+   👤 Nome: teste
+   📱 Telefone: +5531992267220
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1: Invalid API key
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.449Z - TRIGGER recebido
+   📋 Submission ID: 25fa1351-8280-44a4-a81d-2db92f77625f
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: system...
+[bigdatacorp] getCredentials chamado com tenantId: system
+[bigdatacorp] Registros encontrados no DB para tenant system: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: system
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+   📋 CPF: 145...79
+   👤 Nome: Davi Emerick
+   📱 Telefone: +5531992267220
+11:19:25 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 - ID: d18faaec-cba4-455f-856a-4a9afb14c65a | Status: approved
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:25 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:25 PM [express]    📋 Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+11:19:25 PM [express]    📊 Status: approved
+11:19:25 PM [express]    📈 Risk Score: 2
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+11:19:25 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1: Invalid API key
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 25fa1351-8280-44a4-a81d-2db92f77625f
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.514Z - TRIGGER recebido
+   📋 Submission ID: 25fa1351-8280-44a4-a81d-2db92f77625f
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: system...
+[bigdatacorp] getCredentials chamado com tenantId: system
+11:19:25 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 - ID: d18faaec-cba4-455f-856a-4a9afb14c65a | Status: approved
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:25 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:25 PM [express]    📋 Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+11:19:25 PM [express]    📊 Status: approved
+11:19:25 PM [express]    📈 Risk Score: 2
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: d18faaec-cba4-455f-856a-4a9afb14c65a
+[bigdatacorp] Registros encontrados no DB para tenant system: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: system
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+   📋 CPF: 145...79
+   👤 Nome: Davi Emerick
+   📱 Telefone: +5531992267220
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 25fa1351-8280-44a4-a81d-2db92f77625f
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.558Z - TRIGGER recebido
+   📋 Submission ID: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: emericks...
+[bigdatacorp] getCredentials chamado com tenantId: emericks-tenant
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 25fa1351-8280-44a4-a81d-2db92f77625f: Invalid API key
+[bigdatacorp] Registros encontrados no DB para tenant emericks-tenant: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: emericks-tenant
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+   📋 CPF: 145...79
+   👤 Nome: teste
+   📱 Telefone: +5531992267220
+11:19:25 PM [express] ⚠️ [DEDUP] Erro ao verificar check no Master para submission 25fa1351-8280-44a4-a81d-2db92f77625f: Invalid API key
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:25 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 25fa1351-8280-44a4-a81d-2db92f77625f - ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93 | Status: approved
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:25 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 25fa1351-8280-44a4-a81d-2db92f77625f
+11:19:25 PM [express]    📋 Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+11:19:25 PM [express]    📊 Status: approved
+11:19:25 PM [express]    📈 Risk Score: 2
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 25fa1351-8280-44a4-a81d-2db92f77625f:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.627Z - TRIGGER recebido
+   📋 Submission ID: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: emericks...
+[bigdatacorp] getCredentials chamado com tenantId: emericks-tenant
+11:19:25 PM [express] 🛡️ [DEDUP] Check já existe no CLIENTE para submission 25fa1351-8280-44a4-a81d-2db92f77625f - ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93 | Status: approved
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada para mesma submission)
+11:19:25 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 25fa1351-8280-44a4-a81d-2db92f77625f
+11:19:25 PM [express]    📋 Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+11:19:25 PM [express]    📊 Status: approved
+11:19:25 PM [express]    📈 Risk Score: 2
+11:19:25 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 25fa1351-8280-44a4-a81d-2db92f77625f:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: 7a4afb2d-421c-4b5a-967c-970aa67fbd93
+[bigdatacorp] Registros encontrados no DB para tenant emericks-tenant: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: emericks-tenant
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1...
+   📋 CPF: 145...79
+   👤 Nome: teste
+   📱 Telefone: +5531992267220
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.729Z - TRIGGER recebido
+   📋 Submission ID: 25fa1351-8280-44a4-a81d-2db92f77625f
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: emericks...
+[bigdatacorp] getCredentials chamado com tenantId: emericks-tenant
+[bigdatacorp] Registros encontrados no DB para tenant emericks-tenant: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: emericks-tenant
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+   📋 CPF: 145...79
+   👤 Nome: Davi Emerick
+   📱 Telefone: +5531992267220
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 25fa1351-8280-44a4-a81d-2db92f77625f
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔔 [LeadSync:AutoCPF] 2026-02-21T23:19:25.824Z - TRIGGER recebido
+   📋 Submission ID: 25fa1351-8280-44a4-a81d-2db92f77625f
+   🆔 Lead ID: 69f48707-4b17-4240-b166-52ee276a7f38
+   🏢 Tenant: emericks...
+[bigdatacorp] getCredentials chamado com tenantId: emericks-tenant
+[bigdatacorp] Registros encontrados no DB para tenant emericks-tenant: 1
+[bigdatacorp] ✅ Credenciais encontradas no DB para tenant: emericks-tenant
+🔍 [LeadSync:AutoCPF] Chamando checkCompliance() para submission 25fa1351-8280-44a4-a81d-2db92f77625f...
+   📋 CPF: 145...79
+   👤 Nome: Davi Emerick
+   📱 Telefone: +5531992267220
+🚀 Iniciando servidor integrado (Express + Vite)...
+11:19:25 PM [express] 🎯 Usando Supabase MESTRE para cache de compliance
+11:19:25 PM [express] 🔍 [DEDUP] Verificando se já existe check para submission_id: 25fa1351-8280-44a4-a81d-2db92f77625f
+🚀 Iniciando servidor integrado (Express + Vite)...
+🏢 [CPFAutoCheck] Processando tenant: emericks-tenant
+📊 [CPFAutoCheck] Tenant emericks-tenant: 2 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emericks-tenant: IDs encontrados: 25fa1351, 6aed9aeb
+ℹ️ [CPFAutoCheck] Tenant emericks-tenant: Todas as 2 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 25fa1351... já está na lista de 6 processados
+✅ [CPFAutoCheck] Verificação concluída: 2 consultas realizadas, 0 erros
+✅ [CPFSync] Auto-check: 2 novas consultas CPF realizadas
+[MasterSync] Conectando ao Supabase Owner/Master: https://fsojiujwjfseqwrqesch.supabase.co...
+11:19:27 PM [express] 🛡️ [DEDUP] Check já existe no MASTER para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 - Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057 | Status: approved
+[normalizeBigdatacorpResponse] Processing 0 lawsuits
+11:19:27 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:27 PM [express]    📋 Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057
+11:19:27 PM [express]    📊 Status: approved
+11:19:27 PM [express]    📈 Risk Score: 2
+11:19:27 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057
+11:19:27 PM [express] 🛡️ [DEDUP] Check já existe no MASTER para submission 25fa1351-8280-44a4-a81d-2db92f77625f - Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de | Status: approved
+[normalizeBigdatacorpResponse] Processing 0 lawsuits
+11:19:27 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 25fa1351-8280-44a4-a81d-2db92f77625f
+11:19:27 PM [express]    📋 Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de
+11:19:27 PM [express]    📊 Status: approved
+11:19:27 PM [express]    📈 Risk Score: 2
+11:19:27 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 25fa1351-8280-44a4-a81d-2db92f77625f:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de
+11:19:27 PM [express] 🛡️ [DEDUP] Check já existe no MASTER para submission 25fa1351-8280-44a4-a81d-2db92f77625f - Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de | Status: approved
+[normalizeBigdatacorpResponse] Processing 0 lawsuits
+11:19:27 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 25fa1351-8280-44a4-a81d-2db92f77625f
+11:19:27 PM [express]    📋 Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de
+11:19:27 PM [express]    📊 Status: approved
+11:19:27 PM [express]    📈 Risk Score: 2
+11:19:27 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 25fa1351-8280-44a4-a81d-2db92f77625f:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: 5d1f96a6-f013-416c-826f-03e493f5f5de
+11:19:27 PM [express] 🛡️ [DEDUP] Check já existe no MASTER para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1 - Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057 | Status: approved
+[normalizeBigdatacorpResponse] Processing 0 lawsuits
+11:19:27 PM [express] 🛡️ [DEDUP] DUPLICAÇÃO PREVENIDA! Retornando check existente para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1
+11:19:27 PM [express]    📋 Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057
+11:19:27 PM [express]    📊 Status: approved
+11:19:27 PM [express]    📈 Risk Score: 2
+11:19:27 PM [express]    💰 ECONOMIA: R$ 0,05-0,07 (evitou consulta duplicada)
+✅ [LeadSync:AutoCPF] Consulta concluída para submission 6aed9aeb-9b9d-4152-9152-7f15c50d4cc1:
+   📊 Status: approved
+   📈 Risk Score: 2
+   💾 Resultado: DEDUP/CACHE HIT (economia de API)
+   🏷️ Check ID: c0ca6d4d-ca68-47f3-b272-1a0f31227057
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.
+[MasterSync] Erro ao buscar integration_queue: Service for this project is restricted due to the following violations: exceed_egress_quota. Please reach out to Supabase support at https://supabase.help immediately.

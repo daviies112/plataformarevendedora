@@ -1,0 +1,2272 @@
+[SUPABASE_LOCAL] Usando credenciais dos secrets SUPABASE_LOCAL_URL/KEY
+🐘 Initializing database connection...
+ℹ️ Redis não configurado - usando cache em memória
+✅ Formulários database connection configured
+📄 [FormPoller] Estado carregado: 11 submissions processadas
+📄 [CPFAutoCheck] Estado carregado: 4 consultas processadas
+📄 [CPFPoller] Estado carregado: 1 consultas processadas
+📄 Estado da automação carregado do arquivo com sucesso
+ℹ️  [RESEND] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+[Pagar.me] ✅ Usando credenciais de PRODUÇÃO
+[STARTUP] Loading server modules...
+[STARTUP] All modules loaded, creating Express app...
+[STARTUP] Express app created
+ℹ️  [SENTRY] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+⚠️ Resend não configurado - Emails desativados
+⚠️ Sentry não configurado - Monitoramento desativado
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Split Routes] Registering split routes early
+11:56:19 AM [express] 🔐 Multi-tenant authentication enabled
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Horarios] Rotas registradas
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ Handler registrado para job type: send_email
+✅ Handler registrado para job type: track_event
+✅ Handler registrado para job type: push_notification
+✅ Handler registrado para job type: process_upload
+✅ Handler registrado para job type: sync_form_submission
+🚀 Iniciando processamento da fila: emails
+🚀 Iniciando processamento da fila: analytics
+🚀 Iniciando processamento da fila: notifications
+🚀 Iniciando processamento da fila: data-processing
+✅ Todas as filas de background jobs inicializadas
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔍 Buscando tenants do banco de dados...
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+⏰ [FormSync] Sincronização automática iniciada - verificação a cada 2 minutos
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+⏰ [FormMappingSync] Job de sincronização iniciado - verificação a cada 5 minutos
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+⏰ [CPFSync] Sincronização automática iniciada - verificação a cada 3 minutos
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Starting limit monitor (interval: 300s)
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+🚀 Starting automatic alerting (interval: 5min)
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [ContractSync] Iniciando poller de sincronização de contratos...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🧹 [CacheCleanup] Scheduler iniciado - limpeza a cada 24h
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ Database connection established and verified
+🚀 Iniciando servidor integrado (Express + Vite)...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+✅ 5 tenants encontrados no banco de dados
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+⏰ Automação iniciada para davisemijoias/davisemijoias - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+⏰ Automação iniciada para emericks/emericks - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+⏰ Automação iniciada para emerick/emerick - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: emerick
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+⏰ Automação iniciada para emerick/emerick - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+⏰ Automação iniciada para davisemi-joias/davisemi-joias - verificação a cada 2 minutos
+✅ Automação iniciada para tenant: davisemi-joias
+🚀 Automação iniciada para 5 tenants
+⚙️ Configuração: verificação a cada 2 minutos
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para davisemijoias (ou fallback)
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para emericks (ou fallback)
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para emerick (ou fallback)
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para emerick (ou fallback)
+✅ [PUBLIC_CACHE] Credenciais encontradas no banco para davisemi-joias (ou fallback)
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+🆕 Inicializando cache para davisemijoias/davisemijoias com 0 clientes
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+🆕 Inicializando cache para emericks/emericks com 0 clientes
+✅ Cache atualizado para emericks-emericks: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+🆕 Inicializando cache para emerick/emerick com 0 clientes
+✅ Cache atualizado para emerick-emerick: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+🆕 Inicializando cache para davisemi-joias/davisemi-joias com 0 clientes
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+[MasterSync] Conectando ao Supabase Owner/Master: https://fsojiujwjfseqwrqesch.supabase.co...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ CF Cache rule matched: static for /favicon.ico
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+✅ CF Cache rule matched: static for /icons/icon-192x192.png
+✅ CF Cache rule matched: static for /icons/icon-192x192.png
+✅ CF Cache rule matched: static for /icons/icon-512x512.png
+✅ CF Cache rule matched: static for /service-worker.js
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════╗
+║  🧹 LIMPEZA DE CACHE LOCAL - INICIANDO                    ║
+╚════════════════════════════════════════════════════════════╝
+📅 Data: 2026-03-06T15:01:19.112Z
+📊 Limites: forms=7d, submissions=7d, leads=7d, reunioes=30d, notifications=14d
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🏢 Encontrados 5 tenant(s) configurados
+
+🔄 [CacheCleanup] Processando tenant: davisemijoias
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+📤 [CacheCleanup] Sync pré-limpeza: 0 reuniões sincronizadas, 0 erros
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+✅ [SUPABASE] Usando cliente cache (headers)
+  📋 form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+🔄 [CacheCleanup] Processando tenant: emericks
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📤 [CacheCleanup] Sync pré-limpeza: 0 reuniões sincronizadas, 0 erros
+  📋 form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+🔄 [CacheCleanup] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+📤 [CacheCleanup] Sync pré-limpeza: 2 reuniões sincronizadas, 0 erros
+  📋 form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+🔄 [CacheCleanup] Processando tenant: emerick
+📤 [CacheCleanup] Sync pré-limpeza: 2 reuniões sincronizadas, 0 erros
+  📋 form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+🔄 [CacheCleanup] Processando tenant: davisemi-joias
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+📤 [CacheCleanup] Sync pré-limpeza: 0 reuniões sincronizadas, 0 erros
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+  📋 form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+╔════════════════════════════════════════════════════════════╗
+║  🧹 LIMPEZA CONCLUÍDA                                     ║
+╚════════════════════════════════════════════════════════════╝
+📊 Total: 0 registros limpos, 0 mantidos, 5 erros
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+✅ CF Cache rule matched: static for /assets/react_jsx-dev-runtime-CMiIsN2s.js
+✅ CF Cache rule matched: static for /assets/main--eCqfc22.js
+✅ CF Cache rule matched: static for /assets/main-Cf94kGcP.css
+✅ CF Cache rule matched: static for /assets/ui-vendor-BQCqNqg0.js
+✅ CF Cache rule matched: static for /assets/react-core-BzUdTat9.js
+✅ CF Cache rule matched: static for /assets/supabase-BDMpidPs.js
+✅ CF Cache rule matched: static for /assets/query-B9RSXSIy.js
+✅ CF Cache rule matched: static for /assets/date-utils-BODSbLC5.js
+✅ CF Cache rule matched: static for /assets/validation-CeKAihz9.js
+[PublicStore] Using credentials from data/supabase-config.json
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ CF Cache rule matched: static for /service-worker.js
+✅ CF Cache rule matched: static for /favicon.ico
+✅ CF Cache rule matched: static for /icons/icon-192x192.png
+✅ CF Cache rule matched: static for /icons/icon-192x192.png
+✅ CF Cache rule matched: static for /icons/icon-512x512.png
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🚀 Iniciando servidor integrado (Express + Vite)...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🚀 Iniciando servidor integrado (Express + Vite)...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+✅ [SUPABASE] Usando cliente cache (headers)
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+✅ [SUPABASE] Usando cliente cache (headers)
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🚀 Iniciando servidor integrado (Express + Vite)...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+🚀 Iniciando servidor integrado (Express + Vite)...
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormMappingSync] Iniciando sincronização de formulários do Supabase...
+
+╔════════════════════════════════════════╗
+║  🔍 LIMIT MONITOR - FREE TIER         ║
+╚════════════════════════════════════════╝
+
+✅ [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+📊 [FormMappingSync] Encontrados 5 tenant(s) para sincronizar
+📊 Service Status:
+
+  🟢 Redis (Monthly): 0.0% (0/500000)
+  🟢 Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+────────────────────────────────────────
+
+🔍 [FormMappingSync] Sincronizando tenant: davisemijoias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemijoias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemijoias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemijoias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemijoias
+📋 [FormMappingSync] CompanySlug para tenant davisemijoias: davisemijoias (from hms100msConfig)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant davisemijoias sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: emericks
+🔍 [SUPABASE] Buscando credenciais para tenant emericks...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emericks)
+✅ [SUPABASE] Usando credenciais do tenant: emericks
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+ℹ️ [FormMappingSync] Nenhum formulário encontrado no tenant emericks
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+🔄 [SUPABASE] Criando novo cliente com headers...
+✅ [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔍 [FormMappingSync] Sincronizando tenant: emerick
+🔍 [SUPABASE] Buscando credenciais para tenant emerick...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: emerick)
+✅ [SUPABASE] Usando credenciais do tenant: emerick
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant emerick
+📋 [FormMappingSync] CompanySlug para tenant emerick: emerick (from hms100msConfig)
+✅ [FormMappingSync] Tenant emerick sincronizado com sucesso
+🔍 [FormMappingSync] Sincronizando tenant: davisemi-joias
+🔍 [SUPABASE] Buscando credenciais para tenant davisemi-joias...
+✅ [SUPABASE] Credenciais processadas com sucesso (tenant: davisemi-joias)
+✅ [SUPABASE] Usando credenciais do tenant: davisemi-joias
+✅ [SUPABASE] Usando cliente cache (headers)
+📋 [FormMappingSync] Encontrados 5 formulário(s) no tenant davisemi-joias
+📋 [FormMappingSync] CompanySlug para tenant davisemi-joias: davisemi-joias (from hms100msConfig)
+✅ [FormMappingSync] Tenant davisemi-joias sincronizado com sucesso
+✅ [FormMappingSync] Sincronização concluída: 20 formulário(s) sincronizado(s), 0 erro(s)
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [FormSync] Executando sincronização de formulários do Supabase...
+🔍 [FormPoller] Iniciando polling de submissions...
+✅ [SUPABASE] 5 configuração(ões) encontrada(s) no banco de dados
+🏢 [FormPoller] Encontrados 5 tenant(s) configurados
+
+🔄 [FormPoller] Processando tenant: davisemijoias
+🔍 Verificando novos clientes para cliente davisemijoias (tenant: davisemijoias)
+🔍 Iniciando detecção de novos clientes para davisemijoias/davisemijoias
+🔍 Verificando novos clientes para cliente emericks (tenant: emericks)
+🔍 Iniciando detecção de novos clientes para emericks/emericks
+🔍 Verificando novos clientes para cliente emerick (tenant: emerick)
+🔍 Iniciando detecção de novos clientes para emerick/emerick
+🔍 Verificando novos clientes para cliente davisemi-joias (tenant: davisemi-joias)
+🔍 Iniciando detecção de novos clientes para davisemi-joias/davisemi-joias
+📊 [FormPoller] Tenant davisemijoias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemijoias: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emericks
+✅ [MULTI-TENANT] 0 registros encontrados para davisemi-joias
+✅ Cache atualizado para davisemi-joias-davisemi-joias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emerick
+✅ Cache atualizado para emerick-emerick: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para emericks
+✅ Cache atualizado para emericks-emericks: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+✅ [MULTI-TENANT] 0 registros encontrados para davisemijoias
+✅ Cache atualizado para davisemijoias-davisemijoias: 0 clientes
+✅ Nenhum novo cliente detectado. Total: 0 clientes
+🔍 Verificação de novos clientes concluída: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+📊 [FormPoller] Tenant emericks: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emericks: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: emerick
+📊 [FormPoller] Tenant emerick: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant emerick: Nenhuma submission nova
+
+🔄 [FormPoller] Processando tenant: davisemi-joias
+📊 [FormPoller] Tenant davisemi-joias: 0 submissions não sincronizadas ou atualizadas
+ℹ️ [FormPoller] Tenant davisemi-joias: Nenhuma submission nova
+
+✅ [FormPoller] Polling concluído: 0 submissions enfileiradas de 5 tenant(s)
+ℹ️ [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+🔄 [CPFSync] Executando sincronização de CPF compliance...
+🔍 [CPFPoller] Iniciando polling de consultas CPF...
+📱 [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+📱 [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+ℹ️ [CPFPoller] Todos os resultados já foram processados
+ℹ️ [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+🚀 Iniciando servidor integrado (Express + Vite)...
+🔄 [CPFPoller] Verificando Supabase Master (compatibilidade)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+✅ [CPFPoller] Polling concluído: 0 consultas processadas
+ℹ️ [CPFSync] Nenhuma consulta CPF nova para processar
+🔍 [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+✅ [CPFAutoCheck] Encontrados 2 tenant(s) elegíveis (com BigDataCorp + Supabase)
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+🏢 [CPFAutoCheck] Processando tenant: emerick
+📊 [CPFAutoCheck] Tenant emerick: 1 submissions em 'form_submissions'
+📋 [CPFAutoCheck] Tenant emerick: IDs encontrados: 9996cdec
+ℹ️ [CPFAutoCheck] Tenant emerick: Todas as 1 submissions já foram processadas
+ℹ️ [CPFAutoCheck] Exemplo: ID 9996cdec... já está na lista de 4 processados
+✅ [CPFAutoCheck] Verificação concluída: 0 consultas realizadas, 0 erros
+📋 [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist

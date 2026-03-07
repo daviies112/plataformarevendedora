@@ -1,0 +1,30 @@
+{
+  "lastSyncedAt": null,
+  "lastSyncedId": null,
+  "lastRunAt": "2026-03-06T15:24:19.204Z",
+  "totalSubmissionsProcessed": 11,
+  "totalErrors": 55,
+  "lastError": null,
+  "tenantStates": {
+    "system": {
+      "lastSyncedAt": "2026-02-17T20:10:04.690273+00:00",
+      "lastSyncedId": "25fa1351-8280-44a4-a81d-2db92f77625f"
+    },
+    "emericks-tenant": {
+      "lastSyncedAt": "2026-03-02T19:16:44.321498+00:00",
+      "lastSyncedId": "fbd26920-48b0-42f0-b668-15d395b86479"
+    },
+    "emerick": {
+      "lastSyncedAt": "2026-03-04T16:33:27.884062+00:00",
+      "lastSyncedId": "9996cdec-06f3-4a83-a009-99c38756a178"
+    },
+    "davisemi-joias": {
+      "lastSyncedAt": "2026-03-04T16:33:27.884062+00:00",
+      "lastSyncedId": "9996cdec-06f3-4a83-a009-99c38756a178"
+    },
+    "davisemijoias": {
+      "lastSyncedAt": "2026-03-04T16:33:27.884062+00:00",
+      "lastSyncedId": "9996cdec-06f3-4a83-a009-99c38756a178"
+    }
+  }
+}

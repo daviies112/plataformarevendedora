@@ -1,0 +1,20 @@
+Warning: connect.session() MemoryStore is not
+designed for a production environment, as it will leak
+memory, and will not scale past a single process.
+(node:8972) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+[PublicBranding] Error fetching branding: {
+  code: 'PGRST205',
+  details: null,
+  hint: "Perhaps you meant the table 'public.cpf_compliance_results'",
+  message: "Could not find the table 'public.companies' in the schema cache"
+}
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache
+❌ [CPFPoller] Erro ao buscar do Master: Could not find the table 'public.datacorp_checks' in the schema cache

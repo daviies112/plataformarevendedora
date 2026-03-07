@@ -1,0 +1,90 @@
+{
+  "isRunning": true,
+  "startedAt": "2026-03-06T14:56:19.076Z",
+  "lastExecutions": {
+    "system-system": {
+      "clientId": "system",
+      "tenantId": "system",
+      "lastRun": "2026-02-27T22:59:42.691Z",
+      "lastSuccess": "2026-02-25T11:52:05.374Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 2181,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "stopped"
+    },
+    "emericks-tenant-emericks-tenant": {
+      "clientId": "emericks-tenant",
+      "tenantId": "emericks-tenant",
+      "lastRun": "2026-03-04T23:04:08.859Z",
+      "lastSuccess": "2026-03-04T23:04:08.859Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 2449,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "running"
+    },
+    "emerick-emerick": {
+      "clientId": "emerick",
+      "tenantId": "emerick",
+      "lastRun": "2026-03-06T15:24:19.389Z",
+      "lastSuccess": "2026-03-06T15:24:19.389Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 700,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "running"
+    },
+    "davisemijoias-davisemijoias": {
+      "clientId": "davisemijoias",
+      "tenantId": "davisemijoias",
+      "lastRun": "2026-03-06T15:24:19.358Z",
+      "lastSuccess": "2026-03-06T15:24:19.358Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 649,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "running"
+    },
+    "emericks-emericks": {
+      "clientId": "emericks",
+      "tenantId": "emericks",
+      "lastRun": "2026-03-06T15:24:19.374Z",
+      "lastSuccess": "2026-03-06T15:24:19.374Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 649,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "running"
+    },
+    "davisemi-joias-davisemi-joias": {
+      "clientId": "davisemi-joias",
+      "tenantId": "davisemi-joias",
+      "lastRun": "2026-03-06T15:24:19.404Z",
+      "lastSuccess": "2026-03-06T15:24:19.404Z",
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 649,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "running"
+    }
+  },
+  "globalStats": {
+    "totalExecutions": 7277,
+    "totalNewClientsDetected": 0,
+    "totalEventsCreated": 0,
+    "totalErrors": 0,
+    "uptime": 1680
+  },
+  "settings": {
+    "detectionIntervalMinutes": 2,
+    "processingEnabled": true,
+    "maxRetries": 3
+  }
+}

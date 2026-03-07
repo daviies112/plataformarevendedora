@@ -1,0 +1,17 @@
+
+node_modules
+.vscode
+.DS_Store
+dist
+dist-ssr
+*.local
+.vite
+.env
+.env.*
+! .env.example
+build_error.log
+vps_*.js
+*.png
+*.webp
+temp
+tmp

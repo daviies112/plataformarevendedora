@@ -1,0 +1,1412 @@
+﻿[SUPABASE_LOCAL] Usando credenciais dos secrets SUPABASE_LOCAL_URL/KEY
+­ƒÉÿ Initializing database connection...
+Ôä╣´©Å Redis n├úo configurado - usando cache em mem├│ria
+Ô£à Formul├írios database connection configured
+­ƒôä [FormPoller] Estado carregado: 4 submissions processadas
+­ƒôä [CPFAutoCheck] Estado carregado: 3 consultas processadas
+­ƒôä [CPFPoller] Estado carregado: 0 consultas processadas
+­ƒôä Estado da automa├º├úo carregado do arquivo com sucesso
+Ôä╣´©Å  [RESEND] Servi├ºo multi-tenant - ser├í inicializado quando tenant estiver dispon├¡vel
+[Pagar.me] Ô£à Usando credenciais de PRODU├ç├âO
+[STARTUP] Loading server modules...
+[STARTUP] All modules loaded, creating Express app...
+[STARTUP] Express app created
+Ôä╣´©Å  [SENTRY] Servi├ºo multi-tenant - ser├í inicializado quando tenant estiver dispon├¡vel
+ÔÜá´©Å Resend n├úo configurado - Emails desativados
+ÔÜá´©Å Sentry n├úo configurado - Monitoramento desativado
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+[Split Routes] Registering split routes early
+02:12:22 PM [express] ­ƒöÉ Multi-tenant authentication enabled
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+[Horarios] Rotas registradas
+node.exe : (node:11440) [DEP0040] DeprecationWarning: The 
+`punycode` module is deprecated. Please use a userland 
+alternative instead.
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:11440)  
+   [D...native instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the 
+warning was created)
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+[VITE] Creating Vite server...
+[VITE] Environment: Local
+[VITE] REPLIT_DEV_DOMAIN: not set
+Ô£à Handler registrado para job type: send_email
+Ô£à Handler registrado para job type: track_event
+Ô£à Handler registrado para job type: push_notification
+Ô£à Handler registrado para job type: process_upload
+Ô£à Handler registrado para job type: sync_form_submission
+­ƒÜÇ Iniciando processamento da fila: emails
+­ƒÜÇ Iniciando processamento da fila: analytics
+­ƒÜÇ Iniciando processamento da fila: notifications
+­ƒÜÇ Iniciando processamento da fila: data-processing
+Ô£à Todas as filas de background jobs inicializadas
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöì Buscando tenants do banco de dados...
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+ÔÅ░ [FormSync] Sincroniza├º├úo autom├ítica iniciada - verifica├º├úo a cada 2 minutos
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+ÔÅ░ [FormMappingSync] Job de sincroniza├º├úo iniciado - verifica├º├úo a cada 5 minutos
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+ÔÅ░ [CPFSync] Sincroniza├º├úo autom├ítica iniciada - verifica├º├úo a cada 3 minutos
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Starting limit monitor (interval: 300s)
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+­ƒÜÇ Starting automatic alerting (interval: 5min)
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [ContractSync] Iniciando poller de sincroniza├º├úo de contratos...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒº╣ [CacheCleanup] Scheduler iniciado - limpeza a cada 24h
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+Ô£à Database connection established and verified
+Ô£à 1 tenants encontrados no banco de dados
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+ÔÅ░ Automa├º├úo iniciada para emericks-tenant/emericks-tenant - verifica├º├úo a cada 2 minutos
+Ô£à Automa├º├úo iniciada para tenant: emericks-tenant
+­ƒÜÇ Automa├º├úo iniciada para 1 tenants
+ÔÜÖ´©Å Configura├º├úo: verifica├º├úo a cada 2 minutos
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+Ô£à [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+Ô£à [PUBLIC_CACHE] Credenciais encontradas no banco para emericks-tenant (ou fallback)
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+­ƒöä [SUPABASE] Criando novo cliente com headers...
+Ô£à [SUPABASE] Cliente criado com sucesso: https://semijoias-supabase.y98g1d.easypanel.host
+Forced re-optimization of dependencies
+[VITE] Vite server created successfully
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+­ƒåò Inicializando cache para emericks-tenant/emericks-tenant com 0 clientes
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+[MasterSync] Conectando ao Supabase Owner/Master: https://fsojiujwjfseqwrqesch.supabase.co...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+ÔØî [CPFPoller] Erro ao buscar resultados CPF: TypeError: 
+fetch failed
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒº╣ LIMPEZA DE CACHE LOCAL - INICIANDO                    Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+­ƒôà Data: 2026-03-02T17:17:25.077Z
+­ƒôè Limites: forms=7d, submissions=7d, leads=7d, reunioes=30d, notifications=14d
+Ô£à [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+Ô£à [SUPABASE] Usando cliente cache (headers)
+­ƒÅó Encontrados 1 tenant(s) configurados
+
+­ƒöä [CacheCleanup] Processando tenant: emericks-tenant
+­ƒôñ [CacheCleanup] Sync pr├®-limpeza: 0 reuni├Áes sincronizadas, 0 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+  ­ƒôï form_tenant_mapping: 0 deletados, 0 mantidos (erro: Cannot convert undefined or null to object)
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒº╣ LIMPEZA CONCLU├ìDA                                     Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+­ƒôè Total: 0 registros limpos, 0 mantidos, 1 erros
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+Ô£à [SUPABASE] Usando cliente cache (headers)
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+ÔØî [SUPABASE] Erro ao buscar configs do banco: 
+DrizzleQueryError: Failed query: select "id", "tenant_id", 
+"supabase_url", "supabase_anon_key", "supabase_bucket", 
+"created_at", "updated_at" from "supabase_config"
+params: 
+    at NodePgPreparedQuery.queryWithCache 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\node_modules\src\pg-core\session.ts:73:11)
+    at process.processTicksAndRejections 
+(node:internal/process/task_queues:103:5)
+    at async <anonymous> (C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\node_modules\src\node-postgres\session.ts:154:19)
+    ... 2 lines matching cause stack trace ...
+    at async executeFormSubmissionSync 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\server\lib\automationManager.ts:720:20) {
+  query: 'select "id", "tenant_id", "supabase_url", 
+"supabase_anon_key", "supabase_bucket", "created_at", 
+"updated_at" from "supabase_config"',
+  params: [],
+  cause: Error: connect ENETUNREACH 103.199.187.145:5432
+      at C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections 
+(node:internal/process/task_queues:103:5)
+      at async <anonymous> (C:\Users\davie\Downloads\Skill 
+e mcp\loja\plataformarevendedora-main (2)\plataformarevende
+dora-main\node_modules\src\node-postgres\session.ts:161:13)
+      at async NodePgPreparedQuery.queryWithCache 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\node_modules\src\pg-core\session.ts:71:12)
+      at async <anonymous> (C:\Users\davie\Downloads\Skill 
+e mcp\loja\plataformarevendedora-main (2)\plataformarevende
+dora-main\node_modules\src\node-postgres\session.ts:154:19)
+      at async getAllSupabaseConfigs 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\server\formularios\utils\supabaseClient.ts:223:21)
+      at async pollFormSubmissions 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\server\lib\formSubmissionPoller.ts:216:24)
+      at async executeFormSubmissionSync 
+(C:\Users\davie\Downloads\Skill e 
+mcp\loja\plataformarevendedora-main (2)\plataformarevendedo
+ra-main\server\lib\automationManager.ts:720:20) {
+    errno: -4062,
+    code: 'ENETUNREACH',
+    syscall: 'connect',
+    address: '103.199.187.145',
+    port: 5432
+  }
+}
+Ô£à [SUPABASE] Fallback: usando configura├º├úo do arquivo/env (tenant: system)
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: system
+ÔÜá´©Å [FormMappingSync] Erro ao criar tabela: connect 
+ENETUNREACH 103.199.187.145:5432
+ÔØî N├úo foi poss├¡vel buscar dados do Supabase para cliente emericks-tenant
+ÔÜá´©Å Supabase n├úo configurado para emericks-tenant/emericks-tenant - usando modo mock
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+ÔØî [MULTI-TENANT] Erro ao buscar dados para 
+emericks-tenant: {
+  message: 'TypeError: fetch failed',
+  details: 'TypeError: fetch failed\n' +
+    '    at node:internal/deps/undici/undici:16416:13\n' +
+    '    at process.processTicksAndRejections 
+(node:internal/process/task_queues:103:5)\n' +
+    '    at async getClientDashboardData 
+(C:\\Users\\davie\\Downloads\\Skill e 
+mcp\\loja\\plataformarevendedora-main (2)\\plataformarevend
+edora-main\\server\\lib\\multiTenantSupabase.ts:199:29)\n' 
++
+    '    at async detectNewClients 
+(C:\\Users\\davie\\Downloads\\Skill e 
+mcp\\loja\\plataformarevendedora-main (2)\\plataformarevend
+edora-main\\server\\lib\\clientMonitor.ts:122:26)\n' +
+    '    at async executeClientAutomation 
+(C:\\Users\\davie\\Downloads\\Skill e 
+mcp\\loja\\plataformarevendedora-main (2)\\plataformarevend
+edora-main\\server\\lib\\automationManager.ts:272:29)',
+  hint: '',
+  code: ''
+}
+[MasterSync] Nenhum admin encontrado: TypeError: fetch 
+failed
+ÔØî [CPFPoller] Erro ao buscar resultados CPF: TypeError: 
+fetch failed
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+Ô£à [SUPABASE] Usando cliente cache (headers)
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+­ƒôè [FormPoller] Tenant system: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant system: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+­ƒåò Inicializando cache para emericks-tenant/emericks-tenant com 0 clientes
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'cache_initialized',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+Ô£à [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+Ô£à [SUPABASE] Usando cliente cache (headers)
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormMappingSync] Iniciando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+
+ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöì LIMIT MONITOR - FREE TIER         Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+Ô£à [FormMappingSync] Tabela form_tenant_mapping verificada/criada
+­ƒôè Service Status:
+
+  ­ƒƒó Redis (Monthly): 0.0% (0/500000)
+  ­ƒƒó Supabase Bandwidth: 0.0% (0.00MB/2048.00MB)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+­ƒôè [FormMappingSync] Encontrados 1 tenant(s) para sincronizar
+­ƒöì [FormMappingSync] Sincronizando tenant: emericks-tenant
+­ƒöì [SUPABASE] Buscando credenciais para tenant emericks-tenant...
+Ô£à [SUPABASE] Credenciais processadas com sucesso (tenant: emericks-tenant)
+Ô£à [SUPABASE] Usando credenciais do tenant: emericks-tenant
+Ô£à [SUPABASE] Usando cliente cache (headers)
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+­ƒôï [FormMappingSync] Encontrados 2 formul├írio(s) no tenant emericks-tenant
+­ƒôï [FormMappingSync] CompanySlug para tenant emericks-tenant: emerick (from hms100msConfig)
+Ô£à [FormMappingSync] Tenant emericks-tenant sincronizado com sucesso
+Ô£à [FormMappingSync] Sincroniza├º├úo conclu├¡da: 2 formul├írio(s) sincronizado(s), 0 erro(s)
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+­ƒöä [CPFSync] Executando sincroniza├º├úo de CPF compliance...
+­ƒöì [CPFPoller] Iniciando polling de consultas CPF...
+­ƒô▒ [CPFPoller] Buscando resultados com telefone do Supabase Cliente...
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+­ƒô▒ [CPFPoller] Buscando resultados CPF e telefones via form_submissions...
+Ôä╣´©Å [CPFPoller] Todos os resultados j├í foram processados
+Ôä╣´©Å [CPFPoller] Nenhum resultado pendente no Supabase Cliente
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒöä [CPFPoller] Verificando Supabase Master (compatibilidade)...
+­ƒÜÇ Iniciando servidor integrado (Express + Vite)...
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+ÔØî [CPFPoller] Erro ao buscar do Master: Could not find 
+the table 'public.datacorp_checks' in the schema cache
+Ô£à [CPFPoller] Polling conclu├¡do: 0 consultas processadas
+Ôä╣´©Å [CPFSync] Nenhuma consulta CPF nova para processar
+­ƒöì [CPFAutoCheck] Verificando leads aprovados sem consulta CPF...
+ÔÜá´©Å [CPFAutoCheck] Nenhum tenant com BigDataCorp E Supabase configurados - pulando verifica├º├úo
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒöä [FormSync] Executando sincroniza├º├úo de formul├írios do Supabase...
+­ƒöì [FormPoller] Iniciando polling de submissions...
+­ƒöì Verificando novos clientes para cliente emericks-tenant (tenant: emericks-tenant)
+­ƒöì Iniciando detec├º├úo de novos clientes para emericks-tenant/emericks-tenant
+Ô£à [SUPABASE] 1 configura├º├úo(├Áes) encontrada(s) no banco de dados
+­ƒÅó [FormPoller] Encontrados 1 tenant(s) configurados
+
+­ƒöä [FormPoller] Processando tenant: emericks-tenant
+­ƒôè [FormPoller] Tenant emericks-tenant: 0 submissions n├úo sincronizadas ou atualizadas
+Ôä╣´©Å [FormPoller] Tenant emericks-tenant: Nenhuma submission nova
+
+Ô£à [FormPoller] Polling conclu├¡do: 0 submissions enfileiradas de 1 tenant(s)
+Ôä╣´©Å [FormSync] Nenhuma submission nova para processar
+Ô£à [MULTI-TENANT] 0 registros encontrados para emericks-tenant
+Ô£à Cache atualizado para emericks-tenant-emericks-tenant: 0 clientes
+Ô£à Nenhum novo cliente detectado. Total: 0 clientes
+­ƒöì Verifica├º├úo de novos clientes conclu├¡da: {
+  novos: 0,
+  fonte: 'comparison_complete',
+  processamento: { sucessos: 0, erros: 0 }
+}
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+­ƒôï [MasterSync] 5 admins com credenciais encontrados
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist
+[MasterSync] Usando Supabase Master para createTenantClient ao inv├®s de credencial do tenant
+[MasterSync] Erro ao buscar integration_queue: column integration_queue.entity_type does not exist

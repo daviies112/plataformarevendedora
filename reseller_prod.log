@@ -1,0 +1,45 @@
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+[SUPABASE_OWNER] Usando credenciais dos secrets SUPABASE_OWNER_URL/KEY
+🐘 Initializing database connection...
+ℹ️ Redis não configurado - usando cache em memória
+✅ Formulários database connection configured
+📄 [FormPoller] Estado carregado: 6 submissions processadas
+📄 [CPFAutoCheck] Estado carregado: 1 consultas processadas
+📄 [CPFPoller] Estado carregado: 0 consultas processadas
+📄 Estado da automação carregado do arquivo com sucesso
+ℹ️  [RESEND] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+[Pagar.me] ✅ Usando credenciais de PRODUÇÃO
+[STARTUP] Loading server modules...
+[STARTUP] All modules loaded, creating Express app...
+[STARTUP] Express app created
+ℹ️  [SENTRY] Serviço multi-tenant - será inicializado quando tenant estiver disponível
+⚠️ Resend não configurado - Emails desativados
+⚠️ Sentry não configurado - Monitoramento desativado
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Split Routes] Registering split routes early
+11:17:27 PM [express] 🔐 Multi-tenant authentication enabled
+🚀 Iniciando servidor integrado (Express + Vite)...
+[Horarios] Rotas registradas
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at doListen (node:net:2014:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 5001
+}
+
+Node.js v18.20.8
