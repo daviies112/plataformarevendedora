@@ -111,7 +111,7 @@ export function ChatWidget() {
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-20 right-4 h-10 w-10 rounded-full shadow-lg z-40 hover:scale-105 transition-transform lg:bottom-6 lg:right-6 lg:h-14 lg:w-14"
+          className="fixed bottom-20 right-4 h-10 w-10 rounded-full shadow-lg z-40 hover:scale-105 transition-transform lg:bottom-6 lg:right-6 lg:h-14 lg:w-14" style={{ backgroundColor: 'var(--brand-primary, #954728)', color: 'var(--brand-text-on-primary, #ffffff)', border: '2px solid rgba(255,255,255,0.25)', boxShadow: '0 0 0 3px rgba(0,0,0,0.15)' }}
           size="icon"
         >
           <MessageCircle className="h-5 w-5 lg:h-6 lg:w-6" />

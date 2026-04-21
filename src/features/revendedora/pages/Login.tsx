@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,20 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Carregar credenciais salvas ao montar
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('nexus_remember_me');
+      if (saved) {
+        const { email: savedEmail, cpf: savedCpf } = JSON.parse(saved);
+        if (savedEmail) setEmail(savedEmail);
+        if (savedCpf) setCpf(savedCpf);
+        setRememberMe(true);
+      }
+    } catch (_) {}
+  }, []);
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(formatCPF(e.target.value));
@@ -68,6 +82,12 @@ export default function Login() {
         }
         await queryClient.invalidateQueries({ queryKey: ['/api/reseller/supabase-config'] });
         await queryClient.invalidateQueries({ queryKey: ['/api/reseller/settings'] });
+        // Salvar ou limpar credenciais baseado no 'lembrar de mim'
+        if (rememberMe) {
+          try { localStorage.setItem('nexus_remember_me', JSON.stringify({ email, cpf })); } catch (_) {}
+        } else {
+          try { localStorage.removeItem('nexus_remember_me'); } catch (_) {}
+        }
         toast.success('Login realizado com sucesso!');
         navigate('/revendedora/reseller/dashboard');
       }
@@ -96,7 +116,7 @@ export default function Login() {
       className="min-h-screen flex items-center justify-center p-4"
       style={{
         background: hasCustomBranding
-          ? `linear-gradient(135deg, ${branding.background_color} 0%, ${branding.sidebar_background}15 50%, ${branding.background_color} 100%)`
+          ? branding.background_color
           : undefined,
       }}
       data-testid="login-page"
@@ -116,7 +136,7 @@ export default function Login() {
           </div>
         )}
 
-        <Card className="w-full">
+        <div className="w-full rounded-lg border shadow-sm" style={{ backgroundColor: branding.card_color || '#1a1a2e' }}>
           <CardHeader className="text-center">
             {!branding.logo_url && (
               <div className="flex justify-center mb-3">
@@ -181,6 +201,30 @@ export default function Login() {
                 />
               </div>
 
+              {/* Lembrar de mim */}
+              <div className="flex items-center gap-2">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  style={{
+                    width: 16, height: 16, cursor: 'pointer',
+                    accentColor: branding.button_color || '#9b87f5',
+                  }}
+                  data-testid="checkbox-remember-me"
+                />
+                <Label
+                  htmlFor="remember-me"
+                  style={{
+                    cursor: 'pointer', fontSize: 13,
+                    color: hasCustomBranding ? `${branding.text_color}cc` : undefined,
+                  }}
+                >
+                  Lembrar de mim
+                </Label>
+              </div>
+
               <Button
                 type="submit"
                 className="w-full"
@@ -197,7 +241,7 @@ export default function Login() {
               </Button>
             </form>
           </CardContent>
-        </Card>
+        </div>
       </div>
     </div>
   );

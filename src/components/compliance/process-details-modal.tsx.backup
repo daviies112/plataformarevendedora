@@ -157,29 +157,7 @@ export function ProcessDetailsModal({ check, open, onOpenChange }: ProcessDetail
   }, [check?.payload]);
 
   const result = useMemo(() => payload?.Result?.[0] || {}, [payload]);
-  
-  // Defensive parsing: ensure processData is always an object with safe defaults
-  // Prevents: "Cannot read properties of undefined (reading 'TotalLawsuitsAsAuthor')"
-  const processData = useMemo(() => {
-    const data = result?.Processes;
-    if (!data || typeof data !== 'object') {
-      return {
-        Lawsuits: [],
-        TotalLawsuits: 0,
-        TotalLawsuitsAsAuthor: 0,
-        TotalLawsuitsAsDefendant: 0,
-        TotalLawsuitsAsOther: 0,
-        FirstLawsuitDate: null,
-        LastLawsuitDate: null,
-        Last30DaysLawsuits: 0,
-        Last90DaysLawsuits: 0,
-        Last180DaysLawsuits: 0,
-        Last365DaysLawsuits: 0
-      };
-    }
-    return data;
-  }, [result?.Processes]);
-  
+  const processData = useMemo(() => result?.Processes || {}, [result]);
   const lawsuits = useMemo(() => processData?.Lawsuits || [], [processData]);
   const totalLawsuits = useMemo(() => processData?.TotalLawsuits || 0, [processData]);
 
@@ -209,40 +187,8 @@ export function ProcessDetailsModal({ check, open, onOpenChange }: ProcessDetail
   const matchKeys = result?.MatchKeys;
   const statusInfo = payload?.Status;
   
-  // Defensive: ensure basicDataPayload is always safe object with defaults
-  const basicDataPayload = useMemo(() => {
-    const data = payload?._basic_data?.Result?.[0]?.BasicData;
-    if (!data || typeof data !== 'object') {
-      return {
-        Name: null,
-        TaxIdStatus: null,
-        TaxIdStatusDate: null,
-        BirthDate: null,
-        Age: null,
-        Gender: null,
-        MotherName: null,
-        FatherName: null,
-        DeathDate: null
-      };
-    }
-    return data;
-  }, [payload]);
-  // Defensive: ensure collectionsPayload is always safe object with defaults
-  const collectionsPayload = useMemo(() => {
-    const data = payload?._collections?.Result?.[0]?.Collections;
-    if (!data || typeof data !== 'object') {
-      return {
-        HasActiveCollections: false,
-        TotalOccurrences: 0,
-        Last3Months: 0,
-        Last12Months: 0,
-        ConsecutiveMonths: 0,
-        FirstOccurrenceDate: null,
-        LastOccurrenceDate: null
-      };
-    }
-    return data;
-  }, [payload]);
+  const basicDataPayload = useMemo(() => payload?._basic_data?.Result?.[0]?.BasicData || {}, [payload]);
+  const collectionsPayload = useMemo(() => payload?._collections?.Result?.[0]?.Collections || {}, [payload]);
   const metadata = payload?._metadata;
   const isCompleteConsultation = payload?._datacorp_complete === true;
   const hasDebt = useMemo(() => !!(collectionsPayload?.HasActiveCollections || (collectionsPayload?.TotalOccurrences && collectionsPayload.TotalOccurrences > 0)), [collectionsPayload]);

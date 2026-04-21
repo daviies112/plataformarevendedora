@@ -1,11 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
-import {
-  getAdminCredentials,
+import { getMasterClient, getAdminCredentials,
   getAllAdminsWithCredentials,
-  createRevendedoraFromContract
-} from '../lib/masterSyncService';
+  createRevendedoraFromContract } from '../lib/masterSyncService';
 import { pool } from '../db';
 import { pagarmeService } from '../services/pagarme';
 import { saveResellerRecipientId, getResellerRecipientId } from '../services/commission';
@@ -501,16 +499,71 @@ router.get('/check-session', (req: Request, res: Response) => {
   if (req.session?.userId && req.session?.userRole === 'reseller') {
     res.json({
       authenticated: true,
+      tenantId: req.session.tenantId || null,
       user: {
         id: req.session.userId,
         nome: req.session.userName,
         email: req.session.userEmail,
         role: 'reseller',
-        comissao: req.session.comissao
+        comissao: req.session.comissao,
+        tenantId: req.session.tenantId || null
       }
     });
   } else {
     res.json({ authenticated: false });
+  }
+});
+
+// GET /api/reseller/branding - retorna branding do tenant da sessao automaticamente
+router.get('/branding', async (req: Request, res: Response) => {
+  try {
+    // Resolver tenant: 1) sessao autenticada 2) query param 3) env
+    let tenantId = '';
+    if (req.session?.tenantId) {
+      tenantId = req.session.tenantId;
+    } else if (req.query.tenant && typeof req.query.tenant === 'string') {
+      tenantId = req.query.tenant.trim();
+    } else {
+      tenantId = process.env.REID_TENANT_ID || 'emerick';
+    }
+
+    const { pool } = await import('../db');
+    const result = await pool.query(
+      `SELECT company_name, primary_color, secondary_color, accent_color,
+              background_color, sidebar_background, sidebar_text, button_color,
+              button_text_color, text_color, heading_color, selected_item_color,
+              logo_url, logo_size, logo_position, card_color
+       FROM companies WHERE tenant_id = $1 LIMIT 1`,
+      [tenantId]
+    );
+
+    const data = result.rows[0] || null;
+    if (!data) {
+      return res.json({ tenant_id: tenantId, notFound: true });
+    }
+
+    return res.json({
+      tenant_id: tenantId,
+      primary_color: data.primary_color,
+      secondary_color: data.secondary_color,
+      accent_color: data.accent_color,
+      background_color: data.background_color,
+      sidebar_background: data.sidebar_background,
+      sidebar_text: data.sidebar_text,
+      button_color: data.button_color,
+      button_text_color: data.button_text_color,
+      text_color: data.text_color,
+      heading_color: data.heading_color,
+      selected_item_color: data.selected_item_color,
+      logo_url: data.logo_url || null,
+      logo_size: data.logo_size,
+      logo_position: data.logo_position,
+      card_color: data.card_color || '#1a1a2e',
+      company_name: data.company_name,
+    });
+  } catch (error: any) {
+    console.error('[ResellerBranding] Error:', error);
+    return res.status(500).json({ error: 'Erro ao buscar branding' });
   }
 });
 
@@ -1353,6 +1406,18 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
         };
       }
     }
+  }
+
+  // Fallback direto: usar SUPABASE_OWNER_URL/KEY das variáveis de ambiente
+  const ownerUrl = process.env.SUPABASE_OWNER_URL || process.env.SUPABASE_LOCAL_URL || process.env.SUPABASE_URL || '';
+  const ownerKey = process.env.SUPABASE_OWNER_SERVICE_KEY || process.env.SUPABASE_LOCAL_SERVICE_KEY || process.env.SUPABASE_LOCAL_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  if (ownerUrl && ownerKey) {
+    console.log('[StoreConfig] Using env vars fallback:', ownerUrl.substring(0, 40) + '...');
+    const { createClient } = await import('@supabase/supabase-js');
+    return {
+      client: createClient(ownerUrl, ownerKey),
+      adminId: 'env-fallback'
+    };
   }
 
   // Fallback: Try config file credentials

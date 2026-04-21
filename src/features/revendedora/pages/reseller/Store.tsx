@@ -6,6 +6,7 @@ import { Button } from '@/features/revendedora/components/ui/button';
 import { toast } from 'sonner';
 import { Badge } from '@/features/revendedora/components/ui/badge';
 import { getResellerId as getStoredResellerId, resellerFetch } from '@/features/revendedora/lib/resellerAuth';
+import { useCompany } from '@/features/revendedora/contexts/CompanyContext';
 import { Input } from '@/features/revendedora/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/features/revendedora/components/ui/select';
 import {
@@ -23,10 +24,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ResellerProfileForm } from '@/features/revendedora/components/reseller/ResellerProfileForm';
 import { User } from 'lucide-react';
 import { Switch } from '@/features/revendedora/components/ui/switch';
+import StorePreview from '@/features/revendedora/components/store/StorePreview';
 import { Label } from '@/features/revendedora/components/ui/label';
 
 export default function Store() {
   const { client: supabase, loading: supabaseLoading, configured } = useSupabase();
+  const { branding } = useCompany();
+  const accent = branding.button_color || '#954728';
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [storeProducts, setStoreProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +45,27 @@ export default function Store() {
   const [storeName, setStoreName] = useState('');
   const [storeSlug, setStoreSlug] = useState('');
   const [urlCopied, setUrlCopied] = useState(false);
-  const [publishSaving, setPublishSaving] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [savedStoreSlug, setSavedStoreSlug] = useState('');
+  const [fullStoreData, setFullStoreData] = useState<any>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
+
+  const loadFullStoreData = async (slug: string) => {
+    if (!slug) return;
+    try {
+      setLoadingPreview(true);
+      const res = await fetch(`/api/public/store/${slug}/full`);
+      if (res.ok) {
+        const data = await res.json();
+        console.log('[Store] fullStoreData:', data);
+        setFullStoreData(data);
+      }
+    } catch(e) {
+      console.warn('[Store] Erro ao carregar preview:', e);
+    } finally {
+      setLoadingPreview(false);
+    }
+  };
 
   useEffect(() => {
     if (!supabaseLoading && configured) {
@@ -53,124 +77,52 @@ export default function Store() {
   }, [supabaseLoading, configured]);
 
   const loadProducts = async () => {
-    if (!supabase) {
-      console.log('[Store] Supabase not configured');
-      setLoading(false);
-      return;
-    }
-    
+    if (!supabase) { setLoading(false); return; }
     try {
-      console.log('[Store] Loading products...');
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('description');
-
+      const { data, error } = await supabase.from('products').select('*').order('description');
       if (error) throw error;
-      console.log('[Store] Products loaded:', data?.length || 0);
       setAllProducts(data || []);
     } catch (error) {
-      console.error('[Store] Error loading products:', error);
       toast.error('Erro ao carregar produtos');
     } finally {
       setLoading(false);
     }
   };
 
-  const getResellerId = (): string | null => {
-    const storedReseller = getStoredResellerId();
-    if (storedReseller) return storedReseller;
-    console.error('[Store] Reseller ID não encontrado no localStorage');
-    return null;
-  };
-
-  const ensureTableExists = async () => {
-    if (!supabase) return false;
-    
-    try {
-      const { error } = await supabase
-        .from('reseller_stores')
-        .select('id')
-        .limit(1);
-      
-      if (error?.code === '42P01') {
-        console.log('[Store] Table reseller_stores not found, will use localStorage fallback');
-        return false;
-      }
-      return true;
-    } catch {
-      return false;
-    }
-  };
+  const getResellerId = (): string | null => getStoredResellerId() || null;
 
   const loadStoreConfiguration = async () => {
     const resellerId = getResellerId();
-    console.log('[Store] Loading config for reseller:', resellerId);
-    
-    if (!resellerId) {
-      console.error('[Store] Cannot load store configuration: reseller_id is missing');
-      toast.error('Por favor, faça login novamente');
-      return;
-    }
-
+    if (!resellerId) return;
     try {
-      console.log('[Store] Loading store configuration via API...');
-      
-      // Use backend API which handles Supabase with service_role
       const response = await resellerFetch('/api/reseller/store-config');
-      
-      if (!response.ok) {
-        throw new Error('Erro ao carregar configuração');
-      }
-
+      if (!response.ok) throw new Error('Erro ao carregar configuração');
       const result = await response.json();
-      console.log('[Store] API response:', result);
-
       if (result.success && result.data) {
         const data = result.data;
-        console.log('[Store] Config loaded:', data);
-        
         setIsPublished(data.is_published || false);
         setStoreName(data.store_name || '');
         setStoreSlug(data.store_slug || '');
-        
-        // Load product details from Supabase if we have product_ids
-        if (data.product_ids && Array.isArray(data.product_ids) && data.product_ids.length > 0 && supabase) {
-          console.log('[Store] Fetching products for IDs:', data.product_ids);
-          const { data: products, error: productsError } = await supabase
-            .from('products')
-            .select('*')
-            .in('id', data.product_ids);
-
-          if (productsError) {
-            console.error('[Store] Error loading products details:', productsError);
-          } else {
-            console.log('[Store] Products loaded:', products?.length);
-            setStoreProducts(products || []);
-          }
+        if (data.product_ids?.length > 0 && supabase) {
+          const { data: products } = await supabase.from('products').select('*').in('id', data.product_ids);
+          setStoreProducts(products || []);
         } else {
           setStoreProducts([]);
         }
-
-        // Sync to localStorage as backup
         localStorage.setItem(`reseller_store_config_${resellerId}`, JSON.stringify({
           product_ids: data.product_ids || [],
           is_published: data.is_published,
           store_name: data.store_name,
           store_slug: data.store_slug,
         }));
+        // Carregar preview da vitrine
+        loadFullStoreData(data.store_slug || resellerId);
       } else {
-        console.log('[Store] No config found, checking localStorage fallback');
         const saved = localStorage.getItem(`reseller_store_config_${resellerId}`);
         if (saved) {
           const config = JSON.parse(saved);
-          console.log('[Store] Local config found:', config);
-          
           if (config.product_ids?.length > 0 && supabase) {
-            const { data: products } = await supabase
-              .from('products')
-              .select('*')
-              .in('id', config.product_ids);
+            const { data: products } = await supabase.from('products').select('*').in('id', config.product_ids);
             setStoreProducts(products || []);
           }
           setIsPublished(config.is_published || false);
@@ -179,14 +131,6 @@ export default function Store() {
         }
       }
     } catch (error: any) {
-      console.error('[Store] Error loading store configuration:', error);
-      
-      // Show specific error message based on error type
-      if (error.message?.includes('TABLE_NOT_FOUND')) {
-        toast.error('Tabela de configuração não existe no Supabase. Entre em contato com o administrador.');
-      }
-      
-      // Try localStorage fallback
       const saved = localStorage.getItem(`reseller_store_config_${resellerId}`);
       if (saved) {
         const config = JSON.parse(saved);
@@ -194,6 +138,7 @@ export default function Store() {
         setIsPublished(config.is_published || false);
         setStoreName(config.store_name || '');
         setStoreSlug(config.store_slug || '');
+        loadFullStoreData(config.store_slug || resellerId || '');
       }
     }
   };
@@ -201,61 +146,23 @@ export default function Store() {
   const saveStoreConfiguration = async () => {
     setSaving(true);
     const resellerId = getResellerId();
-    
     try {
-      const slugRegex = /^[a-z0-9-]+$/;
-      if (storeSlug && !slugRegex.test(storeSlug)) {
-        toast.error('O slug deve conter apenas letras minúsculas, números e hífens');
-        setSaving(false);
-        return;
-      }
-
-      if (!resellerId) {
-        console.error('[Store] Cannot save store configuration: reseller_id is missing');
-        toast.error('Por favor, faça login novamente');
-        setSaving(false);
-        return;
-      }
-
+      if (!resellerId) { toast.error('Faça login novamente'); setSaving(false); return; }
       const productIds = storeProducts.map(p => p.id);
-      
-      console.log('[Store] Saving store configuration via API for reseller:', resellerId);
-      console.log('[Store] Product IDs:', productIds);
-
-      // Save via backend API (which uses service_role for Supabase)
       const response = await resellerFetch('/api/reseller/store-config', {
         method: 'POST',
-        body: JSON.stringify({
-          product_ids: productIds,
-          is_published: isPublished,
-          store_name: storeName,
-          store_slug: storeSlug || null
-        })
+        body: JSON.stringify({ product_ids: productIds, is_published: isPublished, store_name: storeName, store_slug: storeSlug || null })
       });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Erro ao salvar configuração');
+        throw new Error(errorData.error || 'Erro ao salvar');
       }
-
-      const result = await response.json();
-      console.log('[Store] Save result:', result);
-
-      // Also save to localStorage as backup
-      const localConfig = {
-        product_ids: productIds,
-        products: storeProducts,
-        is_published: isPublished,
-        store_name: storeName,
-        store_slug: storeSlug,
-      };
-      localStorage.setItem(`reseller_store_config_${resellerId}`, JSON.stringify(localConfig));
-
-      console.log('[Store] Store configuration saved successfully');
-      toast.success('Configuração da loja salva com sucesso!');
+      localStorage.setItem(`reseller_store_config_${resellerId}`, JSON.stringify({ product_ids: productIds, products: storeProducts, is_published: isPublished, store_name: storeName, store_slug: storeSlug }));
+      const slug = storeSlug || resellerId;
+      setSavedStoreSlug(slug);
+      setShowShareModal(true);
     } catch (error: any) {
-      console.error('[Store] Error saving store:', error);
-      toast.error('Erro ao salvar configuração da loja: ' + (error.message || 'Erro desconhecido'));
+      toast.error('Erro ao salvar: ' + (error.message || 'Erro desconhecido'));
     } finally {
       setSaving(false);
     }
@@ -272,578 +179,229 @@ export default function Store() {
 
   const removeProductFromStore = (productId: string) => {
     setStoreProducts(storeProducts.filter(p => p.id !== productId));
-    toast.success('Produto removido da loja');
   };
 
-  const handleDragStart = (product: any) => {
-    setDraggedProduct(product);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
+  const handleDragStart = (product: any) => setDraggedProduct(product);
+  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (draggedProduct) {
-      addProductToStore(draggedProduct);
-      setDraggedProduct(null);
-    }
-  };
-
-  const handleSaleComplete = () => {
-    setSellingProduct(null);
-    loadProducts();
+    if (draggedProduct) { addProductToStore(draggedProduct); setDraggedProduct(null); }
   };
 
   const categories = useMemo(() => {
-    const uniqueCategories = new Set(
-      allProducts
-        .map(p => p.category)
-        .filter(c => c && c.trim() !== '')
-    );
-    return Array.from(uniqueCategories).sort();
+    const s = new Set(allProducts.map(p => p.category).filter(c => c?.trim()));
+    return Array.from(s).sort();
   }, [allProducts]);
 
-  const filteredProducts = useMemo(() => {
-    return allProducts.filter(product => {
-      const matchesSearch = !searchTerm || 
-        product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.reference?.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesCategory = selectedCategory === 'all' || 
-        product.category === selectedCategory;
-      
-      return matchesSearch && matchesCategory;
-    });
-  }, [allProducts, searchTerm, selectedCategory]);
+  const filteredProducts = useMemo(() => allProducts.filter(p => {
+    const ms = !searchTerm || p.description?.toLowerCase().includes(searchTerm.toLowerCase()) || p.reference?.toLowerCase().includes(searchTerm.toLowerCase());
+    const mc = selectedCategory === 'all' || p.category === selectedCategory;
+    return ms && mc;
+  }), [allProducts, searchTerm, selectedCategory]);
 
   const storeProductsByCategory = useMemo(() => {
-    const grouped: { [key: string]: any[] } = {};
-    
-    storeProducts.forEach(product => {
-      const category = product.category || 'Sem Categoria';
-      if (!grouped[category]) {
-        grouped[category] = [];
-      }
-      grouped[category].push(product);
-    });
-    
-    return grouped;
+    const g: { [k: string]: any[] } = {};
+    storeProducts.forEach(p => { const c = p.category || 'Sem Categoria'; if (!g[c]) g[c] = []; g[c].push(p); });
+    return g;
   }, [storeProducts]);
 
   const allProductsByCategory = useMemo(() => {
-    const grouped: { [key: string]: any[] } = {};
-    allProducts.forEach(product => {
-      const category = product.category || 'Sem Categoria';
-      if (!grouped[category]) {
-        grouped[category] = [];
-      }
-      grouped[category].push(product);
-    });
-    return grouped;
+    const g: { [k: string]: any[] } = {};
+    allProducts.forEach(p => { const c = p.category || 'Sem Categoria'; if (!g[c]) g[c] = []; g[c].push(p); });
+    return g;
   }, [allProducts]);
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(value);
-  };
+  const formatCurrency = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
   const getPublicUrl = () => {
-    const baseUrl = window.location.origin;
-    const storeIdentifier = storeSlug || getResellerId();
-    return `${baseUrl}/loja/${storeIdentifier}`;
+    const base = window.location.origin;
+    const id = storeSlug || getResellerId();
+    return `${base}/loja/${id}`;
   };
 
   const copyPublicUrl = () => {
-    const url = getPublicUrl();
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText(getPublicUrl());
     setUrlCopied(true);
     toast.success('Link copiado!');
     setTimeout(() => setUrlCopied(false), 2000);
   };
 
   const shareOnWhatsApp = () => {
-    const url = getPublicUrl();
-    const message = encodeURIComponent(`Confira minha loja online: ${storeName || 'Minha Loja'}\n${url}`);
-    window.open(`https://wa.me/?text=${message}`, '_blank');
+    const msg = encodeURIComponent(`Confira minha loja: ${storeName || 'Minha Loja'}\n${getPublicUrl()}`);
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
   };
 
-  const openPublicStore = () => {
-    const url = getPublicUrl();
-    window.open(url, '_blank');
-  };
+  const generateSlug = (name: string) => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
 
-  const generateSlugFromName = (name: string) => {
-    return name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
+  if (supabaseLoading) return <div className="flex items-center justify-center h-64">Carregando...</div>;
+  if (!configured) return <div className="flex items-center justify-center h-64"><p className="text-muted-foreground">Supabase não configurado</p></div>;
+  if (loading) return <div className="flex items-center justify-center h-64">Carregando produtos...</div>;
 
-  const handleStoreNameChange = (name: string) => {
-    setStoreName(name);
-    if (!storeSlug || storeSlug === generateSlugFromName(storeName)) {
-      setStoreSlug(generateSlugFromName(name));
-    }
-  };
-
-  if (supabaseLoading) {
-    return <div className="flex items-center justify-center h-64">Carregando configuração...</div>;
-  }
-
-  if (!configured) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <p className="text-lg text-muted-foreground mb-2">Supabase não configurado</p>
-          <p className="text-sm text-muted-foreground">Por favor, configure as credenciais do Supabase</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return <div className="flex items-center justify-center h-64">Carregando produtos...</div>;
-  }
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Minha Loja</h1>
-          <p className="text-muted-foreground">
-            Configure sua loja selecionando os produtos que deseja vender
-          </p>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Configure e publique sua loja</p>
         </div>
         <Button onClick={saveStoreConfiguration} disabled={saving}>
           <Save className="mr-2 h-4 w-4" />
-          {saving ? 'Salvando...' : 'Salvar Configuração'}
+          {saving ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
 
-      <Tabs defaultValue="minha-loja" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-6">
-          <TabsTrigger value="minha-loja" className="flex items-center gap-2">
-            <StoreIcon className="h-4 w-4" />
-            Minha Loja
+      <Tabs defaultValue="preview-loja" className="w-full">
+        <TabsList className="grid w-full grid-cols-4 mb-6" style={{ backgroundColor: 'var(--brand-card, #4e3b3b)' }}>
+          <TabsTrigger value="preview-loja" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <Globe className="h-4 w-4" />Minha Vitrine
           </TabsTrigger>
-          <TabsTrigger value="publicar" className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            Publicar
+          <TabsTrigger value="minha-loja" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <StoreIcon className="h-4 w-4" />Produtos
           </TabsTrigger>
-          <TabsTrigger value="meu-perfil" className="flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Meu Perfil
+          <TabsTrigger value="meu-perfil" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <User className="h-4 w-4" />Meu Perfil
           </TabsTrigger>
-          <TabsTrigger value="estoque" className="flex items-center gap-2">
-            <Boxes className="h-4 w-4" />
-            Estoque
+          <TabsTrigger value="estoque" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <Boxes className="h-4 w-4" />Estoque
           </TabsTrigger>
         </TabsList>
 
+        {/* ======= ABA MINHA VITRINE (preview da loja publica) ======= */}
+        <TabsContent value="preview-loja">
+          <div className="w-full">
+            {loadingPreview ? (
+              <div className="flex items-center justify-center h-64 text-muted-foreground">
+                <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mr-3" />
+                Carregando vitrine...
+              </div>
+            ) : fullStoreData?.settings ? (
+              <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--brand-button, #954728)', maxHeight: '80vh', overflowY: 'auto' }}>
+                <StorePreview
+                  settings={fullStoreData.settings}
+                  showFullPage={true}
+                  products={fullStoreData.products || []}
+                  banners={fullStoreData.banners || []}
+                  campaigns={fullStoreData.campaigns || []}
+                  benefits={fullStoreData.benefits || []}
+                  videos={fullStoreData.videos || []}
+                  mosaics={fullStoreData.mosaics || []}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-64 text-muted-foreground gap-4">
+                <Globe className="h-12 w-12 opacity-30" />
+                <div className="text-center">
+                  <p className="font-medium">Vitrine ainda não configurada</p>
+                  <p className="text-sm">Salve sua loja primeiro para ver o preview</p>
+                </div>
+                <Button variant="outline" onClick={() => loadFullStoreData(savedStoreSlug || storeSlug)}>
+                  Recarregar Preview
+                </Button>
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* ======= ABA MINHA LOJA (produtos + publicação juntos) ======= */}
         <TabsContent value="minha-loja">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card>
+          <div className="grid xl:grid-cols-2 gap-6">
+
+            {/* Coluna 1 - Produtos disponíveis */}
+            <Card className="xl:col-span-1">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  Produtos Disponíveis
+                  <Package className="h-5 w-5" />Produtos Disponíveis
                 </CardTitle>
-                <CardDescription>
-                  Clique no produto para visualizar ou arraste para adicionar à sua loja
-                </CardDescription>
-                <div className="flex gap-2 mt-4">
+                <CardDescription>Clique ou arraste para adicionar à sua loja</CardDescription>
+                <div className="flex gap-2 mt-3">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Buscar por nome ou referência..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-9"
-                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Buscar..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-9" />
                   </div>
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Categoria" />
-                    </SelectTrigger>
+                    <SelectTrigger className="w-[130px]"><SelectValue placeholder="Categoria" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todas</SelectItem>
-                      {categories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
+                      {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
-                {filteredProducts.length > 0 && (
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {filteredProducts.length} produto(s) encontrado(s)
-                  </p>
-                )}
+                <p className="text-xs text-muted-foreground mt-1">{filteredProducts.length} produto(s)</p>
               </CardHeader>
-              <CardContent className="space-y-3 max-h-[600px] overflow-y-auto">
+              <CardContent className="space-y-2 max-h-[500px] overflow-y-auto">
                 {filteredProducts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <Package className="h-12 w-12 mb-2" />
-                    <p>Nenhum produto encontrado</p>
+                    <Package className="h-10 w-10 mb-2" /><p>Nenhum produto</p>
                   </div>
-                ) : (
-                  filteredProducts.map((product) => (
-                    <div
-                      key={product.id}
-                      draggable
-                      onDragStart={() => handleDragStart(product)}
-                      onClick={() => setViewingProduct(product)}
-                      className="flex items-center gap-3 p-3 border rounded-lg hover:border-primary hover:shadow-sm transition-all cursor-pointer bg-card"
-                    >
-                      <div className="h-16 w-16 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                        {product.image ? (
-                          <img 
-                            src={product.image} 
-                            alt={product.description || 'Produto'} 
-                            className="h-full w-full object-cover" 
-                          />
-                        ) : (
-                          <Package className="h-8 w-8 text-muted-foreground" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium truncate">{product.description || 'Sem descrição'}</h4>
-                        {product.category && (
-                          <Badge variant="secondary" className="text-xs mb-1">
-                            {product.category}
-                          </Badge>
-                        )}
-                        {product.reference && (
-                          <p className="text-sm text-muted-foreground">Ref: {product.reference}</p>
-                        )}
-                        <p className="text-sm font-semibold text-primary">
-                          {product.price ? formatCurrency(product.price) : '-'}
-                        </p>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        variant="ghost"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addProductToStore(product);
-                        }}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
+                ) : filteredProducts.map(product => (
+                  <div key={product.id} draggable onDragStart={() => handleDragStart(product)}
+                    onClick={() => setViewingProduct(product)}
+                    className="flex items-center gap-3 p-3 border rounded-lg hover:shadow-sm transition-all cursor-pointer bg-card"
+                  >
+                    <div className="h-14 w-14 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                      {product.image ? <img src={product.image} alt={product.description} className="h-full w-full object-cover" /> : <Package className="h-7 w-7 text-muted-foreground" />}
                     </div>
-                  ))
-                )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm truncate">{product.description || 'Sem descrição'}</h4>
+                      {product.category && <Badge variant="secondary" className="text-xs mb-1">{product.category}</Badge>}
+                      {product.reference && <p className="text-xs text-muted-foreground">Ref: {product.reference}</p>}
+                      <p className="text-sm font-semibold" style={{ color: accent }}>{product.price ? formatCurrency(product.price) : '-'}</p>
+                    </div>
+                    <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); addProductToStore(product); }}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
               </CardContent>
             </Card>
 
-            <Card>
+            {/* Coluna 2 - Produtos da loja */}
+            <Card className="xl:col-span-1">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <StoreIcon className="h-5 w-5" />
-                  Minha Loja
+                  <StoreIcon className="h-5 w-5" />Produtos na Loja
                 </CardTitle>
-                <CardDescription>
-                  Produtos selecionados para sua loja ({storeProducts.length} produtos)
-                </CardDescription>
+                <CardDescription>{storeProducts.length} produto(s) selecionado(s)</CardDescription>
               </CardHeader>
-              <CardContent 
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                className="min-h-[400px] max-h-[600px] overflow-y-auto"
-              >
+              <CardContent onDragOver={handleDragOver} onDrop={handleDrop} className="min-h-[400px] max-h-[500px] overflow-y-auto">
                 {storeProducts.length === 0 ? (
-                  <div 
-                    className="flex flex-col items-center justify-center h-[400px] border-2 border-dashed border-muted-foreground/25 rounded-lg bg-muted/10"
-                  >
-                    <ArrowRight className="h-12 w-12 text-muted-foreground mb-4 rotate-180" />
-                    <p className="text-muted-foreground text-center">
-                      Arraste produtos aqui ou clique no botão <Plus className="inline h-4 w-4" /> para adicionar à sua loja
+                  <div className="flex flex-col items-center justify-center h-[380px] border-2 border-dashed border-muted-foreground/25 rounded-lg bg-muted/10">
+                    <ArrowRight className="h-10 w-10 text-muted-foreground mb-3 rotate-180" />
+                    <p className="text-muted-foreground text-sm text-center px-4">
+                      Arraste produtos aqui ou clique <Plus className="inline h-3 w-3" /> para adicionar
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-6">
-                    {Object.entries(storeProductsByCategory).map(([category, products]) => (
-                      <div key={category} className="space-y-3">
-                        <div className="flex items-center gap-2 pb-2 border-b">
-                          <h3 className="font-semibold text-lg">{category}</h3>
-                          <Badge variant="outline">{products.length}</Badge>
+                  <div className="space-y-2">
+                    {storeProducts.map(product => (
+                      <div key={product.id} onClick={() => setSellingProduct(product)}
+                        className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors" style={{ backgroundColor: `${accent}15`, borderColor: `${accent}40` }}
+                      >
+                        <div className="h-14 w-14 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                          {product.image ? <img src={product.image} alt={product.description} className="h-full w-full object-cover" /> : <Package className="h-7 w-7 text-muted-foreground" />}
                         </div>
-                        {products.map((product) => (
-                          <div
-                            key={product.id}
-                            onClick={() => setSellingProduct(product)}
-                            className="flex items-center gap-3 p-3 border rounded-lg bg-primary/5 border-primary/20 cursor-pointer hover:bg-primary/10 transition-colors"
-                          >
-                            <div className="h-16 w-16 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                              {product.image ? (
-                                <img 
-                                  src={product.image} 
-                                  alt={product.description || 'Produto'} 
-                                  className="h-full w-full object-cover" 
-                                />
-                              ) : (
-                                <Package className="h-8 w-8 text-muted-foreground" />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium truncate">{product.description || 'Sem descrição'}</h4>
-                              {product.reference && (
-                                <p className="text-sm text-muted-foreground">Ref: {product.reference}</p>
-                              )}
-                              <div className="flex items-center gap-2 mt-1">
-                                <p className="text-sm font-semibold text-primary">
-                                  {product.price ? formatCurrency(product.price) : '-'}
-                                </p>
-                                {product.stock !== undefined && (
-                                  <Badge variant={product.stock > 0 ? "secondary" : "destructive"} className="text-xs">
-                                    {product.stock} un.
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <Button 
-                                size="sm" 
-                                variant="default"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSellingProduct(product);
-                                }}
-                              >
-                                <ShoppingCart className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="ghost"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  removeProductFromStore(product.id);
-                                }}
-                              >
-                                <X className="h-4 w-4 text-destructive" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-sm truncate">{product.description || 'Sem descrição'}</h4>
+                          {product.reference && <p className="text-xs text-muted-foreground">Ref: {product.reference}</p>}
+                          <p className="text-sm font-semibold" style={{ color: accent }}>{product.price ? formatCurrency(product.price) : '-'}</p>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button size="sm" variant="default" style={{ backgroundColor: accent, borderColor: accent }} onClick={e => { e.stopPropagation(); setSellingProduct(product); }}>
+                            <ShoppingCart className="h-3 w-3" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); removeProductFromStore(product.id); }}>
+                            <X className="h-3 w-3 text-destructive" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
               </CardContent>
             </Card>
-          </div>
 
-          {storeProducts.length > 0 && (
-            <Card className="border-primary mt-6">
-              <CardHeader>
-                <CardTitle className="text-primary">Resumo da Loja</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total de Produtos</p>
-                    <p className="text-2xl font-bold">{storeProducts.length}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Valor Total do Catálogo</p>
-                    <p className="text-2xl font-bold">
-                      {formatCurrency(storeProducts.reduce((sum, p) => sum + (p.price || 0), 0))}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Status</p>
-                    <Badge variant="default" className="mt-1">Configurada</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        <TabsContent value="publicar">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Globe className="h-5 w-5" />
-                  Configurações da Loja Pública
-                </CardTitle>
-                <CardDescription>
-                  Configure e publique sua loja para que clientes possam ver seus produtos
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/50">
-                  <div className="space-y-1">
-                    <Label htmlFor="publish-toggle" className="text-base font-medium">
-                      Publicar Loja
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      {isPublished 
-                        ? 'Sua loja está visível para clientes' 
-                        : 'Sua loja está oculta'}
-                    </p>
-                  </div>
-                  <Switch
-                    id="publish-toggle"
-                    checked={isPublished}
-                    onCheckedChange={setIsPublished}
-                    data-testid="switch-publish"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="store-name">Nome da Loja</Label>
-                  <Input
-                    id="store-name"
-                    placeholder="Nome definido pela empresa"
-                    value={storeName}
-                    disabled
-                    className="bg-muted cursor-not-allowed"
-                    data-testid="input-store-name"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    O nome da loja é definido pela empresa
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="store-slug">URL Personalizada (opcional)</Label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">/loja/</span>
-                    <Input
-                      id="store-slug"
-                      placeholder="minha-loja"
-                      value={storeSlug}
-                      onChange={(e) => setStoreSlug(generateSlugFromName(e.target.value))}
-                      data-testid="input-store-slug"
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Use apenas letras minúsculas, números e hífens
-                  </p>
-                </div>
-
-                <Button onClick={saveStoreConfiguration} disabled={saving} className="w-full">
-                  <Save className="mr-2 h-4 w-4" />
-                  {saving ? 'Salvando...' : 'Salvar Configurações'}
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Link2 className="h-5 w-5" />
-                  Link da Sua Loja
-                </CardTitle>
-                <CardDescription>
-                  Compartilhe este link com seus clientes
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isPublished ? (
-                  <>
-                    <div className="p-4 border rounded-lg bg-primary/5 border-primary/20">
-                      <p className="text-sm font-mono break-all">{getPublicUrl()}</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button variant="outline" onClick={copyPublicUrl} data-testid="button-copy-url">
-                        {urlCopied ? (
-                          <Check className="mr-2 h-4 w-4 text-green-500" />
-                        ) : (
-                          <Copy className="mr-2 h-4 w-4" />
-                        )}
-                        {urlCopied ? 'Copiado!' : 'Copiar Link'}
-                      </Button>
-                      <Button variant="outline" onClick={shareOnWhatsApp} data-testid="button-share-whatsapp">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        WhatsApp
-                      </Button>
-                    </div>
-
-                    <Button className="w-full" onClick={openPublicStore} data-testid="button-open-store">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Visualizar Loja
-                    </Button>
-
-                    <div className="pt-4 border-t">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                        <QrCode className="h-4 w-4" />
-                        QR Code
-                      </div>
-                      <div className="p-4 border rounded-lg bg-white flex items-center justify-center">
-                        <img 
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(getPublicUrl())}`}
-                          alt="QR Code da Loja"
-                          className="w-36 h-36"
-                        />
-                      </div>
-                    </div>
-
-                    {storeProducts.length === 0 && (
-                      <p className="text-sm text-amber-600 dark:text-amber-400">
-                        Sua loja está publicada, mas sem produtos. Adicione produtos na aba "Minha Loja".
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <Globe className="h-12 w-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground mb-2">
-                      {storeProducts.length === 0 
-                        ? 'Adicione produtos à sua loja primeiro'
-                        : 'Ative a publicação da loja para gerar o link'}
-                    </p>
-                    {storeProducts.length === 0 && (
-                      <p className="text-sm text-muted-foreground">
-                        Vá para a aba "Minha Loja" e selecione os produtos
-                      </p>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>Status da Loja</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 border rounded-lg">
-                    <p className="text-3xl font-bold text-primary">{storeProducts.length}</p>
-                    <p className="text-sm text-muted-foreground">Produtos</p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg">
-                    <p className="text-3xl font-bold">{Object.keys(storeProductsByCategory).length}</p>
-                    <p className="text-sm text-muted-foreground">Categorias</p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg">
-                    <Badge variant={isPublished ? 'default' : 'secondary'} className="text-base px-4 py-2">
-                      {isPublished ? 'Publicada' : 'Rascunho'}
-                    </Badge>
-                    <p className="text-sm text-muted-foreground mt-2">Status</p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg">
-                    <p className="text-lg font-bold">
-                      {formatCurrency(storeProducts.reduce((sum, p) => sum + (p.price || 0), 0))}
-                    </p>
-                    <p className="text-sm text-muted-foreground">Valor Total</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </TabsContent>
 
@@ -854,19 +412,13 @@ export default function Store() {
         <TabsContent value="estoque">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Boxes className="h-5 w-5" />
-                Estoque da Empresa
-              </CardTitle>
-              <CardDescription>
-                Veja todos os produtos disponíveis no estoque da empresa e solicite os que deseja
-              </CardDescription>
+              <CardTitle className="flex items-center gap-2"><Boxes className="h-5 w-5" />Estoque da Empresa</CardTitle>
+              <CardDescription>Produtos disponíveis no estoque</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(allProductsByCategory).length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-                  <Package className="h-16 w-16 mb-4" />
-                  <p className="text-lg">Nenhum produto disponível no estoque</p>
+                  <Package className="h-16 w-16 mb-4" /><p>Nenhum produto no estoque</p>
                 </div>
               ) : (
                 <Accordion type="multiple" className="w-full">
@@ -874,69 +426,34 @@ export default function Store() {
                     <AccordionItem key={category} value={category}>
                       <AccordionTrigger className="hover:no-underline">
                         <div className="flex items-center gap-3">
-                          <span className="font-semibold text-lg">{category}</span>
-                          <Badge variant="secondary">{products.length} produto(s)</Badge>
+                          <span className="font-semibold">{category}</span>
+                          <Badge variant="secondary">{products.length}</Badge>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="grid gap-3 pt-2">
-                          {products.map((product) => {
-                            const productImage = product.image || product.image_url;
-                            return (
-                              <div
-                                key={product.id}
-                                onClick={() => setRequestingProduct(product)}
-                                className="flex items-center gap-4 p-4 border rounded-lg hover:border-primary hover:shadow-md transition-all cursor-pointer bg-card group"
-                              >
-                                <div className="h-20 w-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0 border">
-                                  {productImage ? (
-                                    <img 
-                                      src={productImage} 
-                                      alt={product.description || 'Produto'} 
-                                      className="h-full w-full object-cover" 
-                                    />
-                                  ) : (
-                                    <Package className="h-10 w-10 text-muted-foreground" />
-                                  )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-base truncate group-hover:text-primary transition-colors">
-                                    {product.description || 'Sem descrição'}
-                                  </h4>
-                                  {product.reference && (
-                                    <p className="text-sm text-muted-foreground">
-                                      REF: {product.reference}
-                                    </p>
-                                  )}
-                                  <div className="flex items-center gap-3 mt-2">
-                                    <p className="text-lg font-bold text-primary">
-                                      {formatCurrency(product.price || 0)}
-                                    </p>
-                                    <Badge 
-                                      variant={product.stock > 0 ? "secondary" : "destructive"}
-                                      className="text-xs"
-                                    >
-                                      {product.stock !== undefined ? (
-                                        product.stock > 0 ? `${product.stock} em estoque` : 'Sem estoque'
-                                      ) : 'Estoque não informado'}
-                                    </Badge>
-                                  </div>
-                                </div>
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setRequestingProduct(product);
-                                  }}
-                                >
-                                  <ShoppingCart className="h-4 w-4 mr-2" />
-                                  Solicitar
-                                </Button>
+                          {products.map(product => (
+                            <div key={product.id} onClick={() => setRequestingProduct(product)}
+                              className="flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer bg-card group"
+                            >
+                              <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0 border">
+                                {(product.image || product.image_url) ? <img src={product.image || product.image_url} alt={product.description} className="h-full w-full object-cover" /> : <Package className="h-8 w-8 text-muted-foreground" />}
                               </div>
-                            );
-                          })}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold truncate transition-colors">{product.description || 'Sem descrição'}</h4>
+                                {product.reference && <p className="text-sm text-muted-foreground">REF: {product.reference}</p>}
+                                <div className="flex items-center gap-3 mt-1">
+                                  <p className="font-bold" style={{ color: accent }}>{formatCurrency(product.price || 0)}</p>
+                                  <Badge variant={product.stock > 0 ? 'secondary' : 'destructive'} className="text-xs">
+                                    {product.stock !== undefined ? (product.stock > 0 ? `${product.stock} em estoque` : 'Sem estoque') : 'Não informado'}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => { e.stopPropagation(); setRequestingProduct(product); }}>
+                                <ShoppingCart className="h-4 w-4 mr-1" />Solicitar
+                              </Button>
+                            </div>
+                          ))}
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -948,96 +465,86 @@ export default function Store() {
         </TabsContent>
       </Tabs>
 
-      <Dialog open={!!viewingProduct} onOpenChange={(open) => !open && setViewingProduct(null)}>
-        <DialogContent className="max-w-3xl">
+      {/* Modal visualizar produto */}
+      <Dialog open={!!viewingProduct} onOpenChange={open => !open && setViewingProduct(null)}>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl">
-              {viewingProduct?.description || 'Produto'}
-            </DialogTitle>
-            <DialogDescription>
-              Visualize os detalhes completos do produto e adicione à sua loja
-            </DialogDescription>
+            <DialogTitle>{viewingProduct?.description || 'Produto'}</DialogTitle>
+            <DialogDescription>Detalhes do produto</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="relative w-full h-[400px] rounded-lg bg-muted flex items-center justify-center overflow-hidden">
-              {viewingProduct?.image ? (
-                <img 
-                  src={viewingProduct.image} 
-                  alt={viewingProduct.description || 'Produto'} 
-                  className="w-full h-full object-contain" 
-                />
-              ) : (
-                <Package className="h-24 w-24 text-muted-foreground" />
-              )}
+            <div className="relative w-full h-64 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+              {viewingProduct?.image ? <img src={viewingProduct.image} alt={viewingProduct.description} className="w-full h-full object-contain" /> : <Package className="h-20 w-20 text-muted-foreground" />}
             </div>
-            
-            <div className="space-y-3">
-              {viewingProduct?.reference && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Referência</p>
-                  <p className="text-lg">{viewingProduct.reference}</p>
-                </div>
-              )}
-              
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Preço</p>
-                  <p className="text-2xl font-bold text-primary">
-                    {viewingProduct?.price 
-                      ? formatCurrency(viewingProduct.price)
-                      : '-'}
-                  </p>
-                </div>
-                
-                {viewingProduct?.stock !== undefined && (
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Estoque</p>
-                    <p className="text-2xl font-bold">
-                      {viewingProduct.stock} unidades
-                    </p>
-                  </div>
-                )}
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+              {viewingProduct?.reference && <div><p className="text-sm text-muted-foreground">Referência</p><p className="font-medium">{viewingProduct.reference}</p></div>}
+              <div><p className="text-sm text-muted-foreground">Preço</p><p className="text-xl font-bold" style={{ color: accent }}>{viewingProduct?.price ? formatCurrency(viewingProduct.price) : '-'}</p></div>
+              {viewingProduct?.stock !== undefined && <div><p className="text-sm text-muted-foreground">Estoque</p><p className="font-bold">{viewingProduct.stock} un.</p></div>}
             </div>
-
-            <div className="flex gap-3 pt-4">
-              <DialogClose asChild>
-                <Button variant="outline" className="flex-1">
-                  <X className="mr-2 h-4 w-4" />
-                  Fechar
-                </Button>
-              </DialogClose>
-              <Button 
-                className="flex-1" 
-                onClick={() => {
-                  if (viewingProduct) {
-                    addProductToStore(viewingProduct);
-                    setViewingProduct(null);
-                  }
-                }}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Adicionar à Loja
+            <div className="flex gap-3">
+              <DialogClose asChild><Button variant="outline" className="flex-1"><X className="mr-2 h-4 w-4" />Fechar</Button></DialogClose>
+              <Button className="flex-1" onClick={() => { if (viewingProduct) { addProductToStore(viewingProduct); setViewingProduct(null); } }}>
+                <Plus className="mr-2 h-4 w-4" />Adicionar
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      <SellProductModal
-        product={sellingProduct}
-        isOpen={!!sellingProduct}
-        onClose={() => setSellingProduct(null)}
-        resellerId="00000000-0000-0000-0000-000000000000"
-        companyId={sellingProduct?.company_id || '00000000-0000-0000-0000-000000000000'}
-      />
-
-      <ProductRequestModal
-        product={requestingProduct}
-        isOpen={!!requestingProduct}
-        onClose={() => setRequestingProduct(null)}
-        resellerId={getResellerId()}
-      />
+      <SellProductModal product={sellingProduct} isOpen={!!sellingProduct} onClose={() => setSellingProduct(null)} resellerId="00000000-0000-0000-0000-000000000000" companyId={sellingProduct?.company_id || '00000000-0000-0000-0000-000000000000'} />
+      <ProductRequestModal product={requestingProduct} isOpen={!!requestingProduct} onClose={() => setRequestingProduct(null)} resellerId={getResellerId()} />
+      {/* Modal de compartilhamento apos salvar */}
+      <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              Loja Salva com Sucesso!
+            </DialogTitle>
+            <DialogDescription>
+              Sua loja esta disponivel no link abaixo
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {/* URL publica */}
+            <div className="p-3 border rounded-lg bg-muted/50">
+              <p className="text-xs text-muted-foreground mb-1">Link da sua loja</p>
+              <p className="text-sm font-mono break-all">{getPublicUrl()}</p>
+            </div>
+            {/* Botoes de acao */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline" onClick={copyPublicUrl} className="flex items-center gap-2">
+                {urlCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                {urlCopied ? 'Copiado!' : 'Copiar Link'}
+              </Button>
+              <Button variant="outline" onClick={shareOnWhatsApp} className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
+              </Button>
+            </div>
+            <Button className="w-full" onClick={() => window.open(getPublicUrl(), '_blank')}>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Abrir Minha Loja
+            </Button>
+            {/* QR Code */}
+            <div className="pt-2 border-t">
+              <p className="text-xs text-muted-foreground flex items-center gap-1 mb-3">
+                <QrCode className="h-3 w-3" /> QR Code para compartilhar
+              </p>
+              <div className="flex justify-center p-3 border rounded-lg bg-white">
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(getPublicUrl())}`}
+                  alt="QR Code"
+                  className="w-40 h-40"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogClose asChild>
+            <Button variant="ghost" className="w-full mt-2">Fechar</Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

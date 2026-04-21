@@ -23,8 +23,7 @@ const getPublicSupabaseClient = (): SupabaseClient | null => {
     
     // Fallback to env vars
     const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-    // Use service role key to bypass RLS for public branding endpoint
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
     
     if (supabaseUrl && supabaseKey) {
       console.log('[PublicStore] Using credentials from env vars');
@@ -141,131 +140,6 @@ router.get('/store/:storeId', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('[PublicStore] Error:', error);
     return res.status(500).json({ success: false, error: error.message || 'Internal server error' });
-  }
-});
-
-
-// GET /api/public/store/:storeId/full - Loja completa com settings, banners, benefits, produtos
-router.get('/store/:storeId/full', async (req: Request, res: Response) => {
-  try {
-    const { storeId } = req.params;
-    if (!storeId) return res.status(400).json({ error: 'storeId required' });
-
-    let tenantId = process.env.REID_TENANT_ID || 'emerick';
-
-    // 1. Resolver a loja pelo slug, reseller_id UUID, ou email da revendedora
-    const storeResult = await pool.query(
-      `SELECT rs.reseller_id, rs.product_ids, rs.store_name, rs.store_slug, rs.is_published,
-              r.tenant_id, r.email
-       FROM reseller_stores rs
-       LEFT JOIN revendedoras r ON r.id = rs.reseller_id
-       WHERE rs.store_slug = $1
-          OR rs.reseller_id::text = $1
-          OR r.email = $1
-          OR r.id::text = $1
-       LIMIT 1`,
-      [storeId]
-    );
-
-    if (!storeResult.rows.length) {
-      return res.status(404).json({ error: 'Loja nao encontrada' });
-    }
-    const store = storeResult.rows[0];
-    if (store.tenant_id) tenantId = store.tenant_id;
-
-    // 2. store_settings
-    const settingsResult = await pool.query(
-      `SELECT * FROM store_settings WHERE tenant_id = $1 LIMIT 1`,
-      [tenantId]
-    );
-    const settings = settingsResult.rows[0] || {};
-
-    // 3. Banners
-    let banners: any[] = [];
-    try {
-      const bannersResult = await pool.query(
-        `SELECT * FROM store_banners WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
-        [tenantId]
-      );
-      banners = bannersResult.rows || [];
-    } catch(e) {}
-
-    // 4. Benefits
-    let benefits: any[] = [];
-    try {
-      const benefitsResult = await pool.query(
-        `SELECT * FROM store_benefits WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
-        [tenantId]
-      );
-      benefits = benefitsResult.rows || [];
-    } catch(e) {}
-
-    // 5. Videos
-    let videos: any[] = [];
-    try {
-      const videosResult = await pool.query(
-        `SELECT * FROM store_videos WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
-        [tenantId]
-      );
-      videos = videosResult.rows || [];
-    } catch(e) {}
-
-    // 6. Mosaics
-    let mosaics: any[] = [];
-    try {
-      const mosaicsResult = await pool.query(
-        `SELECT * FROM store_mosaics WHERE tenant_id = $1 ORDER BY sort_order ASC LIMIT 20`,
-        [tenantId]
-      );
-      mosaics = mosaicsResult.rows || [];
-    } catch(e) {}
-
-    // 7. Produtos filtrados pela maleta
-    let products: any[] = [];
-    const productIds = store.product_ids || [];
-    if (productIds.length > 0) {
-      const placeholders = productIds.map((_: any, i: number) => `$${i + 1}`).join(',');
-      const productsResult = await pool.query(
-        `SELECT * FROM products WHERE id IN (${placeholders})`,
-        productIds
-      );
-      products = productsResult.rows || [];
-    }
-
-    // 8. Branding da empresa
-    let branding: any = {};
-    try {
-      const brandingResult = await pool.query(
-        `SELECT * FROM companies WHERE tenant_id = $1 LIMIT 1`,
-        [tenantId]
-      );
-      branding = brandingResult.rows[0] || {};
-    } catch(e) {}
-
-    return res.json({
-      settings: {
-        ...settings,
-        color_primary: settings.color_primary || branding.button_color || '#C9A84C',
-        color_background: settings.color_background || branding.background_color || '#080808',
-        color_text_primary: settings.color_text_primary || branding.text_color || '#F5F0E8',
-        store_name: settings.store_name || store.store_name || 'Minha Loja',
-        logo_url: settings.logo_url || branding.logo_url || null,
-      },
-      banners,
-      benefits,
-      videos,
-      mosaics,
-      products,
-      reseller: {
-        id: store.reseller_id,
-        email: store.email,
-        store_name: store.store_name,
-        store_slug: store.store_slug,
-      },
-    });
-  } catch (err: any) {
-    console.error('[PublicStore/full] Error:', err);
-    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -616,7 +490,7 @@ router.get('/reseller/store/:resellerId', async (req: Request, res: Response) =>
   }
 });
 
-const DEFAULT_BRANDING = { // v2-with-card-color
+const DEFAULT_BRANDING = {
   primary_color: '#9b87f5',
   secondary_color: '#7e69ab',
   accent_color: '#d946ef',
@@ -632,55 +506,36 @@ const DEFAULT_BRANDING = { // v2-with-card-color
   logo_size: 'medium',
   logo_position: 'left',
   company_name: 'NEXUS',
-  card_color: '#1a1a2e',
 };
 
-let brandingCache: { data: Record<string, any>; timestamp: number } | null = null;
-const BRANDING_CACHE_TTL = 0; // Cache disabled - sempre busca do banco
+let brandingCache: { data: typeof DEFAULT_BRANDING; timestamp: number } | null = null;
+const BRANDING_CACHE_TTL = 60000;
 
-router.get('/branding', async (req: Request, res: Response) => {
+router.get('/branding', async (_req: Request, res: Response) => {
   try {
-    // Resolver tenant_id de forma multitenant:
-    // 1. Query param: /api/public/branding?tenant=emerick
-    // 2. Header: x-tenant-id
-    // 3. Hostname: emerick.nexusintelligence.tech -> extrai 'emerick'
-    // 4. Fallback: env var REID_TENANT_ID
-    let tenantId: string = '';
+    if (brandingCache && Date.now() - brandingCache.timestamp < BRANDING_CACHE_TTL) {
+      return res.json(brandingCache.data);
+    }
 
-    // 1. Query param
-    if (req.query.tenant && typeof req.query.tenant === 'string') {
-      tenantId = req.query.tenant.trim();
+    const supabase = getPublicSupabaseClient();
+    if (!supabase) {
+      console.error('[PublicBranding] Supabase not configured');
+      return res.json(DEFAULT_BRANDING);
     }
-    // 2. Header x-tenant-id
-    else if (req.headers['x-tenant-id']) {
-      tenantId = String(req.headers['x-tenant-id']).trim();
-    }
-    // 3. Extrair do hostname (ex: emerick.nexusintelligence.tech)
-    else {
-      const hostname = req.headers.host || '';
-      const subdomain = hostname.split('.')[0];
-      // Só usa se não for 'nexusemijoias' ou 'nexusemijoiasrevendedoras' (hosts fixos)
-      if (subdomain && !['nexusemijoias', 'nexusemijoiasrevendedoras', 'localhost'].includes(subdomain)) {
-        tenantId = subdomain;
-      }
-    }
-    // 4. Fallback
-    if (!tenantId) {
-      tenantId = process.env.REID_TENANT_ID || 'emerick';
-    }
-    const result = await pool.query(
-      `SELECT company_name, primary_color, secondary_color, accent_color,
-              background_color, sidebar_background, sidebar_text, button_color,
-              button_text_color, text_color, heading_color, selected_item_color,
-              logo_url, logo_size, logo_position, card_color
-       FROM companies WHERE tenant_id = $1 LIMIT 1`,
-      [tenantId]
-    );
 
-    const data = result.rows[0] || null;
+    const { data, error } = await supabase
+      .from('companies')
+      .select('company_name, primary_color, secondary_color, accent_color, background_color, sidebar_background, sidebar_text, button_color, button_text_color, text_color, heading_color, selected_item_color, logo_url, logo_size, logo_position')
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('[PublicBranding] Error fetching branding:', error);
+      return res.json(DEFAULT_BRANDING);
+    }
 
     if (!data) {
-      console.log('[PublicBranding] No branding data found for tenant:', tenantId);
+      console.log('[PublicBranding] No branding data found, using defaults');
       return res.json(DEFAULT_BRANDING);
     }
 
@@ -700,12 +555,11 @@ router.get('/branding', async (req: Request, res: Response) => {
       logo_size: data.logo_size || DEFAULT_BRANDING.logo_size,
       logo_position: data.logo_position || DEFAULT_BRANDING.logo_position,
       company_name: data.company_name || DEFAULT_BRANDING.company_name,
-      card_color: data.card_color || DEFAULT_BRANDING.card_color,
     };
 
     brandingCache = { data: branding, timestamp: Date.now() };
     console.log('[PublicBranding] Branding loaded and cached');
-    return res.json({ ...branding, card_color: (branding as any).card_color || data.card_color || '#1a1a2e' } as Record<string, any>);
+    return res.json(branding);
   } catch (error: any) {
     console.error('[PublicBranding] Error:', error);
     return res.json(DEFAULT_BRANDING);

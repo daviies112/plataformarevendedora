@@ -62,6 +62,7 @@ function initializeDatabase(): void {
         connectionString: finalDbUrl,
         connectionTimeoutMillis: 15000,
         max: 20,
+        idleTimeoutMillis: 30000,
         ssl: {
           rejectUnauthorized: false
         }

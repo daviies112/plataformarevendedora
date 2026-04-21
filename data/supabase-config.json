@@ -1,6 +1,6 @@
 {
-  "supabaseUrl": "https://fsojiujwjfseqwrqesch.supabase.co",
-  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzb2ppdWp3amZzZXF3cnFlc2NoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2ODg1NjAwMSwiZXhwIjoyMDg0NDMyMDAxfQ.9A5ngn5l8QV1degQA_ge7LV3uvgsTpOEt2Pts2_gyik",
-  "supabaseServiceKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzb2ppdWp3amZzZXF3cnFlc2NoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2ODg1NjAwMSwiZXhwIjoyMDg0NDMyMDAxfQ.9A5ngn5l8QV1degQA_ge7LV3uvgsTpOEt2Pts2_gyik",
-  "timestamp": "2026-02-12T22:13:00.000Z"
+  "supabaseUrl": "https://api-supabase.nexusemijoias.nexusintelligence.tech",
+  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
+  "supabaseServiceKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q",
+  "timestamp": "2026-03-15T00:00:00.000Z"
 }

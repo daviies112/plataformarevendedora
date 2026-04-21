@@ -1475,7 +1475,7 @@ export function analyzeRisk(response: BigdatacorpProcessesResponse): RiskAnalysi
     throw new Error("Dados de processos não encontrados na resposta da API");
   }
   
-  const { TotalLawsuits, TotalLawsuitsAsDefendant, TotalLawsuitsAsAuthor } = processData;
+  const { TotalLawsuits = 0, TotalLawsuitsAsDefendant = 0, TotalLawsuitsAsAuthor = 0 } = processData || {};
   const lawsuits = processData.Lawsuits || [];
 
   // No lawsuits = APPROVED with score 0

@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Search, Instagram, Facebook, Smartphone, Heart, Share2, Loader2, Phone, Award } from 'lucide-react';
 import { toast } from 'sonner';
+import StorePreview from '@/features/revendedora/components/store/StorePreview';
 
 interface ResellerProfile {
   profile_photo_url: string | null;
@@ -36,6 +37,7 @@ export default function Storefront() {
   const [cart, setCart] = useState<any[]>([]);
   const [resellerProfile, setResellerProfile] = useState<ResellerProfile | null>(null);
   const [careerTierName, setCareerTierName] = useState<string | null>(null);
+  const [storeSettings, setStoreSettings] = useState<any>(null);
 
   useEffect(() => {
     loadStoreData();
@@ -120,6 +122,27 @@ export default function Storefront() {
         .single();
 
       setStore({ ...reseller, company });
+
+      // Buscar configuracoes visuais completas via endpoint /full
+      try {
+        const fullRes = await fetch(`/api/public/store/${reseller.id}/full`);
+        if (fullRes.ok) {
+          const fullData = await fullRes.json();
+          console.log('[Storefront] fullData loaded:', fullData);
+          if (fullData.settings) {
+            setStoreSettings({
+              ...fullData.settings,
+              _banners: fullData.banners || [],
+              _benefits: fullData.benefits || [],
+              _videos: fullData.videos || [],
+              _mosaics: fullData.mosaics || [],
+              _products: fullData.products || [],
+            });
+          }
+        }
+      } catch(e) {
+        console.warn('[Storefront] Nao foi possivel carregar /full:', e);
+      }
 
       const { data: profileData } = await supabase
         .from('reseller_profiles')
@@ -215,6 +238,22 @@ export default function Storefront() {
     }
     return '/placeholder.svg';
   };
+
+  // Se tiver configuracoes do Personalizar Loja, usar o StorePreview completo
+  if (storeSettings) {
+    return (
+      <StorePreview
+        settings={storeSettings}
+        showFullPage={true}
+        products={storeSettings._products?.length ? storeSettings._products : products}
+        banners={storeSettings._banners || []}
+        campaigns={storeSettings._campaigns || []}
+        benefits={storeSettings._benefits || []}
+        videos={storeSettings._videos || []}
+        mosaics={storeSettings._mosaics || []}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

@@ -8,7 +8,7 @@ import { getCompanySlug } from './tenantSlug';
 
 // Configurações da automação via environment variables
 export const AUTOMATION_CONFIG = {
-  DETECTION_INTERVAL_MINUTES: parseInt(process.env.CLIENT_DETECTION_INTERVAL_MINUTES || '30'),
+  DETECTION_INTERVAL_MINUTES: parseInt(process.env.CLIENT_DETECTION_INTERVAL_MINUTES || '2'),
   PROCESSING_ENABLED: process.env.AUTOMATION_PROCESSING_ENABLED !== 'false',
   PERSIST_STATE: process.env.AUTOMATION_PERSIST_STATE !== 'false',
   MAX_RETRIES: parseInt(process.env.AUTOMATION_MAX_RETRIES || '3'),
@@ -16,11 +16,11 @@ export const AUTOMATION_CONFIG = {
   
   // Form submission sync configuration
   FORM_SYNC_ENABLED: process.env.FORM_SYNC_ENABLED !== 'false',
-  FORM_SYNC_INTERVAL_MINUTES: parseInt(process.env.FORM_SYNC_INTERVAL_MINUTES || '30'),
+  FORM_SYNC_INTERVAL_MINUTES: parseInt(process.env.FORM_SYNC_INTERVAL_MINUTES || '2'),
   
   // CPF compliance sync configuration
   CPF_SYNC_ENABLED: process.env.CPF_SYNC_ENABLED !== 'false',
-  CPF_SYNC_INTERVAL_MINUTES: parseInt(process.env.CPF_SYNC_INTERVAL_MINUTES || '60'),
+  CPF_SYNC_INTERVAL_MINUTES: parseInt(process.env.CPF_SYNC_INTERVAL_MINUTES || '3'),
 };
 
 // Arquivo para persistir o estado da automação
@@ -687,7 +687,7 @@ function startFormMappingSyncJob(): void {
   });
 
   // Configurar timer para execuções futuras (5 minutos)
-  const intervalMs = parseInt(process.env.FORM_SYNC_INTERVAL_MINUTES || '30') * 60 * 1000; // Usa variável de ambiente
+  const intervalMs = 5 * 60 * 1000; // 5 minutos fixo conforme requisito
   formMappingSyncTimer = setInterval(() => {
     syncFormsToMappingTable().catch(error => {
       console.error('❌ [FormMappingSync] Erro na execução automática:', error);

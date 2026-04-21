@@ -1,18 +1,18 @@
 {
   "isRunning": true,
-  "startedAt": "2026-03-06T14:56:19.076Z",
+  "startedAt": "2026-04-21T22:52:35.494Z",
   "lastExecutions": {
     "system-system": {
       "clientId": "system",
       "tenantId": "system",
-      "lastRun": "2026-02-27T22:59:42.691Z",
-      "lastSuccess": "2026-02-25T11:52:05.374Z",
+      "lastRun": "2026-04-21T22:52:35.558Z",
+      "lastSuccess": "2026-04-21T22:52:35.558Z",
       "lastError": null,
       "consecutiveErrors": 0,
-      "totalExecutions": 2181,
+      "totalExecutions": 2449,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
-      "status": "stopped"
+      "status": "running"
     },
     "emericks-tenant-emericks-tenant": {
       "clientId": "emericks-tenant",
@@ -24,16 +24,16 @@
       "totalExecutions": 2449,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
-      "status": "running"
+      "status": "stopped"
     },
     "emerick-emerick": {
       "clientId": "emerick",
       "tenantId": "emerick",
-      "lastRun": "2026-03-06T15:24:19.389Z",
-      "lastSuccess": "2026-03-06T15:24:19.389Z",
+      "lastRun": "2026-04-21T22:52:35.555Z",
+      "lastSuccess": "2026-04-21T22:52:35.555Z",
       "lastError": null,
       "consecutiveErrors": 0,
-      "totalExecutions": 700,
+      "totalExecutions": 1993,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
       "status": "running"
@@ -48,7 +48,7 @@
       "totalExecutions": 649,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
-      "status": "running"
+      "status": "stopped"
     },
     "emericks-emericks": {
       "clientId": "emericks",
@@ -60,30 +60,42 @@
       "totalExecutions": 649,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
-      "status": "running"
+      "status": "stopped"
     },
     "davisemi-joias-davisemi-joias": {
       "clientId": "davisemi-joias",
       "tenantId": "davisemi-joias",
-      "lastRun": "2026-03-06T15:24:19.404Z",
+      "lastRun": "2026-03-13T21:11:04.537Z",
       "lastSuccess": "2026-03-06T15:24:19.404Z",
       "lastError": null,
       "consecutiveErrors": 0,
-      "totalExecutions": 649,
+      "totalExecutions": 856,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
-      "status": "running"
+      "status": "stopped"
+    },
+    "gleice-gleice": {
+      "clientId": "gleice",
+      "tenantId": "gleice",
+      "lastRun": "2026-03-13T21:11:04.506Z",
+      "lastSuccess": null,
+      "lastError": null,
+      "consecutiveErrors": 0,
+      "totalExecutions": 207,
+      "totalNewClientsDetected": 0,
+      "totalEventsCreated": 0,
+      "status": "stopped"
     }
   },
   "globalStats": {
-    "totalExecutions": 7277,
+    "totalExecutions": 9252,
     "totalNewClientsDetected": 0,
     "totalEventsCreated": 0,
     "totalErrors": 0,
-    "uptime": 1680
+    "uptime": 299
   },
   "settings": {
-    "detectionIntervalMinutes": 2,
+    "detectionIntervalMinutes": 30,
     "processingEnabled": true,
     "maxRetries": 3
   }
