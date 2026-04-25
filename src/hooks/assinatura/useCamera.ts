@@ -43,34 +43,22 @@ export const useCamera = (options: UseCameraOptions = {}) => {
 
       let stream: MediaStream;
       try {
-        console.log('Requesting camera with high quality constraints...');
+        // ⚡ OTIMIZADO: começa direto com qualidade adequada (sem tentar 1920 que demora)
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: targetFacingMode,
-            width: { ideal: 1920, min: 1280 },
-            height: { ideal: 1080, min: 720 },
-            frameRate: { ideal: 30 },
+            width: { ideal: 1280, max: 1280 },
+            height: { ideal: 720, max: 720 },
+            frameRate: { ideal: 30, max: 30 },
           },
           audio: false,
         });
       } catch (constraintErr) {
-        console.log('High quality constraints failed, trying medium constraints...');
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: targetFacingMode,
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-            },
-            audio: false,
-          });
-        } catch (mediumErr) {
-          console.log('Medium constraints failed, trying basic constraints...');
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false,
-          });
-        }
+        // Fallback rápido
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: targetFacingMode },
+          audio: false,
+        });
       }
 
       console.log('Camera stream obtained:', stream.id);

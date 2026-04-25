@@ -18,6 +18,7 @@ import { leadsPipelineRoutes } from "./routes/leadsPipelineRoutes";
 // import n8nRouter from "./routes/n8n"; // REMOVED
 import resellerAuthRoutes from "./routes/resellerAuth";
 import resellerCatalogRoutes from "./routes/resellerCatalog";
+import assinaturaRoutes from "./routes/assinatura";
 import pagarmeRoutes from "./routes/pagarme";
 import pagarmePublicRoutes from "./routes/pagarmePublic";
 import publicStoreRoutes from "./routes/publicStore";
@@ -68,6 +69,7 @@ export async function registerRoutes(app: Express) {
 
   // Public store routes - allows customers to view reseller stores without auth
   app.use("/api/public", publicStoreRoutes);
+  app.use('/api/assinatura', assinaturaRoutes);
 
   // N8N integration routes - REMOVED
   /*

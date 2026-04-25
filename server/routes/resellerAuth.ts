@@ -1382,6 +1382,8 @@ router.post('/supabase-config/test', async (req: Request, res: Response) => {
 // Helper to get Supabase client for store operations (uses service_role key)
 // Returns { client, adminId } or throws error with specific message
 async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any, adminId: string }> {
+  // Try to force LOCALHOST for internal server-to-server calls to avoid fetch failed (DNS/SSL)
+  const useLocalhost = true;
   const master = getMasterClient();
 
   // Try Master client first
@@ -1401,7 +1403,7 @@ async function getStoreSupabaseClient(userEmail: string): Promise<{ client: any,
 
         const { createClient } = await import('@supabase/supabase-js');
         return {
-          client: createClient(adminCreds.supabase_url, adminCreds.supabase_service_key),
+          client: createClient(adminCreds.supabase_url.replace('https://api-supabase.nexusemijoias.nexusintelligence.tech', 'http://localhost:8000'), adminCreds.supabase_service_key),
           adminId: revendedora.admin_id
         };
       }
@@ -1457,7 +1459,8 @@ router.get('/store-config', async (req: Request, res: Response) => {
     console.log('[StoreConfig] Loading config for reseller:', resellerId);
 
     try {
-      const { client: supabase } = await getStoreSupabaseClient(auth.email);
+      const { client: supabase, adminId } = await getStoreSupabaseClient(auth.email);
+      console.log('[StoreConfig] Attempting fetch with client targeting adminId:', adminId);
 
       const { data, error } = await supabase
         .from('reseller_stores')

@@ -91,6 +91,20 @@ export const SelfieCapture = ({
     };
   }, []);
 
+  // Mostra feedback enquanto modelos carregam (camara ja ativa)
+  useEffect(() => {
+    if (isReady && !isModelLoaded && !capturedImage) {
+      setDetectionResult({
+        detected: false,
+        centered: false,
+        goodLighting: false,
+        lookingAtCamera: false,
+        quality: 0,
+        message: '⏳ Preparando detecção facial...',
+      });
+    }
+  }, [isReady, isModelLoaded, capturedImage]);
+
   useEffect(() => {
     if (!isReady || !isModelLoaded || capturedImage) {
       return;
@@ -125,7 +139,7 @@ export const SelfieCapture = ({
             setAutoCapture(true);
             autoCaptureTimeoutRef.current = setTimeout(() => {
               handleCapture();
-            }, 1500);
+            }, 800); // ⚡ OTIMIZADO: captura mais rapido
           } else if (!isIdeal && autoCapture) {
             console.log('SelfieCapture: Conditions no longer ideal, canceling auto-capture');
             setAutoCapture(false);
@@ -137,7 +151,7 @@ export const SelfieCapture = ({
           console.error('Face detection error:', err);
         }
       }
-    }, 250);
+    }, 400); // ⚡ OTIMIZADO: 400ms - menos CPU mantendo boa experiência
 
     return () => {
       if (detectionIntervalRef.current) {

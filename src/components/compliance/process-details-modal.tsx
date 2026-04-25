@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Loader2, User, CreditCard, Scale, AlertTriangle, CheckCircle2, TrendingUp } from "lucide-react";
+import { FileText, Loader2, User, CreditCard, AlertTriangle, CheckCircle2, TrendingUp } from "lucide-react";
 import { downloadPDF } from "@/lib/download-utils";
 import { toast } from "sonner";
 import { calculateUnifiedRisk, getRiskColor } from "@/lib/riskCalculation";
@@ -771,78 +771,6 @@ export function ProcessDetailsModal({ check, open, onOpenChange }: ProcessDetail
                     <p className="text-zinc-400 text-xs mt-2">
                       Dados de cobrança não disponíveis para esta consulta. Marque "Forçar Atualização" para buscar dados completos.
                     </p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Indicador de consulta completa (SEMPRE exibido) */}
-          <Card className="border-zinc-700 bg-zinc-800/50">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Scale className="h-5 w-5 text-amber-500" />
-                  <CardTitle className="text-base text-zinc-100">Consulta Completa DataCorp</CardTitle>
-                </div>
-                <Badge variant="outline" className={`text-xs ${isCompleteConsultation ? 'text-amber-500 border-amber-500/50' : 'text-zinc-500 border-zinc-500/50'}`}>
-                  {isCompleteConsultation ? '3 APIs em paralelo' : 'Consulta simples'}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {isCompleteConsultation && metadata ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div>
-                    <p className="text-zinc-400">Tempo de Consulta</p>
-                    <p className="font-medium text-zinc-100">{metadata.tempoConsulta || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-zinc-400">Custo Total</p>
-                    <p className="font-medium text-amber-500">R$ {metadata.custoTotal || '0.170'}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-zinc-400">Dados Cadastrais:</p>
-                    {metadata.basicDataSuccess ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-zinc-400">Cobranças:</p>
-                    {metadata.collectionsSuccess ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div>
-                    <p className="text-zinc-400">Tempo de Consulta</p>
-                    <p className="font-medium text-zinc-100">{elapsedMs ? `${elapsedMs}ms` : 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-zinc-400">Custo Estimado</p>
-                    <p className="font-medium text-amber-500">R$ 0.070</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-zinc-400">Dados Cadastrais:</p>
-                    {basicDataPayload ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-zinc-400">Cobranças:</p>
-                    {collectionsPayload ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                    )}
                   </div>
                 </div>
               )}

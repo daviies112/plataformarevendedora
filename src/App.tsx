@@ -19,7 +19,7 @@ import PlatformRouter from './platforms/PlatformRouter';
 // import FormularioPublicoWrapper from './PublicFormApp'; // REMOVED
 
 // Outras páginas usam lazy loading (não são críticas para tempo de carga)
-// const AssinaturaClientPage = lazy(() => import('./pages/AssinaturaClientPage')); // REMOVED
+const AssinaturaClientPage = lazy(() => import('./pages/AssinaturaClientPage'));
 // const AssinaturaFromMeeting = lazy(() => import('./pages/AssinaturaFromMeeting')); // REMOVED
 // const ReuniaoPublica = lazy(() => import('./pages/ReuniaoPublica')); // REMOVED
 const PublicStore = lazy(() => import('./features/revendedora/pages/public/PublicStore'));
@@ -91,8 +91,7 @@ const PublicRoutes = () => {
     prefetchPublicRoutes();
   }
 
-  // Assinaturas - REMOVED
-  /*
+  // Assinaturas públicas
   if (path.startsWith('/assinar/')) {
     return (
       <Suspense fallback={<MinimalSkeleton />}>
@@ -100,16 +99,6 @@ const PublicRoutes = () => {
       </Suspense>
     );
   }
-
-  // Assinaturas públicas (exceto rotas internas)
-  if (path.startsWith('/assinatura/') && !internalAssinaturaRoutes.includes(path)) {
-    return (
-      <Suspense fallback={<MinimalSkeleton />}>
-        <AssinaturaFromMeeting />
-      </Suspense>
-    );
-  }
-  */
 
   // Formulários públicos - REMOVED
   /*

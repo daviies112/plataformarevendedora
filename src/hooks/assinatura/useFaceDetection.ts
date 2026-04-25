@@ -5,7 +5,7 @@ import { useImagePreprocessing } from '@/hooks/assinatura/useImagePreprocessing'
 import { useFaceAlignment } from '@/hooks/assinatura/useFaceAlignment';
 import { EnsembleFaceVerification, type EnsembleResult } from '@/lib/ensembleFaceVerification';
 
-const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model';
+const MODEL_URL = '/models'; // ⚡ OTIMIZADO: modelos locais - sem latencia CDN
 
 const EUCLIDEAN_THRESHOLD_VERY_STRICT = 0.35;
 const EUCLIDEAN_THRESHOLD_STRICT = 0.40;
@@ -57,15 +57,24 @@ export const useFaceDetection = () => {
       setIsLoading(true);
       setError(null);
       
+      // ⚡ OTIMIZADO: carrega TinyFaceDetector + Landmarks primeiro (mais leve e rapido)
+      // RecognitionNet é carregado em background após UI estar pronta
       await Promise.all([
-        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       ]);
       
-      setIsModelLoaded(true);
-      console.log('Face detection models loaded successfully');
+      setIsModelLoaded(true); // UI pode usar a camera imediatamente
+      console.log('Face detection core models loaded (fast path)');
+      
+      // Carrega modelos pesados em background sem bloquear a UI
+      Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+      ]).then(() => {
+        console.log('Heavy models loaded in background');
+      }).catch(err => console.warn('Background model load failed:', err));
+      
     } catch (err) {
       console.error('Error loading face detection models:', err);
       setError('Erro ao carregar modelos de detecção facial');
@@ -84,10 +93,11 @@ export const useFaceDetection = () => {
   }, [loadModels]);
 
   const getDetectorOptions = useCallback(() => {
-    return new faceapi.SsdMobilenetv1Options({
-      minConfidence: 0.5,
-      maxResults: 1,
-    });
+    // ⚡ OTIMIZADO: usa SSD apenas se carregado, senao TinyFaceDetector (3x mais rapido)
+    if (faceapi.nets.ssdMobilenetv1.isLoaded) {
+      return new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5, maxResults: 1 });
+    }
+    return new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 });
   }, []);
 
   const detectFace = useCallback(async (
@@ -568,8 +578,8 @@ export const useFaceDetection = () => {
           return;
         }
 
-        canvas.width = Math.min(img.width * scale, 2000);
-        canvas.height = Math.min(img.height * scale, 2000);
+        canvas.width = Math.min(img.width * scale, 1600); // ⚡
+        canvas.height = Math.min(img.height * scale, 1600);
 
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
@@ -585,11 +595,10 @@ export const useFaceDetection = () => {
   const detectFaceMultiPass = useCallback(async (
     img: HTMLImageElement | HTMLCanvasElement
   ): Promise<faceapi.WithFaceDescriptor<faceapi.WithFaceLandmarks<{ detection: faceapi.FaceDetection }, faceapi.FaceLandmarks68>> | null> => {
+    // ⚡ OTIMIZADO: apenas 2 passes (suficiente para boa deteccao)
     const configs = [
-      { minConfidence: 0.5, inputSize: 416 },
-      { minConfidence: 0.4, inputSize: 512 },
-      { minConfidence: 0.3, inputSize: 320 },
-      { minConfidence: 0.2, inputSize: 416 },
+      { minConfidence: 0.4, inputSize: 416 },
+      { minConfidence: 0.25, inputSize: 320 },
     ];
 
     for (const config of configs) {
@@ -687,7 +696,7 @@ export const useFaceDetection = () => {
       descriptors.push(aligned);
     }
 
-    const paddings = [0.15, 0.30, 0.40];
+    const paddings = [0.20, 0.35]; // ⚡ OTIMIZADO: 2 paddings suficientes
     for (const padding of paddings) {
       try {
         const cropped = await extractAlignedFace(imageData, detection, padding, 224);
@@ -775,7 +784,7 @@ export const useFaceDetection = () => {
         preprocessDocument(documentImage),
       ]);
 
-      const upscaledDocument = await upscaleImage(processedDocument, 3.5);
+      const upscaledDocument = await upscaleImage(processedDocument, 2.0); // ⚡ OTIMIZADO: 2x suficiente
 
       const [img1, img2] = await Promise.all([
         faceapi.fetchImage(processedSelfie),
