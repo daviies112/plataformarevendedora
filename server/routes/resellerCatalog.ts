@@ -252,3 +252,63 @@ router.post('/create-sale', async (req, res) => {
 });
 
 export default router;
+
+// GET /api/reseller/maleta-items - Itens da maleta da revendedora (somente leitura, definido pelo admin)
+router.get('/maleta-items', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    if (req.session?.userRole !== 'reseller') {
+      return res.status(403).json({ error: 'Acesso restrito a revendedoras' });
+    }
+
+    const tenantId = req.user?.tenantId || req.session?.tenantId;
+    const revendedoraId = req.user?.userId || req.session?.userId;
+
+    if (!tenantId || !revendedoraId) {
+      return res.status(401).json({ error: 'Sessão inválida' });
+    }
+
+    const client = await getDynamicSupabaseClient(tenantId);
+    if (!client) {
+      return res.status(500).json({ error: 'Banco de dados não configurado para este tenant' });
+    }
+
+    // Buscar itens da maleta mais recente desta revendedora
+    const { data: maletaItems, error: maletaError } = await client
+      .from('maleta_items')
+      .select('*')
+      .eq('revendedora_id', revendedoraId)
+      .eq('tenant_id', tenantId)
+      .order('created_at', { ascending: false });
+
+    if (maletaError) {
+      console.error('[maleta-items] Erro ao buscar itens:', maletaError);
+      return res.status(500).json({ error: 'Erro ao buscar itens da maleta' });
+    }
+
+    // Se tiver itens, buscar dados completos dos produtos
+    const items = maletaItems || [];
+    if (items.length === 0) {
+      return res.json({ success: true, items: [], produtos: [] });
+    }
+
+    const produtoIds = [...new Set(items.map((i: any) => i.produto_id).filter(Boolean))];
+    const { data: produtos } = await client
+      .from('products')
+      .select('*')
+      .in('id', produtoIds);
+
+    const produtosMap: Record<string, any> = {};
+    (produtos || []).forEach((p: any) => { produtosMap[p.id] = p; });
+
+    const itemsComProduto = items.map((item: any) => ({
+      ...item,
+      produto: produtosMap[item.produto_id] || null
+    }));
+
+    res.json({ success: true, items: itemsComProduto, total: items.length });
+
+  } catch (error) {
+    console.error('[maleta-items] Erro interno:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});

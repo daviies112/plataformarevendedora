@@ -33,6 +33,30 @@ import { datacorpChecks } from "../../shared/db-schema";
 import { eq } from "drizzle-orm";
 
 // ============================================
+// IN-MEMORY DEDUPLICATION LOCK (Race Condition Protection)
+// ============================================
+const _inFlightLocks = new Map<string, Promise<any>>();
+
+async function withSubmissionLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const existing = _inFlightLocks.get(key);
+  if (existing) {
+    log(`[LOCK] Resultado em andamento para chave: ${key.substring(0, 24)}... aguardando...`);
+    try {
+      return await existing as T;
+    } catch (_e) { }
+  }
+  const promise = fn();
+  _inFlightLocks.set(key, promise);
+  try {
+    const result = await promise;
+    return result;
+  } finally {
+    setTimeout(() => _inFlightLocks.delete(key), 90000);
+  }
+}
+
+
+// ============================================
 // NORMALIZATION FUNCTIONS
 // ============================================
 // These functions extract arrays from wrapper objects {Total: X, Items: [...]}
@@ -1617,17 +1641,21 @@ export function analyzeRisk(response: BigdatacorpProcessesResponse): RiskAnalysi
   // - 4 risky processes = +56 points (REJECTED - meets threshold)
   // - 5+ risky processes = +70 points (definitely REJECTED)
   const riskyNonDebtProcesses = activeNonBenignCount - debtLawsuitCount;
+    // PROCESS MIX PENALTY (RECALIBRATED for Brazil):
   if (debtAnalysis.totalActiveDebt > 0 && debtAnalysis.totalActiveDebt <= DEBT_THRESHOLDS.LOW && riskyNonDebtProcesses >= 3) {
     let processMixPenalty: number;
-    if (riskyNonDebtProcesses >= 5) {
-      processMixPenalty = 70; // Definitely rejected - many risky processes
-      pointBreakdown.push(`+70 (dívida pequena + ${riskyNonDebtProcesses} processos de risco = REJEIÇÃO)`);
+    if (riskyNonDebtProcesses >= 6) {
+      processMixPenalty = 60; // Rejected
+      pointBreakdown.push(`+60 (divida pequena + ${riskyNonDebtProcesses} processos de risco = REJEICAO)`);
+    } else if (riskyNonDebtProcesses >= 5) {
+      processMixPenalty = 45; // Attention
+      pointBreakdown.push(`+45 (divida pequena + ${riskyNonDebtProcesses} processos de risco = atencao forte)`);
     } else if (riskyNonDebtProcesses >= 4) {
-      processMixPenalty = 56; // Rejected - threshold met
-      pointBreakdown.push(`+56 (dívida pequena + ${riskyNonDebtProcesses} processos de risco = REJEIÇÃO)`);
+      processMixPenalty = 30; // Approved with attention
+      pointBreakdown.push(`+30 (divida pequena + ${riskyNonDebtProcesses} processos de risco = atencao)`);
     } else {
-      processMixPenalty = 40; // 3 processes - approved with attention
-      pointBreakdown.push(`+40 (dívida pequena + ${riskyNonDebtProcesses} processos de risco = atenção)`);
+      processMixPenalty = 15; // Observation
+      pointBreakdown.push(`+15 (divida pequena + ${riskyNonDebtProcesses} processos de risco = observacao)`);
     }
     riskPoints += processMixPenalty;
   }
@@ -1803,7 +1831,7 @@ export function analyzeResellerCompliance(
   
   // Only reject if score is VERY high (9.0+) AND there are serious additional concerns
   // CHANGED from 8.5 to 9.0 - more lenient
-  if (finalScore >= 9.0 && additionalReasons.length > 0) {
+  if (finalScore >= 9.5 && additionalReasons.length > 0) {
     log(`❌ [CPF-COMPLIANCE] REPROVADO por score combinado alto: ${finalScore.toFixed(2)}`);
     return {
       status: 'rejected',
@@ -1830,6 +1858,15 @@ export function analyzeResellerCompliance(
 }
 
 export async function checkCompliance(
+  cpf: string,
+  options: ComplianceCheckOptions
+): Promise<ComplianceCheckResult> {
+  const lockKey = options.submissionId ? `submission:${options.submissionId}` : `cpf:${cpf}:${options.tenantId}`;
+  return withSubmissionLock(lockKey, () => _checkComplianceImpl(cpf, options));
+}
+
+/** @internal */
+async function _checkComplianceImpl(
   cpf: string,
   options: ComplianceCheckOptions
 ): Promise<ComplianceCheckResult> {

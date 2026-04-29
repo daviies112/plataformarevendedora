@@ -49,6 +49,25 @@ export default function Store() {
   const [savedStoreSlug, setSavedStoreSlug] = useState('');
   const [fullStoreData, setFullStoreData] = useState<any>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [maletaItems, setMaletaItems] = useState<any[]>([]);
+  const [loadingMaleta, setLoadingMaleta] = useState(false);
+
+  const loadMaletaItems = async () => {
+    const resellerId = getResellerId();
+    if (!resellerId) return;
+    try {
+      setLoadingMaleta(true);
+      const res = await resellerFetch('/api/reseller/maleta-items');
+      if (res.ok) {
+        const data = await res.json();
+        setMaletaItems(data.items || []);
+      }
+    } catch(e) {
+      console.warn('[Store] Erro ao carregar maleta:', e);
+    } finally {
+      setLoadingMaleta(false);
+    }
+  };
 
   const loadFullStoreData = async (slug: string) => {
     if (!slug) return;
@@ -71,6 +90,7 @@ export default function Store() {
     if (!supabaseLoading && configured) {
       loadProducts();
       loadStoreConfiguration();
+      loadMaletaItems();
     } else if (!supabaseLoading && !configured) {
       setLoading(false);
     }
@@ -254,12 +274,14 @@ export default function Store() {
 
       <Tabs defaultValue="preview-loja" className="w-full">
         <TabsList className="grid w-full grid-cols-4 mb-6" style={{ backgroundColor: 'var(--brand-card, #4e3b3b)' }}>
+          <TabsTrigger value="minha-loja" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <Package className="h-4 w-4" />Minha Maleta
+          </TabsTrigger>
+
           <TabsTrigger value="preview-loja" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
             <Globe className="h-4 w-4" />Minha Vitrine
           </TabsTrigger>
-          <TabsTrigger value="minha-loja" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            <StoreIcon className="h-4 w-4" />Produtos
-          </TabsTrigger>
+
           <TabsTrigger value="meu-perfil" className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
             <User className="h-4 w-4" />Meu Perfil
           </TabsTrigger>
@@ -304,105 +326,81 @@ export default function Store() {
           </div>
         </TabsContent>
 
-        {/* ======= ABA MINHA LOJA (produtos + publicação juntos) ======= */}
+        {/* ======= ABA MINHA MALETA - somente visualizacao (admin define na plataforma completa) ======= */}
         <TabsContent value="minha-loja">
-          <div className="grid xl:grid-cols-2 gap-6">
-
-            {/* Coluna 1 - Produtos disponíveis */}
-            <Card className="xl:col-span-1">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />Produtos Disponíveis
-                </CardTitle>
-                <CardDescription>Clique ou arraste para adicionar à sua loja</CardDescription>
-                <div className="flex gap-2 mt-3">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Buscar..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-9" />
-                  </div>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-[130px]"><SelectValue placeholder="Categoria" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas</SelectItem>
-                      {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Package className="h-5 w-5" />Minha Maleta
+              </CardTitle>
+              <CardDescription>
+                Produtos da sua maleta definidos pela administração. Clique em um produto para registrar uma venda.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingMaleta ? (
+                <div className="flex items-center justify-center h-64 text-muted-foreground">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mr-3" />
+                  Carregando maleta...
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">{filteredProducts.length} produto(s)</p>
-              </CardHeader>
-              <CardContent className="space-y-2 max-h-[500px] overflow-y-auto">
-                {filteredProducts.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <Package className="h-10 w-10 mb-2" /><p>Nenhum produto</p>
+              ) : maletaItems.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64 text-muted-foreground gap-3">
+                  <Package className="h-12 w-12 opacity-30" />
+                  <div className="text-center">
+                    <p className="font-medium">Nenhum produto na maleta ainda</p>
+                    <p className="text-sm opacity-70">Os produtos serão definidos quando sua maleta for preparada pela administração.</p>
                   </div>
-                ) : filteredProducts.map(product => (
-                  <div key={product.id} draggable onDragStart={() => handleDragStart(product)}
-                    onClick={() => setViewingProduct(product)}
-                    className="flex items-center gap-3 p-3 border rounded-lg hover:shadow-sm transition-all cursor-pointer bg-card"
-                  >
-                    <div className="h-14 w-14 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {product.image ? <img src={product.image} alt={product.description} className="h-full w-full object-cover" /> : <Package className="h-7 w-7 text-muted-foreground" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm truncate">{product.description || 'Sem descrição'}</h4>
-                      {product.category && <Badge variant="secondary" className="text-xs mb-1">{product.category}</Badge>}
-                      {product.reference && <p className="text-xs text-muted-foreground">Ref: {product.reference}</p>}
-                      <p className="text-sm font-semibold" style={{ color: accent }}>{product.price ? formatCurrency(product.price) : '-'}</p>
-                    </div>
-                    <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); addProductToStore(product); }}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Coluna 2 - Produtos da loja */}
-            <Card className="xl:col-span-1">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <StoreIcon className="h-5 w-5" />Produtos na Loja
-                </CardTitle>
-                <CardDescription>{storeProducts.length} produto(s) selecionado(s)</CardDescription>
-              </CardHeader>
-              <CardContent onDragOver={handleDragOver} onDrop={handleDrop} className="min-h-[400px] max-h-[500px] overflow-y-auto">
-                {storeProducts.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-[380px] border-2 border-dashed border-muted-foreground/25 rounded-lg bg-muted/10">
-                    <ArrowRight className="h-10 w-10 text-muted-foreground mb-3 rotate-180" />
-                    <p className="text-muted-foreground text-sm text-center px-4">
-                      Arraste produtos aqui ou clique <Plus className="inline h-3 w-3" /> para adicionar
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {storeProducts.map(product => (
-                      <div key={product.id} onClick={() => setSellingProduct(product)}
-                        className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors" style={{ backgroundColor: `${accent}15`, borderColor: `${accent}40` }}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {maletaItems.map(item => {
+                    const product = item.produto || {};
+                    const img = product.image || product.image_url || null;
+                    return (
+                      <div
+                        key={item.id || item.produto_id}
+                        onClick={() => product.id && setSellingProduct(product)}
+                        className="flex flex-col border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow bg-card"
+                        style={{ borderColor: `${accent}30` }}
                       >
-                        <div className="h-14 w-14 rounded-md bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                          {product.image ? <img src={product.image} alt={product.description} className="h-full w-full object-cover" /> : <Package className="h-7 w-7 text-muted-foreground" />}
+                        <div className="h-40 bg-muted flex items-center justify-center overflow-hidden relative">
+                          {img ? (
+                            <img src={img} alt={item.produto_nome} className="h-full w-full object-cover" />
+                          ) : (
+                            <Package className="h-10 w-10 text-muted-foreground" />
+                          )}
+                          {item.quantidade > 1 && (
+                            <Badge className="absolute top-2 right-2" style={{ backgroundColor: accent }}>
+                              x{item.quantidade}
+                            </Badge>
+                          )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-sm truncate">{product.description || 'Sem descrição'}</h4>
-                          {product.reference && <p className="text-xs text-muted-foreground">Ref: {product.reference}</p>}
-                          <p className="text-sm font-semibold" style={{ color: accent }}>{product.price ? formatCurrency(product.price) : '-'}</p>
-                        </div>
-                        <div className="flex gap-1">
-                          <Button size="sm" variant="default" style={{ backgroundColor: accent, borderColor: accent }} onClick={e => { e.stopPropagation(); setSellingProduct(product); }}>
-                            <ShoppingCart className="h-3 w-3" />
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); removeProductFromStore(product.id); }}>
-                            <X className="h-3 w-3 text-destructive" />
-                          </Button>
+                        <div className="p-3 flex-1 flex flex-col gap-1">
+                          <h4 className="font-medium text-sm">{item.produto_nome || product.description || 'Sem descrição'}</h4>
+                          {(item.produto_referencia || product.reference) && (
+                            <p className="text-xs text-muted-foreground">Ref: {item.produto_referencia || product.reference}</p>
+                          )}
+                          <p className="text-sm font-semibold mt-auto" style={{ color: accent }}>
+                            {(item.preco_unitario || product.price) ? formatCurrency(item.preco_unitario || product.price) : '-'}
+                          </p>
+                          {product.id && (
+                            <Button
+                              size="sm"
+                              className="w-full mt-2 gap-2"
+                              style={{ backgroundColor: accent, borderColor: accent }}
+                              onClick={e => { e.stopPropagation(); setSellingProduct(product); }}
+                            >
+                              <ShoppingCart className="h-3 w-3" /> Registrar Venda
+                            </Button>
+                          )}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-          </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="meu-perfil">

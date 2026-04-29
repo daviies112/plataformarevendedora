@@ -1352,7 +1352,7 @@ export async function checkApprovedSubmissionsWithoutCPF(): Promise<{
               continue;
             }
             
-            // NOTA: SEMPRE consulta CPF, mesmo se já existe consulta anterior
+            // FIX: Somente consulta se necess??rio, mesmo se já existe consulta anterior
             // Isso garante que os dados estejam sempre atualizados
             if (existingResult && existingResult.length > 0) {
               console.log(`🔄 [CPFAutoCheck] CPF ${normalizedCPF.substring(0, 3)}... já possui consulta anterior - RECONSULTANDO para atualização`);
