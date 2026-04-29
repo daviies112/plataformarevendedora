@@ -5,11 +5,11 @@
     "system-system": {
       "clientId": "system",
       "tenantId": "system",
-      "lastRun": "2026-04-29T15:58:07.110Z",
-      "lastSuccess": "2026-04-29T15:58:07.110Z",
+      "lastRun": "2026-04-29T17:28:07.122Z",
+      "lastSuccess": "2026-04-29T17:28:07.122Z",
       "lastError": null,
       "consecutiveErrors": 0,
-      "totalExecutions": 2844,
+      "totalExecutions": 2847,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
       "status": "running"
@@ -29,11 +29,11 @@
     "emerick-emerick": {
       "clientId": "emerick",
       "tenantId": "emerick",
-      "lastRun": "2026-04-29T15:58:07.109Z",
-      "lastSuccess": "2026-04-29T15:58:07.109Z",
+      "lastRun": "2026-04-29T17:28:07.120Z",
+      "lastSuccess": "2026-04-29T17:28:07.120Z",
       "lastError": null,
       "consecutiveErrors": 0,
-      "totalExecutions": 2388,
+      "totalExecutions": 2391,
       "totalNewClientsDetected": 0,
       "totalEventsCreated": 0,
       "status": "running"
@@ -88,11 +88,11 @@
     }
   },
   "globalStats": {
-    "totalExecutions": 10042,
+    "totalExecutions": 10048,
     "totalNewClientsDetected": 0,
     "totalEventsCreated": 0,
     "totalErrors": 0,
-    "uptime": 0
+    "uptime": 6299
   },
   "settings": {
     "detectionIntervalMinutes": 30,
