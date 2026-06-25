@@ -37,3 +37,8 @@ pnpm-debug.log*
 *.orig
 *.tmp
 BACKUPS/**
+
+# Hygiene: real secrets, kept on disk, excluded from git (.example versions are tracked instead)
+data/supabase-config.json
+ecosystem.config.cjs
+test_create_admin.js

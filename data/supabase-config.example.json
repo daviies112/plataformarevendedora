@@ -1,0 +1,6 @@
+{
+  "supabaseUrl": "https://your-supabase-instance.example.com",
+  "supabaseAnonKey": "YOUR_SUPABASE_ANON_KEY_HERE",
+  "supabaseServiceKey": "YOUR_SUPABASE_SERVICE_ROLE_KEY_HERE",
+  "timestamp": "2026-01-01T00:00:00.000Z"
+}

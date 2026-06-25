@@ -1,0 +1,43 @@
+module.exports = {
+  apps: [{
+    name: 'plataformarevendedora',
+    script: 'dist/index.mjs',
+    cwd: '/var/www/plataformarevendedora',
+    instances: 1,
+    exec_mode: 'fork',
+    autorestart: true,
+    watch: false,
+    env: {
+    'PORT': '5002',
+    'NODE_ENV': 'production',
+    'APP_DOMAIN': 'your-domain.example.com',
+    'SUPABASE_LOCAL_URL': 'http://localhost:8000',
+    'SUPABASE_LOCAL_KEY': 'YOUR_SUPABASE_LOCAL_SERVICE_ROLE_KEY',
+    'SUPABASE_CONFIGURED': 'true',
+    'DATABASE_URL': 'postgres://postgres:YOUR_DB_PASSWORD@your-db-host:5432/postgres?sslmode=disable',
+    'JWT_SECRET': 'YOUR_JWT_SECRET',
+    'SESSION_SECRET': 'YOUR_SESSION_SECRET',
+    'CREDENTIALS_ENCRYPTION_KEY_BASE64': 'YOUR_BASE64_ENCRYPTION_KEY',
+    'CHAVE_SECRETA_PRODUCAO': 'YOUR_ASAAS_SECRET_KEY',
+    'CHAVE_PUBLICA_PRODUCAO': 'YOUR_ASAAS_PUBLIC_KEY',
+    'CHAVE_ID_PRODUCAO': 'YOUR_ASAAS_ACCOUNT_ID',
+    'SUPABASE_OWNER_SERVICE_KEY': 'YOUR_SUPABASE_SERVICE_ROLE_KEY',
+    'HOST': '0.0.0.0',
+    'CONFIG_MASTER_KEY': 'YOUR_CONFIG_MASTER_KEY',
+    'CLIENT_DETECTION_INTERVAL_MINUTES': '30',
+    'FORM_SYNC_INTERVAL_MINUTES': '30',
+    'CPF_SYNC_INTERVAL_MINUTES': '60',
+    'SUPABASE_URL': 'https://your-supabase-instance.example.com',
+    'SUPABASE_ANON_KEY': 'YOUR_SUPABASE_ANON_KEY',
+    'SUPABASE_SERVICE_ROLE_KEY': 'YOUR_SUPABASE_SERVICE_ROLE_KEY',
+    'SUPABASE_OWNER_URL': 'https://your-supabase-instance.example.com',
+    'SUPABASE_OWNER_KEY': 'YOUR_SUPABASE_ANON_KEY',
+    'SUPABASE_OWNER_SERVICE_ROLE_KEY': 'YOUR_SUPABASE_SERVICE_ROLE_KEY',
+    'SUPABASE_LOCAL_SERVICE_KEY': 'YOUR_SUPABASE_SERVICE_ROLE_KEY',
+    'REID_TENANT_ID': 'your-tenant-id',
+    'SUPABASE_MASTER_URL': 'https://your-supabase-instance.example.com',
+    'SUPABASE_MASTER_KEY': 'YOUR_SUPABASE_ANON_KEY',
+    'SUPABASE_MASTER_SERVICE_ROLE_KEY': 'YOUR_SUPABASE_SERVICE_ROLE_KEY'
+    }
+  }]
+};
