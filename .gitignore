@@ -15,3 +15,18 @@ vps_*.js
 *.webp
 temp
 tmp
+# Runtime / backups / local state
+node_modules/
+dist/
+*.bak
+*.backup
+*.log
+logs/
+BACKUPS/
+data/*state*.json
+data/*processed*.json
+data/*poller*.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
