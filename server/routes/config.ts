@@ -277,14 +277,14 @@ export function setupConfigRoutes(app: Express) {
     }
   });
 
-  app.get("/api/config/redis/telemetry", async (req, res) => {
+  app.get("/api/config/redis/telemetry", authenticateConfig, async (req, res) => {
     try {
       const { cache } = await import('../lib/cache');
       const stats = await cache.getStats();
       
       // Calculate metrics
       const totalCommands = stats.redis.commandsThisMonth || 0;
-      const limit = 500000; // Upstash Free Tier limit
+      const limit = 5000000; // Self-hosted Redis — guard-rail (sem cota real)
       const usagePercent = Math.min((totalCommands / limit) * 100, 100);
       
       // Get Redis INFO if connected
@@ -657,7 +657,7 @@ export function setupConfigRoutes(app: Express) {
   // NOTE: Duplicate routes removed - canonical Supabase routes are defined later in this file
   // with comprehensive cache invalidation and proper encryption of both URL and anonKey
 
-  app.post("/api/config/supabase/test", async (req, res) => {
+  app.post("/api/config/supabase/test", authenticateConfig, async (req, res) => {
     try {
       const { supabaseUrl, supabaseAnonKey } = req.body;
       
@@ -1151,7 +1151,7 @@ export function setupConfigRoutes(app: Express) {
     }
   });
 
-  app.get("/api/config/supabase-master/credentials", authenticateConfig, async (req: AuthRequest, res) => {
+  app.get("/api/config/supabase-master/credentials", configLimiter, authenticateConfig, async (req: AuthRequest, res) => {
     try {
       const tenantId = req.user!.tenantId;
       const configFromDb = await db.select().from(supabaseMasterConfig)
@@ -1161,6 +1161,9 @@ export function setupConfigRoutes(app: Express) {
       if (configFromDb[0]) {
         const decryptedUrl = decrypt(configFromDb[0].supabaseMasterUrl);
         const decryptedKey = decrypt(configFromDb[0].supabaseMasterServiceRoleKey);
+        
+        // 🔐 AUDIT LOG: registra acesso a credenciais service_role sem expor o valor da chave
+        console.log(`🔐 [AUDIT] service_role key acessada | tenant=${tenantId?.substring(0, 8)}... | rota=/api/config/supabase-master/credentials | ip=${req.ip} | ts=${new Date().toISOString()}`);
         
         return res.json({
           success: true,
@@ -2343,7 +2346,7 @@ export function setupConfigRoutes(app: Express) {
     }
   });
 
-  app.get("/api/config/hms100ms/sync-from-env", async (req: AuthRequest, res) => {
+  app.get("/api/config/hms100ms/sync-from-env", authenticateConfig, async (req: AuthRequest, res) => {
     try {
       const tenantId = req.user?.tenantId || "system";
       

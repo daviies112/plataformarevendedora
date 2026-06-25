@@ -502,7 +502,13 @@ function extractCPFFromCheck(check: DatacorpCheck): string | null {
   try {
     // ESTRATÉGIA 1: CPF criptografado (preferido)
     if (check.cpf_encrypted) {
-      return decryptCPF(check.cpf_encrypted);
+      try {
+        const decrypted = decryptCPF(check.cpf_encrypted);
+        if (decrypted) return decrypted;
+      } catch (decryptErr: any) {
+        console.warn(`⚠️ [CPFPoller] cpf_encrypted malformado no check ${check.id}, tentando estratégias alternativas. Erro: ${decryptErr.message}`);
+        // Não relança — continua para estratégia 2 e 3
+      }
     }
     
     // ESTRATÉGIA 2: CPF formatado em person_cpf (dados legados)
