@@ -37,8 +37,15 @@ pnpm-debug.log*
 *.orig
 *.tmp
 BACKUPS/**
-
 # Hygiene: real secrets, kept on disk, excluded from git (.example versions are tracked instead)
 data/supabase-config.json
 ecosystem.config.cjs
 test_create_admin.js
+# Local debug / diagnostic scripts with possible credentials or PII
+check_revend_supabase.cjs
+fix_tenant_revend.cjs
+test_hash.ts
+diagnose_auth.ts
+diagnose_db.ts
+# Development pasted assets / transcripts
+attached_assets/
