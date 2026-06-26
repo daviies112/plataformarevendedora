@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../config/jwtSecret';
 import { supabaseOwner, SUPABASE_CONFIGURED, SUPABASE_OWNER_URL, SUPABASE_OWNER_KEY } from '../config/supabaseOwner';
 
 export interface AdminUser {
@@ -30,7 +31,10 @@ class AdminAuthService {
   private jwtSecret: string;
 
   constructor() {
-    this.jwtSecret = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'demo-secret-key-for-development-only';
+    this.jwtSecret = getJwtSecret();
+    if (!this.jwtSecret) {
+      throw new Error('[AdminAuth] CRÍTICO: JWT_SECRET não configurado no ambiente. Defina JWT_SECRET no .env');
+    }
   }
 
   isConfigured(): boolean {

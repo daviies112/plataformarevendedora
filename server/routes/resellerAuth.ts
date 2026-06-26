@@ -3,10 +3,13 @@ import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import { getMasterClient, getAdminCredentials,
   getAllAdminsWithCredentials,
+  createTenantClient,
   createRevendedoraFromContract } from '../lib/masterSyncService';
 import { pool } from '../db';
 import { pagarmeService } from '../services/pagarme';
 import { saveResellerRecipientId, getResellerRecipientId } from '../services/commission';
+import { asaasService } from '../services/asaas';
+import { resolveTenantFromRequest } from '../lib/resolveTenantFromHost';
 
 // 🔐 SEGURANÇA: JWT_SECRET sem fallback aleatório — deve estar configurado no .env
 function getJwtSecret(): string {
@@ -307,7 +310,7 @@ function normalizeCPF(cpf: string): string {
 // POST /api/reseller/login
 router.post('/login', async (req: Request, res: Response) => {
   try {
-    const { email, cpf } = req.body;
+    const { email, cpf, tenantId: bodyTenantId, companySlug: bodyCompanySlug } = req.body;
 
     if (!email || !cpf) {
       return res.status(400).json({ error: 'Email e CPF sao obrigatorios' });
@@ -324,10 +327,46 @@ router.post('/login', async (req: Request, res: Response) => {
     // 1. Buscar revendedora no banco local por email e CPF
     console.log('[NEXUS] Buscando revendedora local por email:', email);
 
-    const { rows: revendedoras } = await pool.query(
-      'SELECT * FROM revendedoras WHERE LOWER(email) = LOWER($1)',
-      [email.trim()]
-    );
+    // 🔐 MULTITENANT: resolver tenant por ordem de prioridade:
+    // 1) tenantId do body (enviado pelo frontend quando acessa /revendedora/:slug/login)
+    // 2) subdominio/host (ex: emerick.nexusintelligence.tech)
+    // 3) nenhum -> busca global (compatibilidade retroativa)
+    let resolvedTenantId: string | null = null;
+
+    // Prioridade 1: slug/tenantId enviado pelo frontend via body
+    if (bodyTenantId && typeof bodyTenantId === 'string' && bodyTenantId.trim()) {
+      // Validar que o tenantId do body realmente existe em company_public_slugs (evitar injection)
+      const { rows: slugCheck } = await pool.query(
+        'SELECT tenant_id FROM company_public_slugs WHERE tenant_id = $1 LIMIT 1',
+        [bodyTenantId.trim()]
+      );
+      if (slugCheck.length > 0) {
+        resolvedTenantId = slugCheck[0].tenant_id;
+        console.log('[NEXUS] tenant resolvido pelo body (slug URL):', resolvedTenantId);
+      }
+    }
+
+    // Prioridade 2: subdominio/host header
+    if (!resolvedTenantId) {
+      resolvedTenantId = resolveTenantFromRequest(req);
+      if (resolvedTenantId) {
+        console.log('[NEXUS] tenant resolvido pelo host/query/header:', resolvedTenantId);
+      }
+    }
+
+    if (!resolvedTenantId) {
+      console.log('[NEXUS] tenant NAO resolvido - busca global (modo compatibilidade)');
+    }
+
+    const { rows: revendedoras } = resolvedTenantId
+      ? await pool.query(
+          'SELECT * FROM revendedoras WHERE LOWER(email) = LOWER($1) AND tenant_id = $2',
+          [email.trim(), resolvedTenantId]
+        )
+      : await pool.query(
+          'SELECT * FROM revendedoras WHERE LOWER(email) = LOWER($1)',
+          [email.trim()]
+        );
 
     console.log('[NEXUS] Query result count:', revendedoras?.length || 0);
 
@@ -348,11 +387,36 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const adminId = revendedora.admin_id;
 
-    // 1.5. Buscar Company Slug do Admin
-    let companySlug = '';
+    // 1.5. Buscar tenant_id real do admin (string como 'emerick', nao UUID)
+    // O tenant_id eh usado em todas as tabelas como chave de isolamento
+    let realTenantId = adminId; // fallback para o UUID caso nao encontre
+    try {
+      const { rows: adminRows } = await pool.query(
+        'SELECT tenant_id FROM admin_users WHERE id = $1 LIMIT 1',
+        [adminId]
+      );
+      if (adminRows.length > 0 && adminRows[0].tenant_id) {
+        realTenantId = adminRows[0].tenant_id;
+        console.log('[NEXUS] tenant_id real do admin:', realTenantId);
+      }
+    } catch (tenantErr) {
+      console.warn('[NEXUS] Erro ao buscar tenant_id do admin:', tenantErr);
+    }
+
+    // 1.6. Buscar Company Slug do Admin
+    // companySlug deve ser o slug legivel (ex: 'emerick'), nao o UUID do admin
+    // realTenantId ja foi resolvido acima como o tenant_id da tabela admin_users
+    let companySlug = realTenantId; // default: usar o proprio slug do tenant
     try {
       const { getCompanySlug } = await import('../lib/tenantSlug');
-      companySlug = await getCompanySlug(adminId);
+      const slugResult = await getCompanySlug(realTenantId); // corrigido: usar realTenantId, nao adminId (UUID)
+      // So usar o resultado se nao for um UUID (UUID tem 36 chars com hifens)
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugResult);
+      if (slugResult && !isUUID) {
+        companySlug = slugResult;
+      } else {
+        console.warn('[NEXUS] getCompanySlug retornou UUID ou vazio, usando realTenantId como slug:', realTenantId);
+      }
     } catch (slugErr) {
       console.warn('[NEXUS] Erro ao buscar company slug no login:', slugErr);
     }
@@ -385,7 +449,7 @@ router.post('/login', async (req: Request, res: Response) => {
     req.session.revendedoraId = revendedora.id;
     req.session.cpfNormalizado = cpfNormalizado; // chave única por CPF
     // 🔐 NÍVEL 1: empresa (admin_users.tenant_id)
-    req.session.tenantId = adminId;
+    req.session.tenantId = realTenantId; // usa string como "emerick", nao UUID
     req.session.companySlug = companySlug;
     req.session.comissao = Number(revendedora.comissao_padrao);
     req.session.projectName = projectName;
@@ -396,7 +460,7 @@ router.post('/login', async (req: Request, res: Response) => {
       userName: revendedora.nome || '',
       userRole: 'reseller',
       resellerId: revendedora.id,
-      tenantId: adminId,
+      tenantId: realTenantId, // usa string como "emerick", nao UUID
       cpfNormalizado: cpfNormalizado,
       companySlug: companySlug,
       comissao: Number(revendedora.comissao_padrao) || 0,
@@ -479,6 +543,37 @@ router.post('/register', async (req: Request, res: Response) => {
 
     console.log(`✅ [NEXUS] Revendedora registrada: ${email} -> admin: ${adminId}`);
 
+    // Criar subconta Asaas de forma assíncrona (não bloqueia o cadastro)
+    const revendedoraId = data.id;
+    setImmediate(async () => {
+      try {
+        const cpfFormatado = cpfNormalizado; // 11 digitos sem pontuacao
+        const subAccount = await asaasService.createSubAccount({
+          name: nome,
+          email: email.toLowerCase().trim(),
+          cpfCnpj: cpfFormatado,
+          companyType: 'MEI',
+          mobilePhone: (telefone || '31999999999').replace(/\D/g, '').padEnd(11, '0').slice(0, 11),
+          address: 'Rua Principal',
+          addressNumber: '1',
+          postalCode: '30130010',
+          birthDate: '1990-01-01',
+          incomeValue: 3000,
+        });
+        if (subAccount?.walletId) {
+          await pool.query(
+            `UPDATE revendedoras SET asaas_wallet_id = $1, asaas_customer_id = $2 WHERE id = $3`,
+            [subAccount.walletId, subAccount.id, revendedoraId]
+          );
+          console.log(`✅ [ASAAS] Subconta criada para revendedora ${revendedoraId}: walletId=${subAccount.walletId}`);
+        } else {
+          console.warn(`⚠️ [ASAAS] createSubAccount nao retornou walletId para ${email}:`, JSON.stringify(subAccount));
+        }
+      } catch (asaasErr: any) {
+        console.error(`❌ [ASAAS] Erro ao criar subconta para ${email}:`, asaasErr.message);
+      }
+    });
+
     // Removed automatic copying of admin credentials to reseller on registration since we use Master.
 
     res.json({
@@ -514,6 +609,74 @@ router.get('/check-session', (req: Request, res: Response) => {
   }
 });
 
+// GET /api/reseller/login-info/:companySlug - resolve slug publico -> tenant_id + branding
+// Usado pela tela /revendedora/:companySlug/login ANTES da autenticacao
+// Nao depende de sessao - rota publica
+router.get('/login-info/:companySlug', async (req: Request, res: Response) => {
+  try {
+    const { companySlug } = req.params;
+
+    if (!companySlug || typeof companySlug !== 'string' || companySlug.trim() === '') {
+      return res.status(400).json({ error: 'companySlug obrigatorio' });
+    }
+
+    const slug = companySlug.trim().toLowerCase();
+
+    // 1. Resolver slug -> tenant_id via tabela company_public_slugs
+    const { rows: slugRows } = await pool.query(
+      'SELECT tenant_id FROM company_public_slugs WHERE slug = $1 LIMIT 1',
+      [slug]
+    );
+
+    if (!slugRows.length) {
+      return res.status(404).json({ error: 'Empresa nao encontrada', code: 'SLUG_NOT_FOUND' });
+    }
+
+    const tenantId = slugRows[0].tenant_id;
+
+    // 2. Buscar branding da empresa na tabela companies
+    let branding: any = {};
+    try {
+      const { rows: companyRows } = await pool.query(
+        `SELECT company_name, primary_color, secondary_color, accent_color,
+                background_color, sidebar_background, sidebar_text, button_color,
+                button_text_color, text_color, heading_color, selected_item_color,
+                logo_url, logo_size, logo_position, card_color, font_family
+         FROM companies WHERE tenant_id = $1 LIMIT 1`,
+        [tenantId]
+      );
+      branding = companyRows[0] || {};
+    } catch (brandErr) {
+      console.warn('[login-info] Erro ao buscar branding:', brandErr);
+    }
+
+    return res.json({
+      tenant_id: tenantId,
+      company_slug: slug,
+      company_name: branding.company_name || null,
+      logo_url: branding.logo_url || null,
+      primary_color: branding.primary_color || null,
+      secondary_color: branding.secondary_color || null,
+      accent_color: branding.accent_color || null,
+      background_color: branding.background_color || null,
+      sidebar_background: branding.sidebar_background || null,
+      sidebar_text: branding.sidebar_text || null,
+      button_color: branding.button_color || null,
+      button_text_color: branding.button_text_color || null,
+      text_color: branding.text_color || null,
+      heading_color: branding.heading_color || null,
+      selected_item_color: branding.selected_item_color || null,
+      logo_size: branding.logo_size || null,
+      logo_position: branding.logo_position || null,
+      card_color: branding.card_color || '#1a1a2e',
+      font_family: branding.font_family || null,
+    });
+  } catch (error: any) {
+    console.error('[login-info] Erro:', error);
+    return res.status(500).json({ error: 'Erro ao buscar informacoes da empresa' });
+  }
+});
+
 // GET /api/reseller/branding - retorna branding do tenant da sessao automaticamente
 router.get('/branding', async (req: Request, res: Response) => {
   try {
@@ -524,11 +687,17 @@ router.get('/branding', async (req: Request, res: Response) => {
     } else if (req.query.tenant && typeof req.query.tenant === 'string') {
       tenantId = req.query.tenant.trim();
     } else {
-      tenantId = process.env.REID_TENANT_ID || 'emerick';
+      // Sem sessão e sem query param: retornar 400 para forçar uso do ?tenant= param
+      return res.status(400).json({ error: 'tenant_id obrigatorio - use ?tenant=SEU_TENANT ou faca login' });
     }
 
-    const { pool } = await import('../db');
-    const result = await pool.query(
+    // Usar pool direto para 172.19.0.12 onde companies esta
+    const { Pool: BPool } = require('pg');
+    const bPool = new BPool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: false, max: 2, idleTimeoutMillis: 10000,
+    });
+    const result = await bPool.query(
       `SELECT company_name, primary_color, secondary_color, accent_color,
               background_color, sidebar_background, sidebar_text, button_color,
               button_text_color, text_color, heading_color, selected_item_color,
@@ -536,6 +705,7 @@ router.get('/branding', async (req: Request, res: Response) => {
        FROM companies WHERE tenant_id = $1 LIMIT 1`,
       [tenantId]
     );
+    await bPool.end();
 
     const data = result.rows[0] || null;
     if (!data) {
@@ -742,6 +912,35 @@ router.patch('/admin/:id/status', async (req: Request, res: Response) => {
     }
 
     const data = updated[0];
+
+    // Safety net: se ativando e ainda sem subconta Asaas, criar agora
+    if (status === 'ativo' && !data.asaas_wallet_id) {
+      setImmediate(async () => {
+        try {
+          const subAccount = await asaasService.createSubAccount({
+            name: data.nome,
+            email: data.email,
+            cpfCnpj: data.cpf_normalizado || data.cpf.replace(/\D/g, ''),
+            companyType: 'MEI',
+            mobilePhone: (data.telefone || '31999999999').replace(/\D/g, '').padEnd(11, '0').slice(0, 11),
+            address: data.endereco || 'Rua Principal',
+            addressNumber: '1',
+            postalCode: (data.cep || '30130010').replace(/\D/g, ''),
+            birthDate: '1990-01-01',
+            incomeValue: 3000,
+          });
+          if (subAccount?.walletId) {
+            await pool.query(
+              `UPDATE revendedoras SET asaas_wallet_id = $1, asaas_customer_id = $2 WHERE id = $3`,
+              [subAccount.walletId, subAccount.id, data.id]
+            );
+            console.log(`✅ [ASAAS] Subconta criada na ativacao de ${data.email}: walletId=${subAccount.walletId}`);
+          }
+        } catch (asaasErr: any) {
+          console.error(`❌ [ASAAS] Erro ao criar subconta na ativacao de ${data.email}:`, asaasErr.message);
+        }
+      });
+    }
 
     res.json({
       success: true,
@@ -1499,7 +1698,9 @@ router.get('/store-config', async (req: Request, res: Response) => {
       }
 
       console.log('[StoreConfig] No config found for reseller:', resellerId);
-      return res.json({ success: true, data: null, source: 'supabase' });
+      // Retornar tenant_id do JWT/sessao para o frontend usar como slug fallback
+      const sessionTenantId = auth.tenantId || null;
+      return res.json({ success: true, data: null, source: 'supabase', tenant_id: sessionTenantId });
 
     } catch (supabaseError: any) {
       // Specific error codes for frontend to handle
@@ -1816,6 +2017,8 @@ router.post('/product-requests', resellerAuthMiddleware, async (req, res) => {
     if (!auth) {
       return res.status(401).json({ error: 'Não autenticado' });
     }
+    // Inicializar supabaseOwner localmente (funciona mesmo sem SUPABASE_CONFIGURED)
+    const { supabaseOwner } = await import('../config/supabaseOwner');
 
     const { product_id, quantity, notes } = req.body;
 
@@ -1956,6 +2159,7 @@ router.get('/product-requests', resellerAuthMiddleware, async (req, res) => {
     if (!auth) {
       return res.status(401).json({ error: 'Não autenticado' });
     }
+    const { supabaseOwner } = await import('../config/supabaseOwner');
 
     // Buscar admin_id da revendedora
     const { data: resellerData, error: resellerError } = await supabaseOwner
@@ -2004,6 +2208,7 @@ router.get('/admin/product-requests', resellerAuthMiddleware, async (req, res) =
     if (!auth) {
       return res.status(401).json({ error: 'Não autenticado' });
     }
+    const { supabaseOwner } = await import('../config/supabaseOwner');
 
     // Buscar admin_id da revendedora para pegar o tenant correto
     const { data: resellerData, error: resellerError } = await supabaseOwner
@@ -2089,6 +2294,7 @@ router.patch('/admin/product-requests/:id', resellerAuthMiddleware, async (req, 
     if (!auth) {
       return res.status(401).json({ error: 'Não autenticado' });
     }
+    const { supabaseOwner } = await import('../config/supabaseOwner');
 
     const { id } = req.params;
     const { status } = req.body;

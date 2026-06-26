@@ -9,6 +9,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../config/jwtSecret';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -26,7 +27,7 @@ export function authenticateConfig(req: AuthRequest, res: Response, next: NextFu
   
   if (token) {
     try {
-      const jwtSecret = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'demo-secret-key-for-development-only';
+      const jwtSecret = getJwtSecret();
       
       const decoded = jwt.verify(token, jwtSecret) as {
         userId: string;
@@ -86,7 +87,7 @@ export function authenticateConfig(req: AuthRequest, res: Response, next: NextFu
   const headerTenantId = req.headers['x-tenant-id'] as string;
   if (headerTenantId && token && req.method === 'GET') {
     try {
-      const jwtSecret = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'demo-secret-key-for-development-only';
+      const jwtSecret = getJwtSecret();
       const decoded = jwt.decode(token) as any;
       if (decoded && decoded.tenantId && decoded.tenantId === headerTenantId) {
         console.log(`🔐 [CONFIG] Fallback via x-tenant-id + decoded JWT: ${headerTenantId} (GET only)`);

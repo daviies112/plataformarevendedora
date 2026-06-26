@@ -91,10 +91,12 @@ export function isPublicRoute(path: string): boolean {
     '/api/auth/',
     '/api/config/',
     '/api/reseller/login',
+    '/api/reseller/login-info/',
     '/api/reseller/register',
     '/api/reseller/check-session',
     '/api/pagarme/webhook',
     '/api/public/checkout/',
+    '/api/internal/',   // Sync interno da plataformacompleta (sem auth)
     '/reseller-login',
     '/revendedora',  // NEXUS: Plataforma de revendedoras tem login próprio
     '/assinar/',     // Assinatura digital pública (clientes)
@@ -135,7 +137,8 @@ export function redirectIfNotAuth(req: Request, res: Response, next: NextFunctio
 
   // Isenção explícita e agressiva para a API do n8n para evitar 401 do redirectIfNotAuth
   const normalizedPath = (req.path || '').toLowerCase();
-  if (normalizedPath.startsWith('/api/n8n') || req.originalUrl.toLowerCase().startsWith('/api/n8n')) {
+  if (normalizedPath.startsWith('/api/n8n') || req.originalUrl.toLowerCase().startsWith('/api/n8n') ||
+      normalizedPath.startsWith('/api/gaps') || req.originalUrl.toLowerCase().startsWith('/api/gaps')) {
     console.log(`[Auth Bypass] Permitindo acesso público para API n8n: ${req.originalUrl}`);
     return next();
   }

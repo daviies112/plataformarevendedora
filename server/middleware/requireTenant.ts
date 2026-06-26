@@ -7,10 +7,39 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../config/jwtSecret';
 
 export function requireTenant(req: Request, res: Response, next: NextFunction) {
-  // Buscar tenantId — SOMENTE da sessão ou header assinado (nunca fallback)
-  const tenantId = req.session?.tenantId || req.headers['x-tenant-id'];
+  // Isentar rotas internas de sincronizacao (chamadas da plataformacompleta)
+  if (req.path.startsWith('/internal/') || req.originalUrl.startsWith('/api/internal/')) {
+    return next();
+  }
+  // 🔐 SEGURANÇA: Prioridade absoluta -> sessão > JWT > header x-tenant-id
+  // O header x-tenant-id NUNCA sobrepõe a sessão autenticada (previne spoofing)
+  let tenantId = req.session?.tenantId;
+
+  // Fallback: extrair tenantId do JWT Bearer token (para clientes sem cookie)
+  if (!tenantId || tenantId === 'undefined' || tenantId === 'null') {
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const _secret = getJwtSecret();
+        const decoded = jwt.verify(token, _secret) as any;
+        tenantId = decoded.tenantId || decoded.tenant_id;
+        if (tenantId) (req as any).tenantId = tenantId; // injetar antecipado
+      } catch { /* token invalido, vai cair no erro abaixo */ }
+    }
+  }
+
+  // Último recurso: header x-tenant-id (apenas se sem sessão E sem JWT)
+  if (!tenantId || tenantId === 'undefined' || tenantId === 'null') {
+    const headerTenant = req.headers['x-tenant-id'] as string;
+    if (headerTenant && headerTenant !== 'undefined' && headerTenant !== 'null') {
+      tenantId = headerTenant;
+    }
+  }
   
   if (!tenantId || tenantId === 'undefined' || tenantId === 'null' || (typeof tenantId === 'string' && tenantId.trim() === '')) {
     return res.status(401).json({

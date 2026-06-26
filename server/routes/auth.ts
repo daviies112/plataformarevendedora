@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../config/jwtSecret';
 import { adminAuthService } from '../services/adminAuth';
 import { saveCompanySlug } from '../lib/tenantSlug';
 
@@ -22,7 +23,7 @@ const requireSuperAdmin = async (req: AuthenticatedRequest, res: Response, next:
   }
 
   try {
-    const jwtSecret = process.env.JWT_SECRET || 'demo-secret-key-for-development-only';
+    const jwtSecret = getJwtSecret();
     const decoded = jwt.verify(token, jwtSecret) as any;
     
     if (decoded.role !== 'superadmin' && decoded.role !== 'admin') {
@@ -130,7 +131,7 @@ router.get('/validate', async (req, res) => {
 
   try {
     const jwt = await import('jsonwebtoken');
-    const jwtSecret = process.env.JWT_SECRET || 'demo-secret-key-for-development-only';
+    const jwtSecret = getJwtSecret();
     
     const decoded = jwt.verify(token, jwtSecret) as any;
     
