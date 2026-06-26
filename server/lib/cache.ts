@@ -50,6 +50,8 @@ async function initializeRedis() {
     const redisConfig: any = {
       maxRetriesPerRequest: 3,
       enableReadyCheck: false,
+      // FIX: forca IPv4, evita reconectar em IP interno Docker obsoleto
+      family: 4,
       retryStrategy(times) {
         const delay = Math.min(times * 50, 2000);
         return delay;
@@ -71,7 +73,19 @@ async function initializeRedis() {
       };
     }
 
-    redis = new Redis(cleanUrl, redisConfig);
+    // FIX: parse manual da URL - passa host/port/password explicitos ao
+    // inves de string de conexao, para evitar que o ioredis reconecte em
+    // um IP interno Docker anunciado pelo servidor (ex: 172.18.0.4) que
+    // muda quando o container e recriado. Sempre reconecta em 127.0.0.1.
+    try {
+      const parsed = new URL(cleanUrl);
+      redisConfig.host = parsed.hostname;
+      redisConfig.port = parsed.port ? parseInt(parsed.port, 10) : 6379;
+      if (parsed.password) redisConfig.password = decodeURIComponent(parsed.password);
+      redis = new Redis(redisConfig);
+    } catch {
+      redis = new Redis(cleanUrl, redisConfig);
+    }
 
     redis.on('error', (err) => {
       console.error('❌ Redis Error:', err);
@@ -132,7 +146,39 @@ function getTTLUntilMonthEnd(): number {
 /**
  * Track Redis command usage (async, persistent) - DUAL TRACKING: daily + monthly
  */
+// In-memory buffer para tracking — evita 4 comandos Redis por operação
+let _memCommandBuffer = 0;
+let _memCommandFlushTimer: NodeJS.Timeout | null = null;
+
+function scheduleCommandFlush(): void {
+  if (_memCommandFlushTimer) return;
+  _memCommandFlushTimer = setTimeout(async () => {
+    _memCommandFlushTimer = null;
+    if (_memCommandBuffer <= 0 || !redis) return;
+    const count = _memCommandBuffer;
+    _memCommandBuffer = 0;
+    try {
+      const todayKey = getTodayKey();
+      const monthKey = getCurrentMonthKey();
+      const pipe = (redis as any).pipeline ? (redis as any).pipeline() : null;
+      if (pipe) {
+        pipe.incrby(todayKey, count);
+        pipe.expire(todayKey, 86400 * 2);
+        pipe.incrby(monthKey, count);
+        pipe.expire(monthKey, getTTLUntilMonthEnd());
+        await pipe.exec();
+      } else {
+        await redis.incrby(todayKey, count);
+        await redis.incrby(monthKey, count);
+      }
+    } catch { /* silent */ }
+  }, 60000);
+}
+
 async function trackRedisCommand(): Promise<void> {
+  _memCommandBuffer++;
+  scheduleCommandFlush();
+  return;
   try {
     const todayKey = getTodayKey();
     const monthKey = getCurrentMonthKey();
@@ -173,20 +219,26 @@ async function trackRedisCommand(): Promise<void> {
   }
 }
 
+// Cache em memória para evitar redis.get em cada poll
+let _cmdCountCache: { count: number; date: string } | null = null;
+let _cmdCountCacheAt = 0;
+let _monthCountCache: { count: number; month: string } | null = null;
+let _monthCountCacheAt = 0;
+
 /**
  * Get current command count for today (daily granularity)
  */
 async function getCommandCount(): Promise<{ count: number; date: string }> {
+  if (_cmdCountCache && (Date.now() - _cmdCountCacheAt) < 60000) return _cmdCountCache;
   try {
     const todayKey = getTodayKey();
     const today = new Date().toISOString().split('T')[0];
     
     if (redis) {
       const count = await redis.get(todayKey);
-      return {
-        count: count ? parseInt(count, 10) : 0,
-        date: today,
-      };
+      _cmdCountCache = { count: count ? parseInt(count, 10) : 0, date: today };
+      _cmdCountCacheAt = Date.now();
+      return _cmdCountCache;
     } else {
       const result = await db.execute(sql`
         SELECT 
@@ -494,11 +546,19 @@ class CacheManager {
   /**
    * Get cache statistics (UPDATED: includes monthly tracking)
    */
+  // Cache em memória do getStats — evita redis.get a cada health check
+  private _cachedStats: any = null;
+  private _cachedStatsAt = 0;
+
   async getStats() {
+    const now = Date.now();
+    // Retorna cache em memória por até 60s — sem redis.get
+    if (this._cachedStats && (now - this._cachedStatsAt) < 60000) {
+      return this._cachedStats;
+    }
     const commandData = await getCommandCount();
     const monthlyData = await getMonthlyCommandCount();
-    
-    return {
+    this._cachedStats = {
       redisConnected: this.redisReady,
       memoryKeys: memoryCache.keys().length,
       memoryStats: memoryCache.getStats(),
@@ -509,6 +569,8 @@ class CacheManager {
         monthKey: monthlyData.month,
       },
     };
+    this._cachedStatsAt = now;
+    return this._cachedStats;
   }
 
   /**

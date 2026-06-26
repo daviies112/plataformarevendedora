@@ -76,6 +76,7 @@ export default defineConfig(({ mode }) => ({
     } : true,
   },
   build: {
+    emptyOutDir: false, // Evita apagar dist/ durante build (previne ERR_MODULE_NOT_FOUND no PM2)
     target: 'esnext',
     minify: 'esbuild',
     sourcemap: mode === 'development',

@@ -259,7 +259,8 @@ async function cleanupFormTenantMappingForTenant(tenantId: string): Promise<Clea
     const threshold = new Date();
     threshold.setDate(threshold.getDate() - CLEANUP_THRESHOLDS.form_tenant_mapping);
     
-    const candidates = await db.select({ id: formTenantMapping.id, formId: formTenantMapping.formId })
+    // formTenantMapping usa formId como primary key (nao tem campo 'id')
+    const candidates = await db.select({ formId: formTenantMapping.formId })
       .from(formTenantMapping)
       .where(and(
         eq(formTenantMapping.tenantId, tenantId),
@@ -274,17 +275,17 @@ async function cleanupFormTenantMappingForTenant(tenantId: string): Promise<Clea
       .where(eq(forms.tenantId, tenantId));
     const existingFormIdSet = new Set(existingFormIds.map(f => f.id));
     
-    const orphanIds = candidates
+    const orphanFormIds = candidates
       .filter(c => !existingFormIdSet.has(c.formId))
-      .map(c => c.id);
+      .map(c => c.formId);
     
-    if (orphanIds.length > 0) {
+    if (orphanFormIds.length > 0) {
       await db.delete(formTenantMapping).where(
-        inArray(formTenantMapping.id, orphanIds)
+        inArray(formTenantMapping.formId, orphanFormIds)
       );
-      result.deleted = orphanIds.length;
+      result.deleted = orphanFormIds.length;
     }
-    result.skipped = candidates.length - orphanIds.length;
+    result.skipped = candidates.length - orphanFormIds.length;
   } catch (err: any) {
     result.error = err.message;
   }

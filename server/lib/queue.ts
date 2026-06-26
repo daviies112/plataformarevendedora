@@ -100,8 +100,9 @@ class SimpleQueue {
         const allKeys = await this.getAllKeys(pattern);
         
         if (allKeys.length === 0) {
-          // Se Redis está indisponível, esperar MAIS (30s ao invés de 1s)
-          const delay = this.redisAvailable ? 1000 : 30000;
+          // Fila vazia: aguardar 30s para reduzir polling desnecessário no Redis
+          // Redis indisponível: aguardar 60s (circuit breaker já trata reconexão)
+          const delay = this.redisAvailable ? 30000 : 60000;
           if (!this.redisAvailable) {
             console.log(`⏳ Redis indisponível para ${this.name}, aguardando ${delay/1000}s antes de tentar novamente...`);
           }

@@ -113,7 +113,7 @@ export async function getAdminCredentials(adminId: string): Promise<AdminCredent
 export function createTenantClient(credentials: AdminCredentials): SupabaseClient {
   const master = getMasterClient();
   if (master) {
-    console.log('[MasterSync] Usando Supabase Master para createTenantClient ao invés de credencial do tenant');
+    // console.log('[MasterSync] Usando Supabase Master para createTenantClient');
     return master;
   }
   return createClient(credentials.supabase_url, credentials.supabase_service_key || credentials.supabase_anon_key);
@@ -380,10 +380,22 @@ export async function processPendingSyncEvents(adminId: string, tenantClient: Su
   }
 }
 
+// Cache em memória para evitar 50 queries ao Supabase a cada ciclo
+let adminsCache: Array<{ admin_id: string; credentials: AdminCredentials }> | null = null;
+let adminsCacheTime = 0;
+const ADMINS_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
+
 export async function getAllAdminsWithCredentials(): Promise<Array<{ admin_id: string; credentials: AdminCredentials }>> {
   const master = getMasterClient();
   if (!master) return [];
   
+  // Retornar cache se valido (TTL 5 minutos)
+  const now = Date.now();
+  if (adminsCache && (now - adminsCacheTime) < ADMINS_CACHE_TTL) {
+    console.log('[MasterSync] Retornando admins do cache');
+    return adminsCache;
+  }
+
   try {
     // Colunas conforme SQL executado
     const { data, error } = await master
@@ -397,7 +409,8 @@ export async function getAllAdminsWithCredentials(): Promise<Array<{ admin_id: s
     
     console.log(`📋 [MasterSync] ${data.length} admins com credenciais encontrados`);
     
-    return data.map(row => ({
+    // Salvar no cache
+    adminsCache = data.map(row => ({
       admin_id: row.admin_id,
       credentials: {
         supabase_url: row.supabase_url,
@@ -406,6 +419,8 @@ export async function getAllAdminsWithCredentials(): Promise<Array<{ admin_id: s
         storage_bucket: ''
       }
     }));
+    adminsCacheTime = Date.now();
+    return adminsCache;
     
   } catch (error) {
     console.error('[MasterSync] Erro ao listar admins:', error);

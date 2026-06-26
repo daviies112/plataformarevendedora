@@ -9,7 +9,7 @@ export function log(message: string) {
     second: "2-digit",
     hour12: true,
   });
-  console.log(`🚀 Iniciando servidor integrado (Express + Vite)...`);
+  console.log(`${formattedTime} [express] ${message}`);
 }
 export function serveStatic(app: Express) {
   const distPath = path.resolve(process.cwd(), "dist");
@@ -18,6 +18,12 @@ export function serveStatic(app: Express) {
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
   }
+  // Service worker nunca deve ser cacheado pelo browser
+  app.get('/service-worker.js', (req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    next();
+  });
   app.use(express.static(distPath));
   app.use((_req, res) => {
     res.sendFile(path.resolve(distPath, "index.html"));

@@ -6,12 +6,14 @@
 import { cache } from './cache';
 import { CACHE_NAMESPACES } from './cacheStrategies';
 
-// Limit constants for FREE tier (UPDATED March 2025: Redis 500K/month)
+// Limit constants — Redis agora é self-hosted (sem cota real)
+// NOTA (2026-06-14): Limite elevado para 5M como guard-rail de sanidade.
+// Redis usa ~1.35MB, sem maxmemory. Não há risco real de cota.
 const LIMITS = {
   redis: {
-    monthly: 500000,  // 500K commands/month (updated from 10K/day)
-    warning: 400000,  // 80%
-    critical: 475000, // 95%
+    monthly: 5000000,  // 5M commands/month (self-hosted, guard-rail apenas)
+    warning: 4000000,  // 80%
+    critical: 4750000, // 95%
   },
   supabase: {
     bandwidth: 2 * 1024 * 1024 * 1024, // 2GB

@@ -3,6 +3,7 @@ console.log('[STARTUP] Loading server modules...');
 
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import connectPgSimple from 'connect-pg-simple';
 import { registerRoutes } from "./routes";
 import { serveStatic, log } from "./production";
 import { initializeSentry, setupSentryMiddleware, setupSentryErrorHandler } from "./lib/sentry";
@@ -58,7 +59,13 @@ app.set('trust proxy', 1);
 // CRITICAL: sameSite: 'lax' é necessário para funcionar em iframes (Replit preview)
 // secure: false é OBRIGATÓRIO quando sameSite é 'none'
 // proxy: true permite que Express confie no x-forwarded-proto do proxy HTTPS do Replit
+const PgSession = connectPgSimple(session);
 app.use(session({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'user_sessions',
+    createTableIfMissing: true,
+  }),
   secret: process.env.SESSION_SECRET || (() => {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('SESSION_SECRET environment variable is required in production');
@@ -246,8 +253,8 @@ app.use((req, res, next) => {
         log('✅ Form submission automation started');
 
         // Start monitoring and alerting
-        startMonitoring();
-        startAutomaticAlerting();
+        startMonitoring(3600000); // 1h — reduzir consumo Redis
+        startAutomaticAlerting(3600000); // 1h
         log('✅ Monitoring and alerting started');
 
         // Start contract sync poller (Master-Client sync)

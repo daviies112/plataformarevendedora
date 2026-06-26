@@ -552,14 +552,16 @@ async function syncFormsToMappingTable(): Promise<void> {
         // Buscar todos os formulários do tenant incluindo slug
         let { data: forms, error } = await supabase
           .from('forms')
-          .select('id, is_public, slug');
+          .select('id, is_public, slug')
+          .eq('tenant_id', tenantId);
         
         // Se coluna is_public ou slug não existir, buscar apenas id e assumir público
         if (error && error.code === '42703') {
           console.log(`⚠️ [FormMappingSync] Colunas faltando no tenant ${tenantId} - buscando apenas id`);
           const fallback = await supabase
             .from('forms')
-            .select('id');
+            .select('id')
+            .eq('tenant_id', tenantId);
           
           if (fallback.error) {
             console.error(`❌ [FormMappingSync] Erro ao buscar forms do tenant ${tenantId}:`, fallback.error);

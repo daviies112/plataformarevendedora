@@ -5,7 +5,8 @@ import { normalizePhone } from '../utils/phoneNormalizer.js';
 import { getDynamicSupabaseClient } from '../utils/supabaseClient.js';
 import { convertKeysToSnakeCase, convertKeysToCamelCase } from '../utils/caseConverter.js';
 import { normalizeCPF, validateCPF } from '../../lib/crypto.js';
-import { checkCompliance } from '../../lib/datacorpCompliance.js';
+// [PROXY] Consulta delegada para plataformacompleta (5001)
+import { proxyCpfCheck } from '../../lib/proxyCpfCheck.js';
 import { isBigdatacorpConfigured } from '../../lib/bigdatacorpClient.js';
 
 /**
@@ -116,7 +117,8 @@ async function triggerAutoCPFCheck(
     console.log(`   👤 Nome: ${personName || 'Não informado'}`);
     console.log(`   📱 Telefone: ${personPhone || 'Não informado'}`);
 
-    const result = await checkCompliance(cpf, {
+    // [PROXY] Delega para plataformacompleta — sem chamada local à BigDataCorp
+    const result = await proxyCpfCheck(cpf, {
       tenantId,
       leadId,
       submissionId,

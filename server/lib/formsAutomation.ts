@@ -1,7 +1,8 @@
 import { getClienteSupabase, getSubmissionById, fetchApprovedSubmissions, type FormSubmission } from './clienteSupabase';
 import { getSupabaseMaster, isSupabaseMasterConfigured } from './supabaseMaster';
 import { getClientSupabaseClient } from './multiTenantSupabase';
-import { checkCompliance } from './datacorpCompliance';
+// [PROXY] Consulta delegada para plataformacompleta (5001)
+import { proxyCpfCheck } from './proxyCpfCheck';
 import { validateCPF, normalizeCPF } from './crypto';
 import { log } from '../production';
 
@@ -233,8 +234,9 @@ export async function processApprovedSubmission(
     const personName = submission.contact_name || 'N/A';
     const personPhone = submission.contact_phone || undefined;
     
-    log(`🔍 [FormsAutomation] Chamando checkCompliance() para submission ${submissionId}...`);
-    const complianceResult = await checkCompliance(cpf, {
+    log(`🔍 [FormsAutomation] Delegando para plataformacompleta via proxy para submission ${submissionId}...`);
+    // [PROXY] Delega para plataformacompleta — sem chamada local à BigDataCorp
+    const complianceResult = await proxyCpfCheck(cpf, {
       tenantId,
       submissionId,
       createdBy: userId || 'system-formsautomation',

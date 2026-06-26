@@ -172,8 +172,14 @@ export async function getCachedSupabaseClient(tenantId: string): Promise<Supabas
   if (!credentials) return null;
   
   // Create and cache client
+  // 🔐 SECURITY: pass x-tenant-id so PostgREST RLS policies work correctly
   const client = createClient(credentials.url, credentials.anonKey, {
-    auth: { autoRefreshToken: false, persistSession: false }
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      headers: {
+        'x-tenant-id': tenantId,
+      }
+    }
   });
   
   supabaseClientCache.set(tenantId, client);

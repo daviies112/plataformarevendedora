@@ -6,7 +6,7 @@ import {
 
 let isPolling = false;
 let pollInterval: NodeJS.Timeout | null = null;
-const POLL_INTERVAL_MS = 30000;
+const POLL_INTERVAL_MS = 600000; // FIX: era 30s, agora 10min para economizar Redis
 
 export function startContractSyncPoller(): void {
   if (pollInterval) {

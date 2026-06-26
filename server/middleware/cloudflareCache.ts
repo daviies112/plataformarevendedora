@@ -10,6 +10,7 @@ import { Request, Response, NextFunction } from 'express';
  * Cache Control rules for different content types
  */
 const CACHE_RULES = {
+  publicForm: { pattern: /^\/api\/forms\/public/, noCache: true },
   // Static assets - cache agressivamente
   static: {
     pattern: /\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/,
@@ -96,6 +97,14 @@ export function cloudflareCache(req: Request, res: Response, next: NextFunction)
   
   // Skip auth routes
   if (path.includes('/auth') || path.includes('/login') || path.includes('/logout')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    return next();
+  }
+
+  // Nunca cachear paginas SPA (reuniao, dashboard, etc)
+  if (path.startsWith('/reuniao') || path.startsWith('/dashboard') || path === '/') {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');

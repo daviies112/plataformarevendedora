@@ -467,14 +467,14 @@ async function getCachedCheckFromSupabase(
 ): Promise<DatacorpCheck | null> {
   try {
     const supabase = await getSupabaseMasterForTenant(tenantId);
-    const tenantUUID = tenantIdToUUID(tenantId); // Convert to UUID for Supabase Master
+    // tenant_id no banco é slug direto (FK -> tenants_registry.slug), NÃO UUID derivado
     
     // STEP 1: Verificar se o PRÓPRIO tenant já consultou este CPF
     const { data: ownCheck, error: ownError } = await supabase
       .from('datacorp_checks')
       .select('*')
       .eq('cpf_hash', cpfHash)
-      .eq('tenant_id', tenantUUID)
+      .eq('tenant_id', tenantId)
       .gt('expires_at', new Date().toISOString())
       .order('consulted_at', { ascending: false })
       .limit(1)
@@ -517,7 +517,7 @@ async function getCachedCheckFromSupabase(
       .from('datacorp_checks')
       .select('id')
       .eq('cpf_hash', cpfHash)
-      .eq('tenant_id', tenantUUID)
+      .eq('tenant_id', tenantId)
       .gt('consulted_at', new Date(Date.now() - 15000).toISOString())
       .limit(1)
       .maybeSingle();
@@ -533,7 +533,7 @@ async function getCachedCheckFromSupabase(
       .insert({
         cpf_hash: globalCheck.cpf_hash,
         cpf_encrypted: globalCheck.cpf_encrypted,
-        tenant_id: tenantUUID, // Tenant atual (converted to UUID)
+        tenant_id: tenantId, // slug direto (FK -> tenants_registry.slug)
         lead_id: context.leadId || null,
         submission_id: context.submissionId || null,
         person_name: globalCheck.person_name, // Copiar nome
@@ -559,7 +559,7 @@ async function getCachedCheckFromSupabase(
           .from('datacorp_checks')
           .select('*')
           .eq('cpf_hash', cpfHash)
-          .eq('tenant_id', tenantUUID)
+          .eq('tenant_id', tenantId)
           .order('consulted_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -612,13 +612,13 @@ async function getExistingCheckForSubmission(
   try {
     // STEP 1: Check in Supabase Master (datacorp_checks)
     const supabase = await getSupabaseMasterForTenant(tenantId);
-    const tenantUUID = tenantIdToUUID(tenantId);
+    // tenant_id no banco é slug direto
     
     const { data: existingCheck, error } = await supabase
       .from('datacorp_checks')
       .select('*')
       .eq('submission_id', submissionId)
-      .eq('tenant_id', tenantUUID)
+      .eq('tenant_id', tenantId)
       .order('consulted_at', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -664,7 +664,7 @@ async function getExistingCheckForSubmission(
             id: existingClienteCheck.id,
             cpf_hash: '',
             cpf_encrypted: '',
-            tenant_id: tenantUUID,
+            tenant_id: tenantId, // slug direto
             status: existingClienteCheck.status,
             risk_score: parseFloat(existingClienteCheck.risco || '0'),
             payload: null,
@@ -744,7 +744,7 @@ async function createCheckInSupabase(checkData: {
   consultedAt?: Date;
 }): Promise<DatacorpCheck> {
   const supabase = await getSupabaseMasterForTenant(checkData.tenantId);
-  const tenantUUID = tenantIdToUUID(checkData.tenantId);
+  const tenantUUID = tenantIdToUUID(checkData.tenantId); // usado só para ensureTenant (tabela 'tenants', não datacorp_checks)
   
   await ensureTenantExistsInMaster(supabase, checkData.tenantId, tenantUUID);
   
@@ -753,7 +753,7 @@ async function createCheckInSupabase(checkData: {
     .insert({
       cpf_hash: checkData.cpfHash,
       cpf_encrypted: checkData.cpfEncrypted,
-      tenant_id: tenantUUID,
+      tenant_id: checkData.tenantId, // slug direto (FK -> tenants_registry.slug)
       lead_id: checkData.leadId || null,
       submission_id: checkData.submissionId || null,
       person_name: checkData.personName,
@@ -785,7 +785,7 @@ async function createCheckInSupabase(checkData: {
         id: fallbackId,
         cpf_hash: checkData.cpfHash,
         cpf_encrypted: checkData.cpfEncrypted,
-        tenant_id: tenantUUID,
+        tenant_id: checkData.tenantId, // slug direto
         status: checkData.status,
         risk_score: checkData.riskScore,
         payload: checkData.payload,
@@ -818,14 +818,13 @@ async function createAuditLogInSupabase(logData: {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     const validUserId = logData.userId && uuidRegex.test(logData.userId) ? logData.userId : null;
     
-    const tenantUUID = tenantIdToUUID(logData.tenantId);
-    
+    // tenant_id no banco é slug direto
     const supabase = await getSupabaseMasterForTenant(logData.tenantId);
     const { error } = await supabase
       .from('compliance_audit_log')
       .insert({
         check_id: logData.checkId,
-        tenant_id: tenantUUID,
+        tenant_id: logData.tenantId, // slug direto
         action: logData.action,
         user_id: validUserId,
         ip_address: logData.ipAddress,
@@ -1658,6 +1657,12 @@ export function analyzeRisk(response: BigdatacorpProcessesResponse): RiskAnalysi
       pointBreakdown.push(`+15 (divida pequena + ${riskyNonDebtProcesses} processos de risco = observacao)`);
     }
     riskPoints += processMixPenalty;
+  } else if (debtAnalysis.totalActiveDebt > 0 && debtAnalysis.totalActiveDebt <= DEBT_THRESHOLDS.LOW && activeNonBenignCount >= 4) {
+    // PATCH Gap2 2026-05-29: dívida pequena mas MUITOS processos ativos (mesmo que todos debt)
+    // indica inadimplência sistêmica — penaliza progressivamente
+    const totalActivePenalty = activeNonBenignCount >= 6 ? 30 : activeNonBenignCount >= 5 ? 20 : 12;
+    riskPoints += totalActivePenalty;
+    pointBreakdown.push(`+${totalActivePenalty} (divida pequena + ${activeNonBenignCount} processos ativos = inadimplencia sistematica)`);
   }
   
   // EXCESSIVE ACTIVE PROCESSES (not benign): +3 points per process above 4
@@ -1715,8 +1720,18 @@ export function analyzeRisk(response: BigdatacorpProcessesResponse): RiskAnalysi
   // RULE 4: 36-55 points = APPROVED with strong observation
   else if (riskPoints >= 36) {
     status = "approved";
-    rejectionReason = `Aprovado com atenção: Perfil requer acompanhamento (${riskPoints} pontos).`;
+    rejectionReason = `Aprovado com atenção: Perfil requer acompanhamento (${riskPoints} pontos). ${pointBreakdown.filter(b => b.includes('dívida') || b.includes('divida')).join('; ') || 'Múltiplos fatores de risco identificados'}`;
     log(`⚠️ [CPF-COMPLIANCE] APROVADO com atenção: ${riskPoints} pontos`);
+  }
+  
+  // RULE 4.5 — PATCH Gap1 2026-05-29: dívida crítica (R$40k-R$60k = 20pts) ou
+  // dívida muito alta (>R$60k = 35pts) mesmo com pontuação total abaixo de 36 —
+  // gera observação explícita alertando o operador sobre o valor da dívida
+  else if (riskPoints >= 18 && debtAnalysis.totalActiveDebt >= 40000) {
+    status = "approved";
+    const debtFormatted = debtAnalysis.totalActiveDebt.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    rejectionReason = `Aprovado com observação de dívida: Dívida ativa de ${debtFormatted} identificada. Recomenda-se cautela no valor da maleta (${riskPoints} pontos).`;
+    log(`⚠️ [CPF-COMPLIANCE] APROVADO com observação de dívida alta: R$${debtAnalysis.totalActiveDebt} | ${riskPoints} pontos`);
   }
   
   // RULE 5: 21-35 points = APPROVED with light observation
@@ -2339,8 +2354,7 @@ async function _checkComplianceImpl(
 
 export async function reprocessCheck(checkId: string, tenantId: string, userId?: string): Promise<ComplianceCheckResult> {
   const useSupabaseMaster = await isSupabaseMasterConfigured(tenantId);
-  const tenantUUID = tenantIdToUUID(tenantId);
-  
+  // tenant_id no banco é slug direto
   let existingCheck: any;
   let riskAnalysis: ReturnType<typeof analyzeRisk>;
   
@@ -2351,7 +2365,7 @@ export async function reprocessCheck(checkId: string, tenantId: string, userId?:
       .from('datacorp_checks')
       .select('*')
       .eq('id', checkId)
-      .eq('tenant_id', tenantUUID)
+      .eq('tenant_id', tenantId)
       .single();
     
     if (fetchError || !checkData) {
@@ -2362,7 +2376,7 @@ export async function reprocessCheck(checkId: string, tenantId: string, userId?:
     
     const { data: updatedCheck, error: rpcError } = await supabase.rpc('reprocess_datacorp_check', {
       p_check_id: checkId,
-      p_tenant_id: tenantUUID,
+      p_tenant_id: tenantId, // slug direto
       p_new_status: riskAnalysis.status,
       p_new_risk_score: riskAnalysis.riskScore,
       p_user_id: userId || null,
