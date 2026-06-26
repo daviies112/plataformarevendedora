@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSupabase } from '@/features/revendedora/contexts/SupabaseContext';
 import { getSupabaseClient } from '@/integrations/supabase/client';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -37,6 +37,7 @@ interface ProductAnalytics {
 }
 
 export function useProductAnalytics(): ProductAnalytics {
+  const instanceId = useRef(`analytics_${Date.now()}_${Math.random().toString(36).slice(2)}`).current;
   const { client: contextClient, loading: supabaseLoading, configured } = useSupabase();
   const [products, setProducts] = useState<any[]>([]);
   const [sales, setSales] = useState<any[]>([]);
@@ -100,7 +101,7 @@ export function useProductAnalytics(): ProductAnalytics {
     loadData();
 
     const salesChannel = supabase
-      .channel('sales_analytics')
+      .channel(`sales_${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'sales_with_split' },
@@ -109,7 +110,7 @@ export function useProductAnalytics(): ProductAnalytics {
       .subscribe();
 
     const productsChannel = supabase
-      .channel('products_analytics')
+      .channel(`products_${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'products' },

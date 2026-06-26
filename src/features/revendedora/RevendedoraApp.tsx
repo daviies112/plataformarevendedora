@@ -23,6 +23,8 @@ import ResellerPaymentCard from "@/features/revendedora/pages/reseller/PaymentCa
 import ResellerPagarmePayment from "@/features/revendedora/pages/reseller/PagarmePayment";
 import ResellerGamification from "@/features/revendedora/pages/reseller/Gamification";
 import ResellerSettings from "@/features/revendedora/pages/reseller/Settings";
+import ResellerDiagnostico from "@/features/revendedora/pages/reseller/DiagnosticoVendas";
+import ResellerProducts from "@/features/revendedora/pages/reseller/Products";
 
 const RevendedoraApp = () => {
   return (
@@ -32,7 +34,11 @@ const RevendedoraApp = () => {
         <Route path="/revendedora" element={<Navigate to="/revendedora/login" replace />} />
 
         {/* Login da revendedora */}
+        {/* Rota generica (sem empresa especifica) */}
         <Route path="/revendedora/login" element={<Login />} />
+        {/* Rota com slug da empresa: /revendedora/emerick/login */}
+        {/* O Login.tsx le companySlug de useParams e carrega branding da empresa */}
+        <Route path="/revendedora/:companySlug/login" element={<Login />} />
         <Route path="/revendedora/demo" element={<Demo />} />
 
         {/* Rotas publicas */}
@@ -53,6 +59,8 @@ const RevendedoraApp = () => {
         <Route path="/revendedora/reseller/payment/card/:saleId" element={<ResellerLayout><ResellerPaymentCard /></ResellerLayout>} />
         <Route path="/revendedora/reseller/gamification" element={<ResellerLayout><ResellerGamification /></ResellerLayout>} />
         <Route path="/revendedora/reseller/settings" element={<ResellerLayout><ResellerSettings /></ResellerLayout>} />
+        <Route path="/revendedora/reseller/products" element={<ResellerLayout><ResellerProducts /></ResellerLayout>} />
+        <Route path="/revendedora/reseller/diagnostico" element={<ResellerLayout><ResellerDiagnostico /></ResellerLayout>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

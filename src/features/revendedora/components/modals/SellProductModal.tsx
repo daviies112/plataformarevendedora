@@ -17,11 +17,13 @@ import { useNavigate } from 'react-router-dom';
 import { useCommissionConfig } from '@/hooks/useCommissionConfig';
 
 interface SellProductModalProps {
+  defaultPaymentMethod?: PaymentMethod;
   product: any;
   isOpen: boolean;
   onClose: () => void;
   resellerId: string;
   companyId: string;
+  maletaItemId?: string | null; // ID do item da maleta (quando vendendo da maleta)
 }
 
 type PaymentMethod = 'pix' | 'cartao' | 'dinheiro' | 'link' | null;
@@ -31,9 +33,11 @@ export function SellProductModal({
   isOpen,
   onClose,
   resellerId,
-  companyId
+  companyId,
+  defaultPaymentMethod = null,
+  maletaItemId = null,
 }: SellProductModalProps) {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(defaultPaymentMethod);
   const [processing, setProcessing] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const navigate = useNavigate();
@@ -106,6 +110,31 @@ export function SellProductModal({
 
     setProcessing(true);
     try {
+      // 🚚 Se é item da maleta + pagamento em dinheiro, usar endpoint de maleta direto
+      if (maletaItemId && paymentMethod === 'dinheiro') {
+        const token = localStorage.getItem('resellerToken');
+        const maletaRes = await fetch('/api/reseller/create-sale', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({
+            revendedoraId: resellerId,
+            produtoId: product.id,
+            produtoNome: product.description || product.nome,
+            valorTotal: product.price || product.preco_atual_referencia || 0,
+            maletaItemId: maletaItemId,
+          })
+        });
+        const maletaData = await maletaRes.json();
+        if (maletaData.success) {
+          toast.success('Venda registrada! Item baixado da maleta.');
+          onClose();
+          window.location.reload();
+        } else {
+          throw new Error(maletaData.error || 'Erro ao registrar venda da maleta');
+        }
+        return;
+      }
+
       const response = await PaymentService.createSale({
         productId: product.id,
         resellerId: resellerId || '00000000-0000-0000-0000-000000000000',

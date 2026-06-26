@@ -123,19 +123,17 @@ export default function StorePreview({
   // Mesclar settings personalizados com padrões
   const s = { ...defaultSettings, ...settings };
 
-  console.log('[StorePreview] Received Settings:', settings);
-  console.log('[StorePreview] Merged Settings (s):', s);
-  console.log('[StorePreview] Layout Type:', s.layout_type);
-  console.log('[StorePreview] Layout Columns:', s.layout_columns);
 
   // Produtos de exemplo para preview ou reais
   const displayProducts = React.useMemo(() => {
     if (products && products.length > 0) {
-      return products.map(p => ({
+      // Limitar a 24 produtos para performance do preview
+      const limited = showFullPage ? products.slice(0, 48) : products.slice(0, 24);
+      return limited.map(p => ({
         id: p.id,
-        name: p.description || p.name || 'Produto sem nome',
+        name: p.name || p.description || 'Produto sem nome',
         price: Number(p.price) || 0,
-        image: p.imagem_url || p.image || p.image_url || 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop'
+        image: (p.images && p.images[0]?.image_url) || p.imagem_url || p.image || p.image_url || 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop'
       }));
     }
 
@@ -959,20 +957,39 @@ export default function StorePreview({
                 style={{
                   aspectRatio: '1',
                   background: `linear-gradient(135deg, #1A1A1A 0%, ${s.color_surface} 100%)`,
-                  position: 'relative'
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '48px'
-                  }}
-                >
-                  💎
-                </div>
+                {product.image ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      fontSize: '48px'
+                    }}
+                  >
+                    💎
+                  </div>
+                )}
               </div>
               <div style={{ padding: '20px' }}>
                 <h3
@@ -1017,6 +1034,12 @@ export default function StorePreview({
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
                     e.currentTarget.style.borderColor = `${s.color_primary}66`;
+                  }}
+                  onClick={() => {
+                    const storeId = window.location.pathname.split('/loja/')[1]?.split('/')[0];
+                    if (storeId) {
+                      window.location.href = `/checkout/${product.id}?storeId=${storeId}`;
+                    }
                   }}
                 >
                   Ver Detalhes

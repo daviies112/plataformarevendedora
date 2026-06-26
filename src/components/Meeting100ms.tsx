@@ -31,6 +31,8 @@ import type { RoomDesignConfig } from "@/types/reuniao";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 
+const RECORDING_BOT_NAME = "__recording_bot__";
+
 interface Meeting100msProps {
   roomId: string;
   userName: string;
@@ -38,6 +40,7 @@ interface Meeting100msProps {
   onLeave: () => void;
   config: RoomDesignConfig;
   meetingId?: string;
+  isHost?: boolean;
 }
 
 function PeerVideo({
@@ -205,6 +208,7 @@ export function Meeting100ms({
   onLeave,
   config,
   meetingId,
+  isHost: isHostProp,
 }: Meeting100msProps) {
   const hmsActions = useHMSActions();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
@@ -219,9 +223,9 @@ export function Meeting100ms({
   const notification = useHMSNotifications();
 
   const localPeer = useHMSStore(selectLocalPeer);
-  const isHost = localPeer?.roleName === 'host';
-  const canRecord = true;
-  const canShare = isHost || localPeer?.roleName === 'guest' || config.meeting?.enableScreenShare !== false;
+  const isHost = isHostProp || localPeer?.roleName === 'host';
+  const canRecord = isHost;
+  const canShare = isHost;
   
   // Usar cores da configuração para os controles
   const controlStyles = {
@@ -237,6 +241,7 @@ export function Meeting100ms({
   const screenShareTrackId = screenSharePeer?.auxiliaryTracks[0];
   
   const [error, setError] = useState<string | null>(null);
+  const [hoveredBtn, setHoveredBtn] = useState<string | null>(null);
   const [isJoining, setIsJoining] = useState(true);
   const [isCopied, setIsCopied] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -296,7 +301,8 @@ export function Meeting100ms({
     
     if (isBot) {
       hmsActions.setLocalAudioEnabled(true).catch(() => {});
-      hmsActions.setLocalVideoEnabled(true).catch(() => {});
+      // Bot NAO ativa camera - evita canvas verde visivel para todos v2
+      hmsActions.setLocalVideoEnabled(false).catch(() => {});
     }
 
     let isMounted = true;
@@ -324,7 +330,7 @@ export function Meeting100ms({
         await hmsActions.join({
           userName,
           authToken,
-          settings: { isAudioMuted: false, isVideoMuted: false },
+          settings: { isAudioMuted: false, isVideoMuted: isBot }, // Bot entra com camera desligada
           rememberDeviceSelection: false // Desabilita para acelerar
         });
         
@@ -541,10 +547,11 @@ export function Meeting100ms({
     }, 10000);
     
     try {
+      const isBotRetry = window.location.search.includes('recording_bot=true') || window.location.search.includes('recording=true');
       await hmsActions.join({
         userName,
         authToken,
-        settings: { isAudioMuted: false, isVideoMuted: false },
+        settings: { isAudioMuted: false, isVideoMuted: isBotRetry },
         rememberDeviceSelection: false
       });
       clearTimeout(retryTimeout);
@@ -636,9 +643,10 @@ export function Meeting100ms({
     );
   }
 
-  const gridClass = peers.length === 1 ? "max-w-4xl" : 
-                    peers.length === 2 ? "grid-cols-1 md:grid-cols-2" : 
-                    peers.length <= 4 ? "grid-cols-2" : "grid-cols-2 lg:grid-cols-3";
+  const visiblePeers = peers.filter(p => p.name !== RECORDING_BOT_NAME);
+  const gridClass = visiblePeers.length === 1 ? "max-w-4xl" : 
+                    visiblePeers.length === 2 ? "grid-cols-1 md:grid-cols-2" : 
+                    visiblePeers.length <= 4 ? "grid-cols-2" : "grid-cols-2 lg:grid-cols-3";
 
   const isRecordingBot = window.location.search.includes("recording_bot=true") || 
                         window.location.search.includes("recording=true") ||
@@ -648,10 +656,13 @@ export function Meeting100ms({
     backgroundColor: isRecordingBot ? "#000000" : config?.colors?.background || "#09090b",
   };
 
+  const logoSize = config?.branding?.logoSize || 40;
+  const headerMinHeight = Math.max(56, logoSize + 16);
   const headerStyle = {
     backgroundColor: `${config?.colors?.controlsBackground || "#18181b"}66`,
     borderColor: `${config?.colors?.controlsText || "#ffffff"}0d`,
     backdropFilter: 'blur(24px)',
+    minHeight: `${headerMinHeight}px`,
   };
 
   const footerStyle = {
@@ -677,46 +688,102 @@ export function Meeting100ms({
       >
         {!isRecordingBot && (
           <header 
-            className="h-14 px-3 sm:px-6 border-b flex items-center justify-between z-20"
+            className="px-3 sm:px-6 border-b flex items-center z-20"
             style={headerStyle}
           >
-            <div className="flex items-center gap-3">
-              {config?.branding?.showLogoInMeeting && config?.branding?.logo ? (
-                <img
-                  src={config.branding.logo}
-                  alt={config?.branding?.companyName || "Logo"}
-                  loading="lazy"
-                  className="object-contain sm:!max-w-[120px]"
-                  data-testid="img-company-logo-meeting"
-                  style={{ 
-                    maxHeight: Math.min(config?.branding?.logoSize || 32, 40),
-                    maxWidth: "90px"
-                  }}
-                />
-              ) : (
+            {/* Coluna esquerda - logo se logoPosition=left ou fallback icone */}
+            <div className="flex-1 flex items-center justify-start gap-2">
+              {config?.branding?.showLogoInMeeting && config?.branding?.logo && config?.branding?.logoPosition !== "center" && config?.branding?.logoPosition !== "right" ? (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={config.branding.logo}
+                    alt={config?.branding?.companyName || "Logo"}
+                    loading="lazy"
+                    className="w-auto object-contain"
+                    data-testid="img-company-logo-meeting"
+                    style={{ maxHeight: config?.branding?.logoSize || 40, maxWidth: "140px" }}
+                  />
+                  <div className="flex flex-col">
+                    {config?.branding?.showCompanyName && config?.branding?.companyName && (
+                      <span className="font-bold text-white text-xs leading-none" data-testid="text-company-name-meeting">
+                        {config.branding.companyName}
+                      </span>
+                    )}
+                    {isRecording && isHost && (
+                      <div className="flex items-center gap-1 mt-0.5 animate-pulse">
+                        <Circle className="h-1.5 w-1.5 fill-red-500 text-red-500" />
+                        <span className="text-[9px] text-red-500 font-bold uppercase tracking-wider">Gravando</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : !config?.branding?.logo ? (
                 <div 
                   className="w-7 h-7 rounded-lg flex items-center justify-center shadow-lg"
                   style={{ backgroundColor: config?.colors?.primaryButton || "#3b82f6" }}
                 >
                   <Video className="h-4 w-4 text-white" />
                 </div>
-              )}
-              <div className="flex flex-col">
-                {config?.branding?.showCompanyName && config?.branding?.companyName && (
-                  <span className="font-bold text-white text-xs leading-none" data-testid="text-company-name-meeting">
-                    {config.branding.companyName}
-                  </span>
-                )}
-                {isRecording && (
-                  <div className="flex items-center gap-1 mt-0.5 animate-pulse">
-                    <Circle className="h-1.5 w-1.5 fill-red-500 text-red-500" />
-                    <span className="text-[9px] text-red-500 font-bold uppercase tracking-wider">Gravando</span>
-                  </div>
-                )}
-              </div>
+              ) : null}
             </div>
-            
-            <div className="flex items-center gap-4 relative" ref={sharePopupRef}>
+
+            {/* Coluna central - logo se logoPosition=center */}
+            <div className="flex-1 flex items-center justify-center gap-2">
+              {config?.branding?.showLogoInMeeting && config?.branding?.logo && config?.branding?.logoPosition === "center" && (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={config.branding.logo}
+                    alt={config?.branding?.companyName || "Logo"}
+                    loading="lazy"
+                    className="w-auto object-contain"
+                    data-testid="img-company-logo-meeting"
+                    style={{ maxHeight: config?.branding?.logoSize || 40, maxWidth: "140px" }}
+                  />
+                  <div className="flex flex-col">
+                    {config?.branding?.showCompanyName && config?.branding?.companyName && (
+                      <span className="font-bold text-white text-xs leading-none" data-testid="text-company-name-meeting">
+                        {config.branding.companyName}
+                      </span>
+                    )}
+                    {isRecording && isHost && (
+                      <div className="flex items-center gap-1 mt-0.5 animate-pulse">
+                        <Circle className="h-1.5 w-1.5 fill-red-500 text-red-500" />
+                        <span className="text-[9px] text-red-500 font-bold uppercase tracking-wider">Gravando</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Coluna direita - logo se logoPosition=right + botoes de acao */}
+            <div className="flex-1 flex items-center justify-end gap-3">
+              {config?.branding?.showLogoInMeeting && config?.branding?.logo && config?.branding?.logoPosition === "right" && (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={config.branding.logo}
+                    alt={config?.branding?.companyName || "Logo"}
+                    loading="lazy"
+                    className="w-auto object-contain"
+                    data-testid="img-company-logo-meeting"
+                    style={{ maxHeight: config?.branding?.logoSize || 40, maxWidth: "140px" }}
+                  />
+                  <div className="flex flex-col">
+                    {config?.branding?.showCompanyName && config?.branding?.companyName && (
+                      <span className="font-bold text-white text-xs leading-none" data-testid="text-company-name-meeting">
+                        {config.branding.companyName}
+                      </span>
+                    )}
+                    {isRecording && isHost && (
+                      <div className="flex items-center gap-1 mt-0.5 animate-pulse">
+                        <Circle className="h-1.5 w-1.5 fill-red-500 text-red-500" />
+                        <span className="text-[9px] text-red-500 font-bold uppercase tracking-wider">Gravando</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center gap-2 relative" ref={sharePopupRef}>
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -809,6 +876,7 @@ export function Meeting100ms({
                   </div>
                 </div>
               )}
+              </div>
             </div>
           </header>
         )}
@@ -820,17 +888,21 @@ export function Meeting100ms({
                 <ScreenShareFullView peer={screenSharePeer} trackId={screenShareTrackId} />
               </div>
               <div className="absolute bottom-24 right-4 z-30 flex flex-col gap-2">
-                {peers.map((peer) => (
-                  <PeerVideoMini key={peer.id} peer={peer} config={config} />
-                ))}
+                {peers
+                  .filter((peer) => peer.name !== RECORDING_BOT_NAME)
+                  .map((peer) => (
+                    <PeerVideoMini key={peer.id} peer={peer} config={config} />
+                  ))}
               </div>
             </>
           ) : (
             <div className={cn("h-full p-4 flex flex-col items-center justify-center gap-6")}>
               <div className={cn("grid gap-6 w-full h-fit mx-auto", gridClass, isRecordingBot && "gap-0 max-w-full h-full")}>
-                {peers.map((peer) => (
-                  <PeerVideo key={peer.id} peer={peer} config={config} totalPeers={peers.length} />
-                ))}
+                {peers
+                  .filter((peer) => peer.name !== RECORDING_BOT_NAME)
+                  .map((peer) => (
+                    <PeerVideo key={peer.id} peer={peer} config={config} totalPeers={peers.filter(p => p.name !== RECORDING_BOT_NAME).length} />
+                  ))}
               </div>
             </div>
           )}
@@ -848,7 +920,9 @@ export function Meeting100ms({
                   variant="ghost"
                   size="icon"
                   className={cn("h-10 w-10 sm:h-12 sm:w-12 rounded-2xl transition-all duration-300 relative z-50")}
-                  style={controlButtonStyle(isAudioEnabled, !isAudioEnabled)}
+                  onMouseEnter={() => setHoveredBtn('audio')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                  style={{ ...controlButtonStyle(isAudioEnabled, !isAudioEnabled), transform: hoveredBtn === 'audio' ? 'scale(1.12)' : 'scale(1)', filter: hoveredBtn === 'audio' ? 'brightness(1.25)' : 'brightness(1)', cursor: 'pointer' }}
                   title={isAudioEnabled ? "Mudar áudio" : "Ativar áudio"}
                 >
                   {isAudioEnabled ? <Mic className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" /> : <MicOff className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" />}
@@ -859,7 +933,9 @@ export function Meeting100ms({
                   variant="ghost"
                   size="icon"
                   className={cn("h-10 w-10 sm:h-12 sm:w-12 rounded-2xl transition-all duration-300 relative z-50")}
-                  style={controlButtonStyle(isVideoEnabled, !isVideoEnabled)}
+                  onMouseEnter={() => setHoveredBtn('video')}
+                  onMouseLeave={() => setHoveredBtn(null)}
+                  style={{ ...controlButtonStyle(isVideoEnabled, !isVideoEnabled), transform: hoveredBtn === 'video' ? 'scale(1.12)' : 'scale(1)', filter: hoveredBtn === 'video' ? 'brightness(1.25)' : 'brightness(1)', cursor: 'pointer' }}
                   title={isVideoEnabled ? "Desligar câmera" : "Ligar câmera"}
                 >
                   {isVideoEnabled ? <Video className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" /> : <VideoOff className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" />}
@@ -870,22 +946,26 @@ export function Meeting100ms({
                   style={{ backgroundColor: `${config?.colors?.controlsText || "#ffffff"}1a` }}
                 />
 
-                <Button
-                  onClick={() => {
-                    if (!canShare) {
-                      toast.error("Somente o administrador pode compartilhar tela nesta sala.");
-                      return;
-                    }
-                    toggleScreenShare();
-                  }}
-                  variant="ghost"
-                  size="icon"
-                  className={cn("h-10 w-10 sm:h-12 sm:w-12 rounded-2xl transition-all duration-300 relative z-50")}
-                  style={controlButtonStyle(isScreenShared)}
-                  title={isScreenShared ? "Parar compartilhamento" : "Compartilhar tela"}
-                >
-                  {isScreenShared ? <MonitorOff className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" /> : <MonitorUp className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" />}
-                </Button>
+                {canShare && (
+                  <Button
+                    onClick={() => {
+                      if (!canShare) {
+                        toast.error("Somente o administrador pode compartilhar tela nesta sala.");
+                        return;
+                      }
+                      toggleScreenShare();
+                    }}
+                    variant="ghost"
+                    size="icon"
+                    className={cn("h-10 w-10 sm:h-12 sm:w-12 rounded-2xl transition-all duration-300 relative z-50")}
+                    onMouseEnter={() => setHoveredBtn('screen')}
+                    onMouseLeave={() => setHoveredBtn(null)}
+                    style={{ ...controlButtonStyle(isScreenShared), transform: hoveredBtn === 'screen' ? 'scale(1.12)' : 'scale(1)', filter: hoveredBtn === 'screen' ? 'brightness(1.25)' : 'brightness(1)', cursor: 'pointer' }}
+                    title={isScreenShared ? "Parar compartilhamento" : "Compartilhar tela"}
+                  >
+                    {isScreenShared ? <MonitorOff className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" /> : <MonitorUp className="h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" />}
+                  </Button>
+                )}
 
                 {canRecord && (
                   <Button
@@ -896,7 +976,9 @@ export function Meeting100ms({
                       "h-10 w-10 sm:h-12 sm:w-12 rounded-2xl transition-all duration-300 relative z-50", 
                       isRecording && "shadow-lg shadow-red-500/20"
                     )}
-                    style={controlButtonStyle(isRecording, isRecording)}
+                    onMouseEnter={() => setHoveredBtn('record')}
+                    onMouseLeave={() => setHoveredBtn(null)}
+                    style={{ ...controlButtonStyle(isRecording, isRecording), transform: hoveredBtn === 'record' ? 'scale(1.12)' : 'scale(1)', filter: hoveredBtn === 'record' ? 'brightness(1.25)' : 'brightness(1)', cursor: 'pointer' }}
                     title={isRecording ? "Parar gravação" : "Iniciar gravação"}
                   >
                     <Circle className={cn("h-4 w-4 sm:h-5 sm:w-5 pointer-events-none", isRecording && "fill-white animate-pulse")} />
@@ -909,109 +991,111 @@ export function Meeting100ms({
                   style={{ backgroundColor: `${config?.colors?.controlsText || "#ffffff"}1a` }}
                 />
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      onClick={async () => {
-                    // IMPORTANTE: Abrir a janela ANTES das chamadas async para evitar bloqueio de popup
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                    let signatureWindow: Window | null = null;
-                    
-                    if (!isMobile) {
-                      signatureWindow = window.open('about:blank', '_blank');
-                    }
-                    
-                    try {
-                      const pathParts = window.location.pathname.split('/').filter(Boolean);
-                      const currentMeetingId = pathParts[pathParts.length - 1] || '';
+                {!isHost && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        onClick={async () => {
+                      // IMPORTANTE: Abrir a janela ANTES das chamadas async para evitar bloqueio de popup
+                      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                      let signatureWindow: Window | null = null;
                       
-                      let formSubmissionId: string | undefined = undefined;
-                      
-                      // PRIMEIRO: Tentar obter fsid da URL diretamente
-                      const urlSearchParams = new URLSearchParams(window.location.search);
-                      const currentFsid = urlSearchParams.get("fsid");
-                      if (currentFsid) {
-                        formSubmissionId = currentFsid;
+                      if (!isMobile) {
+                        signatureWindow = window.open('about:blank', '_blank');
                       }
                       
-                      // SEGUNDO: Buscar dados da reunião para obter o formSubmissionId dos metadados
-                      if (!formSubmissionId) {
-                        const fsidQueryString = currentFsid ? `?fsid=${currentFsid}` : '';
-                        try {
-                          const meetingResponse = await fetch(`/api/public/reunioes/${currentMeetingId}/public${fsidQueryString}`);
-                          if (meetingResponse.ok) {
-                            const meetingData = await meetingResponse.json();
-                            if (meetingData?.metadata?.formSubmissionId) {
-                              formSubmissionId = meetingData.metadata.formSubmissionId;
+                      try {
+                        const pathParts = window.location.pathname.split('/').filter(Boolean);
+                        const currentMeetingId = pathParts[pathParts.length - 1] || '';
+                        
+                        let formSubmissionId: string | undefined = undefined;
+                        
+                        // PRIMEIRO: Tentar obter fsid da URL diretamente
+                        const urlSearchParams = new URLSearchParams(window.location.search);
+                        const currentFsid = urlSearchParams.get("fsid");
+                        if (currentFsid) {
+                          formSubmissionId = currentFsid;
+                        }
+                        
+                        // SEGUNDO: Buscar dados da reunião para obter o formSubmissionId dos metadados
+                        if (!formSubmissionId) {
+                          const fsidQueryString = currentFsid ? `?fsid=${currentFsid}` : '';
+                          try {
+                            const meetingResponse = await fetch(`/api/public/reunioes/${currentMeetingId}/public${fsidQueryString}`);
+                            if (meetingResponse.ok) {
+                              const meetingData = await meetingResponse.json();
+                              if (meetingData?.metadata?.formSubmissionId) {
+                                formSubmissionId = meetingData.metadata.formSubmissionId;
+                              }
                             }
-                          }
-                        } catch (e) {}
-                      }
-                      
-                      // TERCEIRO: Tentar via participant-data (fallback)
-                      if (!formSubmissionId) {
-                        try {
-                          const participantResponse = await fetch(`/api/public/reunioes/${currentMeetingId}/participant-data`, {
-                            credentials: 'include',
-                          });
-                          if (participantResponse.ok) {
-                            const result = await participantResponse.json();
-                            if (result.formSubmissionId) {
-                              formSubmissionId = result.formSubmissionId;
+                          } catch (e) {}
+                        }
+                        
+                        // TERCEIRO: Tentar via participant-data (fallback)
+                        if (!formSubmissionId) {
+                          try {
+                            const participantResponse = await fetch(`/api/public/reunioes/${currentMeetingId}/participant-data`, {
+                              credentials: 'include',
+                            });
+                            if (participantResponse.ok) {
+                              const result = await participantResponse.json();
+                              if (result.formSubmissionId) {
+                                formSubmissionId = result.formSubmissionId;
+                              }
                             }
-                          }
-                        } catch (e) {}
-                      }
-                      
-                      const response = await fetch('/api/assinatura/public/contracts/from-meeting', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          meetingId: currentMeetingId,
-                          formSubmissionId: formSubmissionId || undefined,
-                          client_name: localPeer?.name || undefined,
-                        }),
-                      });
+                          } catch (e) {}
+                        }
+                        
+                        const response = await fetch('/api/assinatura/public/contracts/from-meeting', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            meetingId: currentMeetingId,
+                            formSubmissionId: formSubmissionId || undefined,
+                            client_name: localPeer?.name || undefined,
+                          }),
+                        });
 
-                      if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.error || 'Erro ao criar contrato');
-                      }
+                        if (!response.ok) {
+                          const errorData = await response.json().catch(() => ({}));
+                          throw new Error(errorData.error || 'Erro ao criar contrato');
+                        }
 
-                      const result = await response.json();
-                      const contract = result.contract;
-                      const signatureUrl = `/assinar/${contract.access_token}`;
-                      
-                      if (isMobile) {
-                        toast.info("Redirecionando para assinatura...");
-                        window.location.href = signatureUrl;
-                      } else if (signatureWindow) {
-                        signatureWindow.location.href = signatureUrl;
-                        toast.success("Página de assinatura aberta!");
-                      } else {
-                        window.location.href = signatureUrl;
+                        const result = await response.json();
+                        const contract = result.contract;
+                        const signatureUrl = `/assinar/${contract.access_token}`;
+                        
+                        if (isMobile) {
+                          toast.info("Redirecionando para assinatura...");
+                          window.location.href = signatureUrl;
+                        } else if (signatureWindow) {
+                          signatureWindow.location.href = signatureUrl;
+                          toast.success("Página de assinatura aberta!");
+                        } else {
+                          window.location.href = signatureUrl;
+                        }
+                      } catch (err: any) {
+                        if (signatureWindow) signatureWindow.close();
+                        toast.error(err.message || "Erro ao abrir página de assinatura");
                       }
-                    } catch (err: any) {
-                      if (signatureWindow) signatureWindow.close();
-                      toast.error(err.message || "Erro ao abrir página de assinatura");
-                    }
-                  }}
-                  variant="ghost"
-                  className="h-10 sm:h-12 px-3 sm:px-4 rounded-2xl font-bold text-white shadow-lg hover:scale-105 transition-transform relative z-50 flex items-center gap-2 text-xs sm:text-sm"
-                  style={{ 
-                    backgroundColor: config?.colors?.primaryButton || "#059669",
-                    boxShadow: `0 10px 15px -3px ${config?.colors?.primaryButton}33`
-                  }}
-                  data-testid="button-assinar-contrato"
-                >
-                  <FileSignature className="h-5 w-5" />
-                  <span className="hidden sm:inline">Assinar</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Abrir página de assinatura de contrato</p>
-                  </TooltipContent>
-                </Tooltip>
+                    }}
+                    variant="ghost"
+                    className="h-10 sm:h-12 px-3 sm:px-4 rounded-2xl font-bold text-white shadow-lg hover:scale-105 transition-transform relative z-50 flex items-center gap-2 text-xs sm:text-sm"
+                    style={{ 
+                      backgroundColor: config?.colors?.primaryButton || "#059669",
+                      boxShadow: `0 10px 15px -3px ${config?.colors?.primaryButton}33`
+                    }}
+                    data-testid="button-assinar-contrato"
+                  >
+                    <FileSignature className="h-5 w-5" />
+                    <span className="hidden sm:inline">Assinar</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Abrir página de assinatura de contrato</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
 
                 <Button 
                   onClick={handleLeave}
@@ -1041,7 +1125,7 @@ export function Meeting100ms({
 export function Meeting100msWithProvider(props: Meeting100msProps) {
   return (
     <HMSRoomProvider>
-      <Meeting100ms {...props} />
+      <Meeting100ms {...props} isHost={props.isHost} />
     </HMSRoomProvider>
   );
 }

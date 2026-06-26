@@ -7,7 +7,7 @@ import { SupabaseProvider } from '@/features/revendedora/contexts/SupabaseContex
 import { getResellerToken, clearResellerToken } from '@/features/revendedora/lib/resellerAuth';
 import {
   LayoutDashboard, TrendingUp, Wallet, Store,
-  Trophy, UsersRound, Settings, LogOut, Building2
+  Trophy, UsersRound, Settings, LogOut, Building2, ClipboardCheck, ShoppingBag
 } from 'lucide-react';
 import { NotificationBell } from '@/components/NotificationBell';
 
@@ -20,9 +20,11 @@ const NAV_ITEMS = [
   { title: 'Vendas', url: '/revendedora/reseller/sales', icon: TrendingUp },
   { title: 'Financeiro', url: '/revendedora/reseller/financial', icon: Wallet },
   { title: 'Loja', url: '/revendedora/reseller/store', icon: Store },
+  { title: 'Produtos', url: '/revendedora/reseller/products', icon: ShoppingBag },
   { title: 'Gamifica\u00e7\u00e3o', url: '/revendedora/reseller/gamification', icon: Trophy },
   { title: 'Equipe', url: '/revendedora/reseller/team', icon: UsersRound },
   { title: 'Config.', url: '/revendedora/reseller/settings', icon: Settings },
+  { title: 'Diagnóstico', url: '/revendedora/reseller/diagnostico', icon: ClipboardCheck },
 ];
 
 // Bottom nav usa só 5 itens principais
@@ -31,6 +33,7 @@ const BOTTOM_NAV = [
   { title: 'Vendas', url: '/revendedora/reseller/sales', icon: TrendingUp },
   { title: 'Financeiro', url: '/revendedora/reseller/financial', icon: Wallet },
   { title: 'Loja', url: '/revendedora/reseller/store', icon: Store },
+  { title: 'Produtos', url: '/revendedora/reseller/products', icon: ShoppingBag },
   { title: 'Gamifica\u00e7\u00e3o', url: '/revendedora/reseller/gamification', icon: Trophy },
 ];
 

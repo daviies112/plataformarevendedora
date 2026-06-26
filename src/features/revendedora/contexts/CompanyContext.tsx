@@ -20,7 +20,7 @@ interface BrandingConfig {
   logo_size: string;
   logo_position: string;
   company_name: string;
-  card_color: string;
+  card_color: string | null;
 }
 
 const DEFAULT_BRANDING: BrandingConfig = {
@@ -39,7 +39,7 @@ const DEFAULT_BRANDING: BrandingConfig = {
   logo_size: 'medium',
   logo_position: 'left',
   company_name: 'NEXUS',
-  card_color: '#1a1a2e',
+  card_color: null, // sem cor de card - usar tema padrao
 };
 
 interface CompanyContextType {
@@ -49,6 +49,9 @@ interface CompanyContextType {
   brandingLoading: boolean;
   refetch: () => Promise<void>;
   refetchBranding: () => Promise<void>;
+  // Carrega branding a partir de um slug publico da empresa (/revendedora/:companySlug/login)
+  // Retorna o tenant_id resolvido, ou null se o slug nao existir.
+  loadBrandingBySlug: (companySlug: string) => Promise<string | null>;
 }
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined);
@@ -80,6 +83,29 @@ export function hexToHSL(hex: string): string {
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
+function lightenHSL(hex: string, amount: number): string {
+  // Clareia a cor aumentando a luminosidade (amount em 0-100)
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return '0 0% 50%';
+  let r = parseInt(result[1], 16) / 255;
+  let g = parseInt(result[2], 16) / 255;
+  let b = parseInt(result[3], 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  const newL = Math.min(100, Math.round(l * 100) + amount);
+  return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${newL}%`;
+}
+
 function getLuminance(hex: string): number {
   // Calcula luminancia relativa (0=preto, 1=branco)
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -107,89 +133,84 @@ function pickContrastColor(bg: string, option1: string, option2: string): string
 }
 
 function applyBrandingToCSS(branding: BrandingConfig) {
-  // Remover style tag anterior se existir
-  const existingStyle = document.getElementById('nexus-branding-vars');
-  if (existingStyle) existingStyle.remove();
-
-  // As 7 cores base do branding
-  const bg = branding.background_color;         // Cor de Fundo
-  const titleColor = branding.heading_color;    // Cor dos Titulos
-  const textColor = branding.text_color;        // Cor do Texto
-  const btnBg = branding.button_color;          // Cor do Botao
-  const btnText = branding.button_text_color;   // Cor do Texto do Botao
-  const cardBg = branding.card_color || branding.sidebar_background; // Cor do Container
-  const sidebarBg = branding.sidebar_background; // Cor da Barra Lateral
-
-  // LOGICA DE CONTRASTE INTELIGENTE:
-  // Para cada superficie, escolhemos o elemento sobreposto com maior contraste
-
-  // Botao: se button_color nao tem contraste suficiente contra o fundo, usar container
-  const btnContrastVsBg = getContrastRatio(bg, btnBg);
-  // Se botao e fundo sao parecidos (contraste < 2.5), usar cor do container como botao
-  const effectiveBtnBg = btnContrastVsBg < 2.5 ? cardBg : btnBg;
-  // Texto do botao: escolher entre branco e o que foi configurado, o que tiver mais contraste
-  const effectiveBtnText = pickContrastColor(effectiveBtnBg, btnText, '#ffffff');
-
-  // Primary = cor do botao efetiva (com contraste garantido)
-  // Se ainda assim o contraste e ruim, usar sidebar (geralmente mais escura)
-  const finalPrimary = getContrastRatio(bg, effectiveBtnBg) >= 2.5 ? effectiveBtnBg : sidebarBg;
-  const finalPrimaryFg = pickContrastColor(finalPrimary, '#ffffff', textColor);
-
-  // Card: se card e fundo sao iguais, usar sidebar como card
-  const finalCard = getContrastRatio(bg, cardBg) < 1.3 ? sidebarBg : cardBg;
-  const finalCardFg = pickContrastColor(finalCard, '#ffffff', textColor);
-
-  // Muted: versao mais escura do card
-  const finalMuted = sidebarBg;
-  const finalMutedFg = pickContrastColor(finalMuted, 'rgba(255,255,255,0.6)', 'rgba(0,0,0,0.5)');
-
-  // Border: cor com algum contraste contra o card
-  const finalBorder = pickContrastColor(finalCard, 'rgba(255,255,255,0.15)', 'rgba(0,0,0,0.15)');
-
-  // Calcular muted: precisa ter contraste contra background
-  // Se sidebar == background, usar uma versao mais escura/clara do card
-  const mutedBg = finalCard; // container sempre tem algum contraste vs fundo
-  const mutedFg = pickContrastColor(mutedBg, '#ffffff', textColor); // branco ou text sobre muted
-
-  // Border: linha sutil mas visivel contra o card
-  const borderColor = pickContrastColor(finalCard, 'rgba(255,255,255,0.2)', 'rgba(0,0,0,0.2)');
-  const borderHex = finalCard === cardBg ? sidebarBg : cardBg; // usar a outra cor como borda
-
-  const style = document.createElement('style');
-  style.id = 'nexus-branding-vars';
-  style.textContent = [
-    ':root {',
-    `  --primary: ${hexToHSL(finalPrimary)} !important;`,
-    `  --primary-foreground: ${hexToHSL(finalPrimaryFg)} !important;`,
-    `  --background: ${hexToHSL(bg)} !important;`,
-    `  --foreground: ${hexToHSL(textColor)} !important;`,
-    `  --card: ${hexToHSL(finalCard)} !important;`,
-    `  --card-foreground: ${hexToHSL(finalCardFg)} !important;`,
-    `  --border: ${hexToHSL(borderHex)} !important;`,
-    `  --input: ${hexToHSL(finalCard)} !important;`,
-    `  --muted: ${hexToHSL(mutedBg)} !important;`,
-    `  --muted-foreground: ${hexToHSL(mutedFg)} !important;`,
-    `  --ring: ${hexToHSL(finalPrimary)} !important;`,
-    `  --secondary: ${hexToHSL(finalCard)} !important;`,
-    `  --secondary-foreground: ${hexToHSL(finalCardFg)} !important;`,
-    `  --accent: ${hexToHSL(finalPrimary)} !important;`,
-    `  --accent-foreground: ${hexToHSL(finalPrimaryFg)} !important;`,
-    `  --popover: ${hexToHSL(finalCard)} !important;`,
-    `  --popover-foreground: ${hexToHSL(finalCardFg)} !important;`,
-    '}',
-  ].join('\n');
-  document.head.appendChild(style);
-
-  // Vars brand-* para uso direto nos componentes
   const root = document.documentElement;
-  root.style.setProperty('--brand-background', bg);
-  root.style.setProperty('--brand-text', textColor);
-  root.style.setProperty('--brand-heading', titleColor);
-  root.style.setProperty('--brand-button', finalPrimary);
-  root.style.setProperty('--brand-button-text', finalPrimaryFg);
-  root.style.setProperty('--brand-card', finalCard);
-  root.style.setProperty('--brand-sidebar', sidebarBg);
+
   root.style.setProperty('--brand-primary', branding.primary_color);
+  root.style.setProperty('--brand-secondary', branding.secondary_color);
+  root.style.setProperty('--brand-accent', branding.accent_color);
+  root.style.setProperty('--brand-background', branding.background_color);
+  root.style.setProperty('--brand-sidebar-bg', branding.sidebar_background);
+  root.style.setProperty('--brand-sidebar-text', branding.sidebar_text);
+  root.style.setProperty('--brand-button', branding.button_color);
+  root.style.setProperty('--brand-button-text', branding.button_text_color);
+  root.style.setProperty('--brand-text', branding.text_color);
+  root.style.setProperty('--brand-heading', branding.heading_color);
+  root.style.setProperty('--brand-selected', branding.selected_item_color);
+
+  // 🎨 Title + Favicon dinâmico por tenant (plataformarevendedora)
+  if (branding.company_name && branding.company_name !== 'NEXUS') {
+    document.title = branding.company_name;
+  }
+  if (branding.logo_url) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64; canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0, 64, 64);
+      try {
+        document.querySelectorAll('link[rel="icon"]').forEach(e => e.remove());
+        const link = document.createElement('link');
+        link.rel = 'icon'; link.type = 'image/png';
+        link.href = canvas.toDataURL('image/png');
+        document.head.appendChild(link);
+      } catch {}
+    };
+    img.src = branding.logo_url;
+  }
+
+  // Sobrescrever variaveis globais do tema com as cores do branding
+  // Isso garante que componentes shadcn/Tailwind usem as cores certas
+  if (branding.button_color) {
+    root.style.setProperty('--primary', hexToHSL(branding.button_color));
+    root.style.setProperty('--ring', hexToHSL(branding.button_color));
+  }
+  if (branding.button_text_color) {
+    root.style.setProperty('--primary-foreground', hexToHSL(branding.button_text_color));
+  }
+  if (branding.heading_color) {
+    root.style.setProperty('--foreground', hexToHSL(branding.heading_color));
+  }
+  if (branding.text_color) {
+    root.style.setProperty('--muted-foreground', hexToHSL(branding.text_color));
+  }
+  if (branding.background_color) {
+    root.style.setProperty('--background', hexToHSL(branding.background_color));
+  }
+
+  // Cor do Container (card_color) - aplica nos cards quando configurado
+  if (branding.card_color) {
+    root.style.setProperty('--brand-card', branding.card_color);
+    // Injetar estilo para sobrescrever --card do tema shadcn/tailwind
+    const existing = document.getElementById('nexus-card-color');
+    if (existing) existing.remove();
+    const style = document.createElement('style');
+    style.id = 'nexus-card-color';
+    const cardHSL = hexToHSL(branding.card_color);
+    const fgHSL = hexToHSL(branding.text_color);
+    // card-foreground: usar cor escura para contraste sobre card branco
+    const cardFgHSL = '0 0% 10%'; // texto escuro para card branco
+    const inputHSL = lightenHSL(branding.card_color, 15);
+    style.textContent = `:root { --card: ${cardHSL} !important; --card-foreground: ${cardFgHSL} !important; --input: ${inputHSL} !important; } .dark { --card: ${cardHSL} !important; --card-foreground: ${cardFgHSL} !important; --input: ${inputHSL} !important; } html.dark { --card: ${cardHSL} !important; --card-foreground: ${cardFgHSL} !important; --input: ${inputHSL} !important; }`;
+    document.head.appendChild(style);
+  } else {
+    // Remover override se nao houver card_color configurado (usar branco padrao do tema)
+    const existing = document.getElementById('nexus-card-color');
+    if (existing) existing.remove();
+    root.style.removeProperty('--brand-card');
+  }
 }
 export function CompanyProvider({ children }: { children: ReactNode }) {
   const supabaseContext = useSupabase();
@@ -229,7 +250,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
             logo_size: data.logo_size || DEFAULT_BRANDING.logo_size,
             logo_position: data.logo_position || DEFAULT_BRANDING.logo_position,
             company_name: data.company_name || DEFAULT_BRANDING.company_name,
-            card_color: data.card_color || DEFAULT_BRANDING.card_color,
+            card_color: data.card_color || null, // null = tema padrao (cards brancos)
           };
           setBranding(newBranding);
           applyBrandingToCSS(newBranding);
@@ -269,7 +290,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
             logo_size: data.logo_size || DEFAULT_BRANDING.logo_size,
             logo_position: data.logo_position || DEFAULT_BRANDING.logo_position,
             company_name: data.company_name || DEFAULT_BRANDING.company_name,
-            card_color: data.card_color || DEFAULT_BRANDING.card_color,
+            card_color: data.card_color || null, // null = tema padrao (cards brancos)
           };
           setBranding(newBranding);
           applyBrandingToCSS(newBranding);
@@ -282,6 +303,55 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     }
     applyBrandingToCSS(DEFAULT_BRANDING);
     setBrandingLoading(false);
+  }, []);
+
+  // Carrega branding a partir do slug publico da empresa (rota /revendedora/:companySlug/login)
+  // Usado ANTES do login - nao depende de sessao nem de hostname/subdominio.
+  const loadBrandingBySlug = useCallback(async (companySlug: string): Promise<string | null> => {
+    setBrandingLoading(true);
+    try {
+      const resp = await fetch(`/api/reseller/login-info/${encodeURIComponent(companySlug)}`);
+      if (!resp.ok) {
+        console.warn('[CompanyContext] Slug nao encontrado:', companySlug);
+        applyBrandingToCSS(DEFAULT_BRANDING);
+        setBranding(DEFAULT_BRANDING);
+        setBrandingLoading(false);
+        return null;
+      }
+      const data = await resp.json();
+      const newBranding: BrandingConfig = {
+        primary_color: data.primary_color || DEFAULT_BRANDING.primary_color,
+        secondary_color: data.secondary_color || DEFAULT_BRANDING.secondary_color,
+        accent_color: data.accent_color || DEFAULT_BRANDING.accent_color,
+        background_color: data.background_color || DEFAULT_BRANDING.background_color,
+        sidebar_background: data.sidebar_background || DEFAULT_BRANDING.sidebar_background,
+        sidebar_text: data.sidebar_text || DEFAULT_BRANDING.sidebar_text,
+        button_color: data.button_color || DEFAULT_BRANDING.button_color,
+        button_text_color: data.button_text_color || DEFAULT_BRANDING.button_text_color,
+        text_color: data.text_color || DEFAULT_BRANDING.text_color,
+        heading_color: data.heading_color || DEFAULT_BRANDING.heading_color,
+        selected_item_color: data.selected_item_color || DEFAULT_BRANDING.selected_item_color,
+        logo_url: data.logo_url || null,
+        logo_size: data.logo_size || DEFAULT_BRANDING.logo_size,
+        logo_position: data.logo_position || DEFAULT_BRANDING.logo_position,
+        company_name: data.company_name || DEFAULT_BRANDING.company_name,
+        card_color: data.card_color || null,
+      };
+      setBranding(newBranding);
+      applyBrandingToCSS(newBranding);
+      if (data.tenant_id) {
+        try { localStorage.setItem('nexus_tenant_id', data.tenant_id); } catch (_) {}
+        try { localStorage.setItem('nexus_company_slug', companySlug); } catch (_) {}
+      }
+      setBrandingLoading(false);
+      return data.tenant_id || null;
+    } catch (err) {
+      console.warn('[CompanyContext] Erro ao carregar branding por slug:', err);
+      applyBrandingToCSS(DEFAULT_BRANDING);
+      setBranding(DEFAULT_BRANDING);
+      setBrandingLoading(false);
+      return null;
+    }
   }, []);
 
   const fetchCompanyData = async () => {
@@ -335,6 +405,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
       brandingLoading,
       refetch: fetchCompanyData,
       refetchBranding: fetchBrandingData,
+      loadBrandingBySlug,
     }}>
       {children}
     </CompanyContext.Provider>

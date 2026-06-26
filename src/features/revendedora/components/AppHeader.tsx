@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Store, TrendingUp, Wallet,
-  Trophy, UsersRound, Settings, LogOut, Building2,
+  Trophy, UsersRound, Settings, LogOut, Building2, ShoppingBag,
 } from 'lucide-react';
 import { clearResellerToken } from '@/features/revendedora/lib/resellerAuth';
 import { useCompany } from '@/features/revendedora/contexts/CompanyContext';
@@ -12,6 +12,7 @@ const resellerItems = [
   { title: 'Vendas', url: '/revendedora/reseller/sales', icon: TrendingUp },
   { title: 'Financeiro', url: '/revendedora/reseller/financial', icon: Wallet },
   { title: 'Minha Loja', url: '/revendedora/reseller/store', icon: Store },
+  { title: 'Produtos', url: '/revendedora/reseller/products', icon: ShoppingBag },
   { title: 'Gamificação', url: '/revendedora/reseller/gamification', icon: Trophy },
   { title: 'Equipe', url: '/revendedora/reseller/team', icon: UsersRound },
   { title: 'Configurações', url: '/revendedora/reseller/settings', icon: Settings },

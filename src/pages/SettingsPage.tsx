@@ -1,6 +1,8 @@
 import { PremiumCard } from '@/platforms/shared/premium/PremiumCard';
 import { PremiumButton } from '@/platforms/shared/premium/PremiumButton';
 import { PremiumInput } from '@/platforms/shared/premium/PremiumInput';
+import { QuickCPFCheck } from '@/components/compliance/QuickCPFCheck';
+import { ProcessDetailsModal } from '@/components/compliance/process-details-modal';
 import { PremiumSwitch } from '@/platforms/shared/premium/PremiumSwitch';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -24,11 +26,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
-import { BottomNav } from '@/components/mobile/BottomNav';
+import PageShell from '@/components/PageShell';
+import NexusPageHeader from '@/components/NexusPageHeader';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { setColorScheme, getSavedColorScheme, type ColorScheme } from '@/lib/colorScheme';
+import type { DatacorpCheck } from '@shared/db-schema';
 
 // Move CollapsibleSection outside to prevent re-renders
 const CollapsibleSection = ({
@@ -250,9 +254,40 @@ const SettingsPage = () => {
     totalexpress: false,
   });
 
+  const [processCheck, setProcessCheck] = useState<DatacorpCheck | null>(null);
+  const [showProcessModal, setShowProcessModal] = useState(false);
+
   const [generatedN8nApiKey, setGeneratedN8nApiKey] = useState<string | null>(null);
   const [showN8nApiKey, setShowN8nApiKey] = useState(false);
   const [copiedN8nApiKey, setCopiedN8nApiKey] = useState(false);
+
+  const handleResultReady = async (checkId: string) => {
+    setShowProcessModal(true);
+
+    try {
+      const response = await fetch(`/api/compliance/check/${checkId}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error?.message || "Erro ao obter detalhes da consulta");
+      }
+
+      setProcessCheck(result.data);
+    } catch (error) {
+      console.error("[SettingsPage] Erro ao carregar consulta:", error);
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Não foi possível carregar a consulta",
+        variant: "destructive"
+      });
+      setShowProcessModal(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowProcessModal(false);
+    setProcessCheck(null);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -1995,6 +2030,7 @@ const SettingsPage = () => {
   };
 
   return (
+    <PageShell>
     <div className="min-h-screen relative">
       {/* Premium Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-background via-background/98 to-muted/3 pointer-events-none" />
@@ -3075,6 +3111,19 @@ const SettingsPage = () => {
             </div>
           </CollapsibleSection>
 
+          <PremiumCard variant="elevated" padding="lg" className="space-y-6 border border-muted/60">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">Consulta rápida de CPF</h3>
+                <p className="text-sm text-muted-foreground">
+                  Inicia o fluxo assíncrono já existente e abre o modal quando o CPFPoller processar os dados.
+                </p>
+              </div>
+            </div>
+
+            <QuickCPFCheck onResultReady={handleResultReady} tenantId={user?.tenantId || ''} />
+          </PremiumCard>
+
           {/* TotalExpress Section */}
           <CollapsibleSection
             openSections={openSections}
@@ -3087,7 +3136,7 @@ const SettingsPage = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-2 mb-4">
                 {isLoadingTotalExpress ? (
-                  <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300">
+                  <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-foreground/70">
                     Carregando...
                   </Badge>
                 ) : totalExpressConfig?.configured ? (
@@ -3095,7 +3144,7 @@ const SettingsPage = () => {
                     Configurado
                   </Badge>
                 ) : (
-                  <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300" data-testid="badge-totalexpress-not-configured">
+                  <Badge className="bg-primary/100 text-yellow-800 dark:bg-primary/900 dark:text-yellow-300" data-testid="badge-totalexpress-not-configured">
                     Não configurado
                   </Badge>
                 )}
@@ -3924,9 +3973,18 @@ const SettingsPage = () => {
         </div>
       </main>
 
-      {/* Mobile Bottom Navigation */}
-      {isMobile && <BottomNav />}
+      {showProcessModal && (
+        <ProcessDetailsModal
+          check={processCheck}
+          open={showProcessModal}
+          onOpenChange={(open) => {
+            if (!open) handleCloseModal();
+          }}
+        />
+      )}
+
     </div>
+  </PageShell>
   );
 };
 

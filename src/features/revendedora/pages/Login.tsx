@@ -1,14 +1,49 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { LogIn, Shield } from 'lucide-react';
 import { saveResellerToken, saveProjectName, saveResellerId, saveResellerEmail } from '../lib/resellerAuth';
 import { useCompany } from '../contexts/CompanyContext';
+
+// Clareia um hex em ~20% de luminosidade para o fundo dos inputs
+function lightenHex(hex: string, amount = 20): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return hex;
+  let r = parseInt(result[1], 16) / 255;
+  let g = parseInt(result[2], 16) / 255;
+  let b = parseInt(result[3], 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  const newL = Math.min(1, l + amount / 100);
+  const hsl2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1; if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  const q2 = newL < 0.5 ? newL * (1 + s) : newL + s - newL * s;
+  const p2 = 2 * newL - q2;
+  const nr = Math.round(hsl2rgb(p2, q2, h + 1/3) * 255);
+  const ng = Math.round(hsl2rgb(p2, q2, h) * 255);
+  const nb2 = Math.round(hsl2rgb(p2, q2, h - 1/3) * 255);
+  return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb2.toString(16).padStart(2, '0')}`;
+}
 
 function formatCPF(value: string): string {
   const numbers = value.replace(/\D/g, '').slice(0, 11);
@@ -21,11 +56,28 @@ function formatCPF(value: string): string {
 export default function Login() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { branding, brandingLoading } = useCompany();
+  const { companySlug } = useParams<{ companySlug?: string }>();
+  const { branding, brandingLoading, loadBrandingBySlug } = useCompany();
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  // tenant_id resolvido pelo slug (null = modo generico / sem slug na URL)
+  const [resolvedTenantId, setResolvedTenantId] = useState<string | null>(null);
+  const [slugError, setSlugError] = useState(false);
+
+  // Se houver companySlug na URL, carregar branding da empresa antes do login
+  useEffect(() => {
+    if (!companySlug) return;
+    loadBrandingBySlug(companySlug).then((tenantId) => {
+      if (tenantId) {
+        setResolvedTenantId(tenantId);
+        setSlugError(false);
+      } else {
+        setSlugError(true);
+      }
+    });
+  }, [companySlug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Carregar credenciais salvas ao montar
   useEffect(() => {
@@ -51,13 +103,22 @@ export default function Login() {
     const cpfNumbers = cpf.replace(/\D/g, '');
 
     try {
+      // Montar body: incluir tenant_id resolvido pelo slug quando disponivel
+      // Isso permite que o backend restrinja o login ao tenant correto mesmo que
+      // o host nao seja um subdominio dedicado (ex: nexusemijoiasrevendedoras.nexusintelligence.tech)
+      const loginBody: Record<string, string> = { email, cpf: cpfNumbers };
+      if (resolvedTenantId) {
+        loginBody.tenantId = resolvedTenantId;
+      }
+      if (companySlug) {
+        loginBody.companySlug = companySlug;
+      }
+
       const response = await fetch('/api/reseller/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, cpf: cpfNumbers }),
+        body: JSON.stringify(loginBody),
       });
 
       const data = await response.json();
@@ -68,21 +129,12 @@ export default function Login() {
       }
 
       if (data.success) {
-        if (data.token) {
-          saveResellerToken(data.token);
-        }
-        if (data.tenant?.projectName) {
-          saveProjectName(data.tenant.projectName);
-        }
-        if (data.user?.id) {
-          saveResellerId(data.user.id);
-        }
-        if (data.user?.email) {
-          saveResellerEmail(data.user.email);
-        }
+        if (data.token) saveResellerToken(data.token);
+        if (data.tenant?.projectName) saveProjectName(data.tenant.projectName);
+        if (data.user?.id) saveResellerId(data.user.id);
+        if (data.user?.email) saveResellerEmail(data.user.email);
         await queryClient.invalidateQueries({ queryKey: ['/api/reseller/supabase-config'] });
         await queryClient.invalidateQueries({ queryKey: ['/api/reseller/settings'] });
-        // Salvar ou limpar credenciais baseado no 'lembrar de mim'
         if (rememberMe) {
           try { localStorage.setItem('nexus_remember_me', JSON.stringify({ email, cpf })); } catch (_) {}
         } else {
@@ -98,12 +150,36 @@ export default function Login() {
     }
   };
 
-  const hasCustomBranding = branding.button_color !== '#9b87f5';
+  const hasCustomBranding = (
+    branding.button_color !== '#9b87f5' ||
+    (branding.card_color !== null && branding.card_color !== '#1a1a2e') ||
+    branding.background_color !== '#ffffff' ||
+    branding.sidebar_background !== '#1a1a1a'
+  );
+
+  const inputBg = hasCustomBranding && branding.card_color
+    ? lightenHex(branding.card_color, 20)
+    : undefined;
+
+  // Empresa nao encontrada (slug invalido na URL)
+  if (companySlug && slugError && !brandingLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#f8f8f8' }}>
+        <div className="text-center space-y-4 max-w-sm">
+          <Shield className="w-14 h-14 mx-auto text-muted-foreground opacity-40" />
+          <h2 className="text-xl font-semibold text-foreground">Empresa não encontrada</h2>
+          <p className="text-muted-foreground text-sm">
+            O link que você acessou não corresponde a nenhuma empresa cadastrada.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (brandingLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center" data-testid="login-loading">
-        <div className="animate-pulse space-y-4 w-full max-w-md">
+        <div className="animate-pulse space-y-4 w-full max-w-md px-4">
           <div className="h-16 bg-muted rounded-md mx-auto w-32" />
           <div className="h-64 bg-muted rounded-lg" />
         </div>
@@ -114,11 +190,7 @@ export default function Login() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{
-        background: hasCustomBranding
-          ? branding.background_color
-          : undefined,
-      }}
+      style={{ background: branding.background_color || '#ffffff' }}
       data-testid="login-page"
     >
       <div className="w-full max-w-md space-y-6">
@@ -165,10 +237,7 @@ export default function Login() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  style={hasCustomBranding ? { color: branding.text_color } : undefined}
-                >
+                <Label htmlFor="email" style={hasCustomBranding ? { color: branding.text_color } : undefined}>
                   Email
                 </Label>
                 <Input
@@ -179,14 +248,12 @@ export default function Login() {
                   placeholder="seu@email.com"
                   required
                   data-testid="input-email"
+                  style={inputBg ? { backgroundColor: inputBg, color: branding.text_color, borderColor: `${branding.text_color}30` } : undefined}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="cpf"
-                  style={hasCustomBranding ? { color: branding.text_color } : undefined}
-                >
+                <Label htmlFor="cpf" style={hasCustomBranding ? { color: branding.text_color } : undefined}>
                   CPF
                 </Label>
                 <Input
@@ -198,28 +265,22 @@ export default function Login() {
                   maxLength={14}
                   required
                   data-testid="input-cpf"
+                  style={inputBg ? { backgroundColor: inputBg, color: branding.text_color, borderColor: `${branding.text_color}30` } : undefined}
                 />
               </div>
 
-              {/* Lembrar de mim */}
               <div className="flex items-center gap-2">
                 <input
                   id="remember-me"
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  style={{
-                    width: 16, height: 16, cursor: 'pointer',
-                    accentColor: branding.button_color || '#9b87f5',
-                  }}
+                  style={{ width: 16, height: 16, cursor: 'pointer', accentColor: branding.button_color || '#9b87f5' }}
                   data-testid="checkbox-remember-me"
                 />
                 <Label
                   htmlFor="remember-me"
-                  style={{
-                    cursor: 'pointer', fontSize: 13,
-                    color: hasCustomBranding ? `${branding.text_color}cc` : undefined,
-                  }}
+                  style={{ cursor: 'pointer', fontSize: 13, color: hasCustomBranding ? `${branding.text_color}cc` : undefined }}
                 >
                   Lembrar de mim
                 </Label>

@@ -109,13 +109,13 @@ export function useChat() {
       try {
         const { data: resellerData } = await supabase
           .from('resellers')
-          .select('name, phone')
+          .select('nome, telefone')
           .eq('id', rId)
           .single();
         
         if (resellerData) {
-          resellerName = (resellerData as any).name || 'Revendedor';
-          resellerPhone = (resellerData as any).phone || '';
+          resellerName = (resellerData as any).nome || 'Revendedor';
+          resellerPhone = (resellerData as any).telefone || '';
         }
       } catch {
         console.log('[useChat] Could not fetch reseller details');

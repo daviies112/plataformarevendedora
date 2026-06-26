@@ -49,3 +49,6 @@ diagnose_auth.ts
 diagnose_db.ts
 # Development pasted assets / transcripts
 attached_assets/
+# Staging
+.env.staging
+ecosystem.staging.config.cjs

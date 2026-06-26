@@ -87,7 +87,7 @@ export function ResellerBankSetup({ resellerId }: ResellerBankSetupProps) {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch('/api/pagarme/revendedora-status', {
+      const response = await fetch(`/api/split/reseller-status/${resellerId}`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -142,11 +142,29 @@ export function ResellerBankSetup({ resellerId }: ResellerBankSetupProps) {
     setSaving(true);
 
     try {
-      const response = await fetch('/api/pagarme/onboarding-revendedora', {
+      const response = await fetch(`/api/split/setup-reseller-self/${resellerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          nomeCompleto: formData.nomeCompleto,
+          cpf: formData.cpf.replace(/\D/g, ''),
+          email: formData.email,
+          telefone: formData.telefone.replace(/\D/g, ''),
+          dataNascimento: formData.dataNascimento,
+          nomeMae: formData.nomeMae,
+          cep: formData.endereco.cep.replace(/\D/g, ''),
+          endereco: formData.endereco.rua,
+          enderecoNumero: formData.endereco.numero,
+          complemento: formData.endereco.complemento,
+          bairro: formData.endereco.bairro,
+          cidade: formData.endereco.cidade,
+          estado: formData.endereco.estado,
+          banco: formData.bancoCode,
+          agencia: formData.agencia,
+          conta: formData.conta + formData.contaDv,
+          tipoConta: formData.tipoConta,
+        }),
       });
 
       const data = await response.json();

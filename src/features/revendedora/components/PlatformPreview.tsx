@@ -12,6 +12,7 @@ interface PlatformPreviewProps {
   buttonColor: string;
   buttonTextColor: string;
   sidebarColor: string;
+  containerColor?: string;
   logoUrl: string;
   logoSize: 'small' | 'medium' | 'large';
   companyName?: string;
@@ -28,6 +29,7 @@ export function PlatformPreview({
   buttonColor,
   buttonTextColor,
   sidebarColor,
+  containerColor = '#ffffff',
   logoUrl,
   logoSize,
   companyName,
@@ -146,19 +148,18 @@ export function PlatformPreview({
       minHeight: isDesktop ? 340 : 400,
       gap: isDesktop ? 16 : 12,
       fontFamily: 'Arial, sans-serif',
-      background: buttonColor !== '#9b87f5'
-        ? `linear-gradient(135deg, ${backgroundColor} 0%, ${sidebarColor}15 50%, ${backgroundColor} 100%)`
-        : 'linear-gradient(to bottom right, #faf5ff, #eef2ff)', // from-purple-50 to-indigo-50
+      background: `linear-gradient(135deg, ${backgroundColor} 0%, ${sidebarColor}15 50%, ${backgroundColor} 100%)`,
     }}>
       {/* Logo renderizado fora do card, como na página real */}
       {logoUrl && (
-        <div style={{ marginBottom: 12 }}>
+        <div style={{ marginBottom: 12, padding: '8px 16px', borderRadius: 8, backgroundColor: `${sidebarColor}22` }}>
           <img
             src={logoUrl}
             alt="Logo"
             style={{
               height: logoSize === 'small' ? 48 : logoSize === 'large' ? 120 : 80,
-              objectFit: 'contain'
+              objectFit: 'contain',
+              display: 'block',
             }}
           />
         </div>
@@ -166,7 +167,7 @@ export function PlatformPreview({
 
       {/* Card que encapsula o formulário */}
       <div style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: containerColor,
         borderRadius: 8,
         padding: isDesktop ? 24 : 16,
         width: '100%',
@@ -197,7 +198,7 @@ export function PlatformPreview({
 
         <h2
           style={{
-            color: buttonColor !== '#9b87f5' ? headingColor : undefined, // Inherit or default if not custom
+            color: headingColor,
             fontSize: isDesktop ? 20 : 18,
             fontWeight: 700,
             margin: '0 0 4px 0',
@@ -210,7 +211,7 @@ export function PlatformPreview({
 
         <p style={{
           fontSize: isDesktop ? 12 : 11,
-          color: buttonColor !== '#9b87f5' ? `${textColor}99` : undefined, // Use default text color if not custom
+          color: `${textColor}99`,
           textAlign: 'center',
           margin: '0 0 20px 0'
         }}>
@@ -218,48 +219,34 @@ export function PlatformPreview({
         </p>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' as const, gap: 14 }}>
-          <div>
-            <label style={{ fontSize: isDesktop ? 12 : 11, color: buttonColor !== '#9b87f5' ? textColor : '#000', fontWeight: 500, display: 'block', marginBottom: 6, fontFamily: 'Arial, sans-serif' }}>
-              Email
-            </label>
-            <div
-              data-testid="mock-input-email"
-              style={{
-                width: '100%',
-                padding: isDesktop ? '8px 12px' : '8px 10px',
-                borderRadius: 6,
-                border: '1px solid #e2e8f0',
-                backgroundColor: '#ffffff',
-                fontSize: isDesktop ? 13 : 12,
-                color: '#64748b',
-                fontFamily: 'Arial, sans-serif',
-                boxSizing: 'border-box' as const,
-              }}
-            >
-              seu@email.com
+          {[
+            { testid: 'mock-input-nome', label: 'Nome Completo', placeholder: 'João da Silva' },
+            { testid: 'mock-input-email', label: 'Email', placeholder: 'seu@email.com' },
+            { testid: 'mock-input-cpf', label: 'CPF', placeholder: '000.000.000-00' },
+            { testid: 'mock-input-telefone', label: 'Telefone', placeholder: '(11) 99999-9999' },
+          ].map((field) => (
+            <div key={field.testid}>
+              <label style={{ fontSize: isDesktop ? 12 : 11, color: textColor, fontWeight: 500, display: 'block', marginBottom: 4, fontFamily: 'Arial, sans-serif' }}>
+                {field.label}
+              </label>
+              <div
+                data-testid={field.testid}
+                style={{
+                  width: '100%',
+                  padding: isDesktop ? '7px 12px' : '7px 10px',
+                  borderRadius: 6,
+                  border: `1px solid ${textColor}30`,
+                  backgroundColor: 'rgba(255,255,255,0.25)',
+                  fontSize: isDesktop ? 12 : 11,
+                  color: `${textColor}80`,
+                  fontFamily: 'Arial, sans-serif',
+                  boxSizing: 'border-box' as const,
+                }}
+              >
+                {field.placeholder}
+              </div>
             </div>
-          </div>
-          <div>
-            <label style={{ fontSize: isDesktop ? 12 : 11, color: buttonColor !== '#9b87f5' ? textColor : '#000', fontWeight: 500, display: 'block', marginBottom: 6, fontFamily: 'Arial, sans-serif' }}>
-              CPF
-            </label>
-            <div
-              data-testid="mock-input-cpf"
-              style={{
-                width: '100%',
-                padding: isDesktop ? '8px 12px' : '8px 10px',
-                borderRadius: 6,
-                border: '1px solid #e2e8f0',
-                backgroundColor: '#ffffff',
-                fontSize: isDesktop ? 13 : 12,
-                color: '#64748b',
-                fontFamily: 'Arial, sans-serif',
-                boxSizing: 'border-box' as const,
-              }}
-            >
-              000.000.000-00
-            </div>
-          </div>
+          ))}
           <button
             data-testid="mock-button-entrar"
             style={{
@@ -328,7 +315,7 @@ export function PlatformPreview({
                   key={stat.label}
                   data-testid={`stat-card-${stat.label.toLowerCase()}`}
                   style={{
-                    backgroundColor: '#ffffff',
+                    backgroundColor: containerColor,
                     borderRadius: 8,
                     padding: isDesktop ? '14px 12px' : '10px 8px',
                     border: `1px solid ${textColor}10`,
@@ -389,7 +376,7 @@ export function PlatformPreview({
                   key={product.name}
                   data-testid={`product-card-${idx}`}
                   style={{
-                    backgroundColor: '#ffffff',
+                    backgroundColor: containerColor,
                     borderRadius: 8,
                     overflow: 'hidden',
                     border: `1px solid ${textColor}10`,
