@@ -21,10 +21,13 @@ import resellerCatalogRoutes from "./routes/resellerCatalog";
 import assinaturaRoutes from "./routes/assinatura";
 import pagarmeRoutes from "./routes/pagarme";
 import pagarmePublicRoutes from "./routes/pagarmePublic";
+import publicCheckoutRoutes from "./routes/publicCheckout";
 import publicStoreRoutes from "./routes/publicStore";
 import walletRoutes from "./routes/wallet";
 import splitRoutes from "./routes/split";
 import monitoringRoutes from "./routes/monitoring";
+import gapsRoutes from "./routes/gaps";
+import chatRoutes from "./routes/chat";
 
 // Configure multer for logo uploads
 const logoStorage = multer.diskStorage({
@@ -59,9 +62,13 @@ export async function registerRoutes(app: Express) {
   // Create HTTP server
   const httpServer = createServer(app);
 
+  // Internal sync - DEVE SER O PRIMEIRO, sem nenhum middleware antes
+  app.use("/api/internal", publicStoreRoutes);
+
   // 🔍 MONITORING ROUTES - Must be registered first (no auth required)
   // Health check and monitoring logs for frontend monitoring system
   app.use("/api", monitoringRoutes);
+
 
   app.use("/auth", authRoutes);
 
@@ -89,7 +96,10 @@ export async function registerRoutes(app: Express) {
 
   // Public checkout routes - NO AUTH required (for public store purchases)
   // Must be registered BEFORE redirectIfNotAuth middleware
-  app.use("/api/public/checkout", pagarmePublicRoutes);
+  app.use("/api/public/checkout", publicCheckoutRoutes); // Asaas
+  // GAPS - rotas internas n8n sem autenticacao de sessao
+  app.use("/api/gaps", gapsRoutes);
+  app.use("/api/chat", chatRoutes);
   app.use("/api/public/store", publicStoreRoutes);
 
   // Public shipping quote route - REMOVED
@@ -133,6 +143,8 @@ export async function registerRoutes(app: Express) {
   app.use("/api/dashboard", requireTenant, dashboardRoutes);
   app.use("/api/clients", requireTenant, clientsRoutes);
   registerNotificationRoutes(app);
+  // Public route: evolution/connection (usado pelo front revendedora sem autenticacao de tenant)
+  app.get("/api/evolution/connection", evolutionRoutes);
   app.use("/api/evolution", requireTenant, evolutionRoutes);
   app.use("/api/whatsapp", requireTenant, whatsappRoutes);
   registerWhatsAppCompleteRoutes(app);

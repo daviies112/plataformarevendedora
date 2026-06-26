@@ -151,12 +151,14 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     const { storeId } = req.params;
     if (!storeId) return res.status(400).json({ error: 'storeId required' });
 
-    let tenantId = process.env.REID_TENANT_ID || 'emerick';
+    let tenantId = '';
 
     // 1. Resolver a loja pelo slug, reseller_id UUID, ou email da revendedora
+    // Prioridade: revendedoras.tenant_id > reseller_stores.tenant_id > env fallback
     const storeResult = await pool.query(
       `SELECT rs.reseller_id, rs.product_ids, rs.store_name, rs.store_slug, rs.is_published,
-              r.tenant_id, r.email
+              rs.tenant_id AS store_tenant_id,
+              r.tenant_id AS reseller_tenant_id, r.email
        FROM reseller_stores rs
        LEFT JOIN revendedoras r ON r.id = rs.reseller_id
        WHERE rs.store_slug = $1
@@ -171,7 +173,12 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Loja nao encontrada' });
     }
     const store = storeResult.rows[0];
-    if (store.tenant_id) tenantId = store.tenant_id;
+    // Resolver tenant_id em cascata: revendedoras > reseller_stores > env
+    tenantId = store.reseller_tenant_id || store.store_tenant_id || '';
+    if (!tenantId) {
+      console.warn(`[PublicStore/full] tenant_id nao encontrado para storeId=${storeId} - retornando 404`);
+      return res.status(404).json({ error: 'Loja sem tenant configurado' });
+    }
 
     // 2. store_settings
     const settingsResult = await pool.query(
@@ -184,7 +191,7 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     let banners: any[] = [];
     try {
       const bannersResult = await pool.query(
-        `SELECT * FROM store_banners WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
+        `SELECT * FROM store_banners WHERE tenant_id = $1 AND is_active = true ORDER BY display_order ASC`,
         [tenantId]
       );
       banners = bannersResult.rows || [];
@@ -194,7 +201,7 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     let benefits: any[] = [];
     try {
       const benefitsResult = await pool.query(
-        `SELECT * FROM store_benefits WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
+        `SELECT * FROM store_benefits WHERE tenant_id = $1 AND is_active = true ORDER BY display_order ASC`,
         [tenantId]
       );
       benefits = benefitsResult.rows || [];
@@ -204,7 +211,7 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     let videos: any[] = [];
     try {
       const videosResult = await pool.query(
-        `SELECT * FROM store_videos WHERE tenant_id = $1 AND active = true ORDER BY sort_order ASC`,
+        `SELECT * FROM store_videos WHERE tenant_id = $1 AND is_active = true ORDER BY display_order ASC`,
         [tenantId]
       );
       videos = videosResult.rows || [];
@@ -214,7 +221,7 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     let mosaics: any[] = [];
     try {
       const mosaicsResult = await pool.query(
-        `SELECT * FROM store_mosaics WHERE tenant_id = $1 ORDER BY sort_order ASC LIMIT 20`,
+        `SELECT * FROM store_mosaics WHERE tenant_id = $1 ORDER BY display_order ASC LIMIT 20`,
         [tenantId]
       );
       mosaics = mosaicsResult.rows || [];
@@ -226,7 +233,8 @@ router.get('/store/:storeId/full', async (req: Request, res: Response) => {
     if (productIds.length > 0) {
       const placeholders = productIds.map((_: any, i: number) => `$${i + 1}`).join(',');
       const productsResult = await pool.query(
-        `SELECT * FROM products WHERE id IN (${placeholders})`,
+        `SELECT id, description, price, preco_venda, image, imagem_url, category, reference, stock
+         FROM products WHERE id IN (${placeholders})`,
         productIds
       );
       products = productsResult.rows || [];
@@ -664,9 +672,9 @@ router.get('/branding', async (req: Request, res: Response) => {
         tenantId = subdomain;
       }
     }
-    // 4. Fallback
+    // 4. Sem fallback hardcoded - retornar 400 se tenant não resolvido
     if (!tenantId) {
-      tenantId = process.env.REID_TENANT_ID || 'emerick';
+      return res.status(400).json({ error: 'tenant_id nao resolvido - informe ?tenant=SEU_TENANT ou use subdominio' });
     }
     const result = await pool.query(
       `SELECT company_name, primary_color, secondary_color, accent_color,

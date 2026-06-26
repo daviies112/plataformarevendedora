@@ -189,7 +189,8 @@ router.post('/create-sale', async (req, res) => {
       clienteNome,
       clienteTelefone,
       paymentId, // New neutral name
-      stripePaymentId // Legacy: kept for backward compatibility with existing clients
+      stripePaymentId, // Legacy: kept for backward compatibility with existing clients
+      maletaItemId // Opcional: id do item da maleta sendo vendido
     } = req.body;
 
     if (!revendedoraId || !valorTotal) {
@@ -228,7 +229,8 @@ router.post('/create-sale', async (req, res) => {
         status_pagamento: 'pendente',
         stripe_payment_id: paymentId || stripePaymentId || null, // Accepts both new and legacy field names
         cliente_nome: clienteNome || null,
-        cliente_telefone: clienteTelefone || null
+        cliente_telefone: clienteTelefone || null,
+        maleta_item_id: maletaItemId || null
       })
       .select()
       .single();
@@ -238,11 +240,31 @@ router.post('/create-sale', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao registrar venda' });
     }
 
+    // 🚀 MALETA: Se veio maletaItemId, baixar o item da maleta (status = vendido)
+    if (maletaItemId) {
+      const { error: maletaUpdateError } = await supabaseOwner
+        .from('maleta_items')
+        .update({
+          status: 'vendido',
+          quantidade_vendida: 1,
+          data_ultima_venda: new Date().toISOString(),
+          vendido_por: revendedoraId
+        })
+        .eq('id', maletaItemId)
+        .eq('tenant_id', tenantIdVerificado); // segurança: só atualiza do tenant correto
+      if (maletaUpdateError) {
+        console.warn('[NEXUS] Aviso: nao conseguiu baixar item da maleta:', maletaUpdateError.message);
+      } else {
+        console.log(`✅ [NEXUS] Item da maleta baixado: ${maletaItemId} -> vendido`);
+      }
+    }
+
     console.log(`✅ [NEXUS] Venda criada: revendedora=${revendedoraId}, admin=${adminIdVerificado}, valor=${valorTotal}`);
 
     res.json({
       success: true,
-      venda: data
+      venda: data,
+      maletaItemBaixado: !!maletaItemId
     });
 
   } catch (error) {
@@ -291,7 +313,8 @@ router.get('/maleta-items', authenticateToken, async (req: AuthRequest, res) => 
       return res.json({ success: true, items: [], produtos: [] });
     }
 
-    const produtoIds = [...new Set(items.map((i: any) => i.produto_id).filter(Boolean))];
+    // Campo no banco e product_id (nao produto_id)
+    const produtoIds = [...new Set(items.map((i: any) => i.product_id).filter(Boolean))];
     const { data: produtos } = await client
       .from('products')
       .select('*')
@@ -300,12 +323,38 @@ router.get('/maleta-items', authenticateToken, async (req: AuthRequest, res) => 
     const produtosMap: Record<string, any> = {};
     (produtos || []).forEach((p: any) => { produtosMap[p.id] = p; });
 
-    const itemsComProduto = items.map((item: any) => ({
-      ...item,
-      produto: produtosMap[item.produto_id] || null
-    }));
+    const itemsComProduto = items.map((item: any) => {
+      const prod = produtosMap[item.product_id] || null;
+      return {
+        ...item,
+        // Aliases para compatibilidade com o frontend (que usa produto_id, produto_nome, etc)
+        produto_id: item.product_id,
+        produto_nome: item.descricao_snapshot || prod?.description || prod?.nome || '',
+        preco_unitario: item.preco_snapshot || item.preco_atual_referencia || prod?.price || 0,
+        quantidade: item.quantidade_enviada || 1,
+        categoria: prod?.category || '',
+        produto: prod,
+      };
+    });
 
-    res.json({ success: true, items: itemsComProduto, total: items.length });
+    // Buscar sessao ativa da revendedora para o frontend ter maletaSessao.id
+    let sessao = null;
+    try {
+      const { data: sessaoData } = await client
+        .from('maleta_sessoes')
+        .select('id, status, etiqueta_url, codigo_rastreio, token, created_at, revendedora_id')
+        .eq('revendedora_id', revendedoraId)
+        .eq('tenant_id', tenantId)
+        .in('status', ['ativa', 'enviada', 'na_fila_expedicao'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      sessao = sessaoData || null;
+    } catch (sErr: any) {
+      console.warn('[maleta-items] sessao fetch nao critico:', sErr.message);
+    }
+
+    res.json({ success: true, items: itemsComProduto, total: items.length, sessao });
 
   } catch (error) {
     console.error('[maleta-items] Erro interno:', error);

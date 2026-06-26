@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import fetch from 'node-fetch';
-import { pagarmeService } from '../services/pagarme';
+import { pagarmeService } from '../services/pagarme'; // LEGADO mantido
+import { AsaasService } from '../services/asaas';
 import {
   getCompanyRecipientId,
   getResellerRecipientId,
@@ -176,7 +177,8 @@ router.get('/status', async (req: Request, res: Response) => {
   console.log('[Split] GET /status - Checking configuration status');
   
   try {
-    const pagarmeConfigured = pagarmeService.isConfigured();
+    // MIGRADO: status agora mostra configuracao Asaas
+    const pagarmeConfigured = false; // Pagar.me depreciado
     const companyRecipientId = await getCompanyRecipientId();
     
     const supabase = getMasterSupabaseClient();
@@ -201,8 +203,9 @@ router.get('/status', async (req: Request, res: Response) => {
       }
     }
     
-    const accountId = pagarmeService.getAccountId();
-    const isProduction = pagarmeService.isProductionMode();
+    // MIGRADO Asaas
+    const accountId = process.env.ASAAS_API_KEY ? 'asaas-configurado' : null;
+    const isProduction = !!(process.env.ASAAS_API_KEY && !process.env.ASAAS_API_KEY.startsWith('$aact_Sandbox'));
     
     const status = {
       success: true,
@@ -329,12 +332,7 @@ router.post('/setup-company', async (req: Request, res: Response) => {
       });
     }
     
-    if (!pagarmeService.isConfigured()) {
-      return res.status(400).json({
-        success: false,
-        error: 'Pagar.me não configurado. Configure CHAVE_SECRETA_TESTE e CHAVE_PUBLICA_TESTE.',
-      });
-    }
+    // MIGRADO: Asaas nao precisa de check pagarme
     
     const existingRecipient = await getCompanyRecipientId();
     if (existingRecipient) {
@@ -382,8 +380,20 @@ router.post('/setup-company', async (req: Request, res: Response) => {
       },
     };
     
-    console.log('[Split] Calling Pagar.me createCorporateRecipient...');
-    const recipient = await pagarmeService.createCorporateRecipient(recipientParams);
+    console.log('[Split] Criando subaccount no Asaas...');
+    const asaasSplit = new AsaasService();
+    const subAccount = await asaasSplit.createSubAccount({
+      name: recipientParams.company_name,
+      email: recipientParams.email,
+      cpfCnpj: recipientParams.document,
+      companyType: 'MEI',
+      mobilePhone: '11999999999',
+      address: recipientParams.main_address?.street || 'Av Paulista',
+      addressNumber: recipientParams.main_address?.number || '1000',
+      province: recipientParams.main_address?.neighborhood || 'Centro',
+      postalCode: recipientParams.main_address?.zip_code || '01310100',
+    });
+    const recipient = { id: subAccount.walletId || subAccount.id, code: subAccount.id, status: 'active' };
     
     console.log('[Split] Recipient created successfully');
     
@@ -516,7 +526,9 @@ router.post('/setup-reseller/:resellerId', async (req: Request, res: Response) =
     
     console.log('[Split] Creating individual recipient with document ending in:', maskDocument(recipientParams.document));
     
-    const recipient = await pagarmeService.createIndividualRecipient(recipientParams);
+    // Pagar.me descontinuado - redirect para Asaas
+    return res.status(410).json({ error: "PAGARME_DISCONTINUED", message: "Use /api/asaas/onboarding-revendedor" });
+    // DEAD CODE: const recipient = await pagarmeService.createIndividualRecipient(recipientParams);
     
     console.log('[Split] Recipient created successfully');
     
@@ -555,7 +567,9 @@ router.get('/recipients', async (req: Request, res: Response) => {
     
     console.log('[Split] Listing recipients');
     
-    const response = await pagarmeService.listRecipients(page, size);
+    // Pagar.me descontinuado
+    return res.status(410).json({ error: "PAGARME_DISCONTINUED", message: "Listagem Pagar.me descontinuada" });
+    // DEAD CODE: const response = await pagarmeService.listRecipients(page, size);
     
     console.log('[Split] Recipients listed successfully');
     
@@ -571,6 +585,7 @@ router.get('/recipients', async (req: Request, res: Response) => {
 });
 
 router.post('/test-order', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint de teste legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   console.log('[Split] POST /test-order - Creating test order with split');
@@ -716,6 +731,7 @@ router.post('/test-order', async (req: Request, res: Response) => {
 });
 
 router.post('/test-pix-no-split', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint de teste PIX legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   console.log('[Split] POST /test-pix-no-split - Creating test PIX order WITHOUT split');
@@ -785,6 +801,7 @@ router.post('/test-pix-no-split', async (req: Request, res: Response) => {
 });
 
 router.post('/test-card-split', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint de teste cartao split legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   console.log('[Split] POST /test-card-split - Creating test CARD order WITH split');
@@ -915,6 +932,7 @@ router.post('/test-card-split', async (req: Request, res: Response) => {
 });
 
 router.post('/test-card-no-split', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint de teste cartao sem split legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   console.log('[Split] POST /test-card-no-split - Creating test CARD order WITHOUT split');
@@ -1020,6 +1038,7 @@ router.post('/test-card-no-split', async (req: Request, res: Response) => {
 // ENDPOINT: Calcular Split com Comissões (apenas simulação)
 // ============================================================
 router.post('/calculate-commission', async (req: Request, res: Response) => {
+  if (!requireAdmin(req, res)) return;
   console.log('[Split] POST /calculate-commission - Calculating split with fees');
   
   const { 
@@ -1070,6 +1089,7 @@ router.post('/calculate-commission', async (req: Request, res: Response) => {
 // ENDPOINT: Testar Split Completo com Comissões (CARTÃO)
 // ============================================================
 router.post('/test-full-split', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint de teste full split legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   console.log('[Split] POST /test-full-split - Creating test order WITH full commission split');
@@ -1212,6 +1232,7 @@ router.post('/test-full-split', async (req: Request, res: Response) => {
 });
 
 router.get('/recipient/:recipientId', async (req: Request, res: Response) => {
+  return res.status(410).json({ deprecated: true, error: 'Endpoint recipient legado Pagar.me - migrado para Asaas' });
   if (!requireAdmin(req, res)) return;
   
   const { recipientId } = req.params;
@@ -1225,7 +1246,9 @@ router.get('/recipient/:recipientId', async (req: Request, res: Response) => {
       });
     }
     
-    const recipient = await pagarmeService.getRecipient(recipientId);
+    // Pagar.me descontinuado
+    return res.status(410).json({ error: "PAGARME_DISCONTINUED", message: "Use /api/asaas para consultar recebedores" });
+    // DEAD CODE: const recipient = await pagarmeService.getRecipient(recipientId);
     
     res.json({
       success: true,
@@ -1243,7 +1266,10 @@ router.get('/resellers-analytics', async (req: Request, res: Response) => {
   console.log('[Split] GET /resellers-analytics - Fetching reseller data from tenant Supabase');
   
   try {
-    const tenantId = (req as any).user?.tenantId || 'dev-teste_empresa_com';
+    const tenantId = (req as any).user?.tenantId;
+    if (!tenantId) {
+      return res.status(401).json({ success: false, error: 'Sessão inválida - faça login novamente', code: 'TENANT_ID_MISSING' });
+    }
     const { client: tenantSupabase, url: supabaseUrl, source } = await getTenantSupabaseClient(tenantId);
     
     if (!tenantSupabase) {
@@ -1349,7 +1375,10 @@ router.get('/commission-config', async (req: Request, res: Response) => {
   console.log('[Split] GET /commission-config - Loading commission configuration');
   
   try {
-    const tenantId = (req as any).user?.tenantId || 'dev-teste_empresa_com';
+    const tenantId = (req as any).user?.tenantId;
+    if (!tenantId) {
+      return res.status(401).json({ success: false, error: 'Sessão inválida - faça login novamente', code: 'TENANT_ID_MISSING' });
+    }
     const { client: tenantSupabase, source } = await getTenantSupabaseClient(tenantId);
     
     if (!tenantSupabase) {
@@ -1420,7 +1449,10 @@ router.post('/commission-config', async (req: Request, res: Response) => {
       });
     }
     
-    const tenantId = (req as any).user?.tenantId || 'dev-teste_empresa_com';
+    const tenantId = (req as any).user?.tenantId;
+    if (!tenantId) {
+      return res.status(401).json({ success: false, error: 'Sessão inválida - faça login novamente', code: 'TENANT_ID_MISSING' });
+    }
     const { client: tenantSupabase, source } = await getTenantSupabaseClient(tenantId);
     
     if (!tenantSupabase) {
@@ -1480,7 +1512,10 @@ router.get('/product-requests', async (req: Request, res: Response) => {
   console.log('[Split] GET /product-requests - Loading product requests for admin');
   
   try {
-    const tenantId = (req as any).user?.tenantId || 'dev-teste_empresa_com';
+    const tenantId = (req as any).user?.tenantId;
+    if (!tenantId) {
+      return res.status(401).json({ success: false, error: 'Sessão inválida - faça login novamente', code: 'TENANT_ID_MISSING' });
+    }
     const { client: tenantClient, source } = await getTenantSupabaseClient(tenantId);
     
     if (!tenantClient) {
@@ -1553,7 +1588,10 @@ router.patch('/product-requests/:id', async (req: Request, res: Response) => {
   }
   
   try {
-    const tenantId = (req as any).user?.tenantId || 'dev-teste_empresa_com';
+    const tenantId = (req as any).user?.tenantId;
+    if (!tenantId) {
+      return res.status(401).json({ success: false, error: 'Sessão inválida - faça login novamente', code: 'TENANT_ID_MISSING' });
+    }
     const { client: tenantClient, source } = await getTenantSupabaseClient(tenantId);
     
     if (!tenantClient) {

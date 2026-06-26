@@ -380,7 +380,7 @@ router.post('/admin/update-price', authenticateToken, async (req: AuthRequest, r
   }
 });
 
-router.post('/initialize-prices', async (req, res) => {
+router.post('/initialize-prices', authenticateToken, async (req: AuthRequest, res) => {
   try {
     await walletService.initializeDefaultPrices();
     res.json({ success: true, message: 'Preços padrão inicializados' });

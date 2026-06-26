@@ -82,9 +82,22 @@ export async function getCommissionConfig(): Promise<CommissionConfig> {
     }
 
     console.log('[Commission] Config loaded from Supabase');
+
+    // Normalizar campos PT->EN se necessario (suporte a ambos os formatos)
+    const rawTiers = data.sales_tiers?.length > 0 ? data.sales_tiers : [];
+    const normalizedTiers: SalesTier[] = rawTiers.map((t: any, i: number) => ({
+      id: t.id ?? String(i + 1),
+      name: t.name ?? t.nome ?? `Tier ${i + 1}`,
+      min_monthly_sales: t.min_monthly_sales ?? t.vendasMin ?? 0,
+      max_monthly_sales: t.max_monthly_sales ?? t.vendasMax,
+      // percentualEmpresa = company%, entao reseller = 100 - company
+      company_percentage: t.company_percentage ?? t.percentualEmpresa ?? 35,
+      reseller_percentage: t.reseller_percentage ?? (100 - (t.percentualEmpresa ?? 35)),
+    }));
+
     return {
-      use_dynamic_tiers: data.use_dynamic_tiers || false,
-      sales_tiers: data.sales_tiers?.length > 0 ? data.sales_tiers : DEFAULT_TIERS,
+      use_dynamic_tiers: data.use_dynamic_tiers ?? true,
+      sales_tiers: normalizedTiers.length > 0 ? normalizedTiers : DEFAULT_TIERS,
     };
   } catch (error) {
     console.error('[Commission] Error loading config:', error);

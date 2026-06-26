@@ -1,6 +1,8 @@
 import type { Request, Response, Router } from "express";
 import { Router as createRouter } from "express";
-import { checkCompliance, reprocessCheck } from "../lib/datacorpCompliance.js";
+// [PROXY] Consulta delegada para plataformacompleta (5001) via proxyCpfCheck
+import { proxyCpfCheck } from "../lib/proxyCpfCheck.js";
+import { reprocessCheck } from "../lib/datacorpCompliance.js";
 import { validateCPF, normalizeCPF, decryptCPF, formatCPF, tenantIdToUUID } from "../lib/cryptoCompliance.js";
 import { isBigdatacorpConfigured } from "../lib/bigdatacorpClient.js";
 import { z } from "zod";
@@ -145,14 +147,15 @@ export function setupComplianceRoutes(): Router {
       
       console.log(`[CPF Check] Autenticado: ${isAuthenticated}, User: ${finalUserId}, Tenant: ${finalTenantId}, ForceRefresh: ${!!forceRefresh}`);
 
-      const result = await checkCompliance(normalizedCpf, {
+      // [PROXY] Delega para plataformacompleta — sem chamada local à BigDataCorp
+      const result = await proxyCpfCheck(normalizedCpf, {
         tenantId: finalTenantId,
         leadId,
         submissionId,
         createdBy: finalUserId,
         personName: personName || undefined,
-        personPhone: personPhone || undefined, // Telefone para sincronização de etiquetas WhatsApp
-        forceRefresh: forceRefresh || false, // Passa o parâmetro forceRefresh
+        personPhone: personPhone || undefined,
+        forceRefresh: forceRefresh || false,
       });
 
       // WALLET: Debitar saldo APÓS consulta bem-sucedida (apenas se Pagar.me configurado E autenticado)
@@ -194,7 +197,8 @@ export function setupComplianceRoutes(): Router {
         : DEMO_TENANT_ID;      // DEMO apenas para anônimos
       
       // Convert tenantId to UUID for PostgreSQL query
-      const tenantId = tenantIdToUUID(sessionTenantId);
+      // tenant_id no banco é slug direto (FK -> tenants_registry.slug)
+      const tenantId = sessionTenantId;
       
       const checks = await db.select()
         .from(datacorpChecks)
@@ -241,9 +245,9 @@ export function setupComplianceRoutes(): Router {
       const finalUserId = isAuthenticated ? req.session.userId! : "anonymous";
       const limit = parseInt(req.query.limit as string) || 10;
       
-      // Convert tenantId and userId to UUID for all database queries
-      const tenantUUID = tenantIdToUUID(sessionTenantId);
-      const userUUID = tenantIdToUUID(finalUserId);
+      // tenant_id no banco é slug direto (FK -> tenants_registry.slug); created_by é UUID do usuário
+      const tenantUUID = sessionTenantId;
+      const userUUID = finalUserId;
       
       console.log('[CPF Recent] Buscando por tenant_id:', tenantUUID, 'OU created_by:', userUUID);
       
@@ -284,7 +288,7 @@ export function setupComplianceRoutes(): Router {
         checks = data || [];
       }
       
-      const formattedChecks = checks.map(convertSupabaseCheckToCamelCase);
+      const formattedChecks = checks.map(convertSupabaseCheckToCamelCase).map(({ payload, ...rest }: any) => rest);
       
       return res.json(formattedChecks);
     } catch (error) {
@@ -314,9 +318,9 @@ export function setupComplianceRoutes(): Router {
       const userEmail = req.session?.userEmail || null;
       const limit = parseInt(req.query.limit as string) || 100;
       
-      // Convert tenantId and userId to UUID for all database queries
-      const tenantUUID = tenantIdToUUID(finalTenantId);
-      const userUUID = tenantIdToUUID(finalUserId);
+      // tenant_id no banco é slug direto (FK -> tenants_registry.slug); created_by é UUID do usuário
+      const tenantUUID = finalTenantId;
+      const userUUID = finalUserId;
       
       console.log('[CPF History] isAuthenticated:', isAuthenticated);
       console.log('[CPF History] session.userEmail:', userEmail);
@@ -490,7 +494,7 @@ export function setupComplianceRoutes(): Router {
         console.log('[CPF History] Registros encontrados no PostgreSQL local:', checks.length);
       }
       
-      const formattedChecks = checks.map(convertSupabaseCheckToCamelCase);
+      const formattedChecks = checks.map(convertSupabaseCheckToCamelCase).map(({ payload, ...rest }: any) => rest);
       console.log('[CPF History] Retornando', formattedChecks.length, 'registros formatados');
       
       return res.json(formattedChecks);
@@ -506,7 +510,14 @@ export function setupComplianceRoutes(): Router {
   router.get("/api/compliance/check/:id", async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      
+
+      // SEGURANÇA: Exigir autenticação para acesso a dados de CPF
+      const isAuthenticated = !!req.session?.userId;
+      if (!isAuthenticated) {
+        return res.status(401).json({ error: "Não autorizado" });
+      }
+      const sessionTenantId = req.session.tenantId || req.session.userId!;
+
       const data = await db.select()
         .from(datacorpChecks)
         .where(eq(datacorpChecks.id, id))
@@ -515,7 +526,16 @@ export function setupComplianceRoutes(): Router {
       if (!data || data.length === 0) {
         return res.status(404).json({ error: "Consulta não encontrada" });
       }
-      
+
+      // SEGURANÇA: Verificar ownership — tenant do registro deve bater com o da sessão
+      const record = data[0] as any;
+      const recordTenantId = record.tenantId ?? record.tenant_id ?? '';
+      // Comparar slug-para-slug (tenant_id no banco é slug, session.tenantId também é slug)
+      if (recordTenantId && recordTenantId !== sessionTenantId) {
+        console.warn(`[SECURITY] check/:id acesso negado. Session: ${sessionTenantId}, Record: ${recordTenantId}`);
+        return res.status(403).json({ error: "Acesso negado a este registro" });
+      }
+
       const check = convertSupabaseCheckToCamelCase(data[0]);
       return res.json(check);
     } catch (error) {
@@ -560,7 +580,7 @@ export function setupComplianceRoutes(): Router {
       }
       
       const sessionTenantId = req.session.tenantId || req.session.userId!;
-      const normalizedTenantId = tenantIdToUUID(sessionTenantId);
+      const normalizedTenantId = sessionTenantId; // slug direto
       
       const { generateCompliancePDF } = await import('../lib/pdfGenerator.js');
       
@@ -601,7 +621,7 @@ export function setupComplianceRoutes(): Router {
       // SEGURANÇA: Verificar se o check pertence ao tenant do usuário
       // Normalizar ambos para UUID antes de comparar
       const checkTenantId = checkRecord.tenantId || checkRecord.tenant_id;
-      const normalizedCheckTenantId = tenantIdToUUID(checkTenantId);
+      const normalizedCheckTenantId = checkTenantId; // slug direto
       
       if (normalizedCheckTenantId !== normalizedTenantId) {
         console.warn(`[SECURITY] Tentativa de acesso não autorizado ao PDF. User tenant: ${normalizedTenantId}, Check tenant: ${normalizedCheckTenantId}`);
@@ -640,7 +660,7 @@ export function setupComplianceRoutes(): Router {
       }
       
       const sessionTenantId = req.session.tenantId || req.session.userId!;
-      const normalizedTenantId = tenantIdToUUID(sessionTenantId);
+      const normalizedTenantId = sessionTenantId; // slug direto
       
       const { generateBulkCompliancePDF } = await import('../lib/pdfGenerator.js');
       const { isSupabaseMasterConfigured, getSupabaseMasterForTenant } = await import('../lib/supabaseMaster.js');
@@ -680,7 +700,7 @@ export function setupComplianceRoutes(): Router {
           if (checkRecord) {
             // SEGURANÇA: Verificar se pertence ao tenant (normalizar para UUID)
             const checkTenantId = checkRecord.tenantId || checkRecord.tenant_id;
-            const normalizedCheckTenantId = tenantIdToUUID(checkTenantId);
+            const normalizedCheckTenantId = checkTenantId; // slug direto
             
             if (normalizedCheckTenantId === normalizedTenantId) {
               checks.push(convertSupabaseCheckToCamelCase(checkRecord));
@@ -739,6 +759,12 @@ export function setupComplianceRoutes(): Router {
   // POST /api/compliance/sync-to-cliente - Sincroniza consultas do Master para o Cliente
   router.post("/api/compliance/sync-to-cliente", async (req: Request, res: Response) => {
     try {
+      // SEGURANÇA: Exigir autenticação
+      const isAuthenticated = !!req.session?.userId;
+      const isInternalService = req.headers['x-internal-service'] === (process.env.INTERNAL_SERVICE_KEY || 'n8n-internal');
+      if (!isAuthenticated && !isInternalService) {
+        return res.status(401).json({ error: "Não autorizado" });
+      }
       const { syncMasterToCliente } = await import("../lib/cpfCompliancePoller.js");
       const result = await syncMasterToCliente();
       
@@ -771,14 +797,14 @@ export function setupComplianceRoutes(): Router {
       }
       
       // Converter para formato camelCase
-      const formattedChecks = result.checks.map(convertSupabaseCheckToCamelCase);
+      const formattedChecks = result.checks.map(convertSupabaseCheckToCamelCase).map(({ payload, ...rest }: any) => rest);
       
       // Add diagnostic info: get session tenant for comparison
       const isAuthenticated = !!req.session?.userId;
       const sessionTenantId = isAuthenticated 
         ? (req.session.tenantId || req.session.userId!)
         : DEMO_TENANT_ID;
-      const sessionTenantUUID = tenantIdToUUID(sessionTenantId);
+      const sessionTenantUUID = sessionTenantId; // slug direto
       
       // Count tenant distribution for diagnostic
       const tenantDistribution: Record<string, number> = {};
@@ -790,9 +816,11 @@ export function setupComplianceRoutes(): Router {
       // Find records that should be visible to current user
       const matchingTenantCount = formattedChecks.filter(c => c.tenantId === sessionTenantUUID).length;
       
+      // SEGURANÇA: Só retornar registros do tenant atual no campo 'checks'
+      const tenantChecks = formattedChecks.filter(c => c.tenantId === sessionTenantUUID);
       return res.json({
         success: true,
-        count: formattedChecks.length,
+        count: tenantChecks.length,
         diagnostic: {
           sessionTenantId,
           sessionTenantUUID,
@@ -802,7 +830,7 @@ export function setupComplianceRoutes(): Router {
             ? `⚠️ ${formattedChecks.length - matchingTenantCount} registros têm tenant_id diferente e não aparecem no histórico filtrado`
             : '✅ Todos os registros pertencem ao tenant atual'
         },
-        checks: formattedChecks
+        checks: tenantChecks
       });
     } catch (error) {
       console.error("Erro ao buscar consultas do Master:", error);
@@ -824,13 +852,19 @@ export function setupComplianceRoutes(): Router {
       
       const { sourceTenantId: customSourceTenantId } = req.body;
       const sessionTenantId = req.session.tenantId || req.session.userId!;
-      const targetTenantId = tenantIdToUUID(sessionTenantId);
-      const systemTenantId = tenantIdToUUID("system");
+      const targetTenantId = sessionTenantId; // slug direto
+      const systemTenantId = "system"; // slug direto
       const demoTenantId = DEMO_TENANT_ID;
+
+      // SECURITY: Restringir sourceTenantId a apenas valores permitidos
+      if (customSourceTenantId && customSourceTenantId !== systemTenantId && customSourceTenantId !== demoTenantId) {
+        console.warn(`[Migration] BLOQUEADO: sourceTenantId inválido: ${customSourceTenantId}`);
+        return res.status(403).json({ error: "sourceTenantId não permitido" });
+      }
       
       // Source tenants to migrate from (in priority order)
       const sourceTenants = customSourceTenantId 
-        ? [tenantIdToUUID(customSourceTenantId)]
+        ? [customSourceTenantId] // slug direto
         : [systemTenantId, demoTenantId];
       
       console.log(`[Migration] Migrando registros para ${targetTenantId}`);
@@ -933,6 +967,7 @@ export function setupComplianceRoutes(): Router {
       let query = supabase
         .from('datacorp_checks')
         .select('*')
+        .eq('tenant_id', sessionTenantId)  // SEGURANÇA: filtrar por tenant
         .order('consulted_at', { ascending: false })
         .limit(50);
       
@@ -954,6 +989,7 @@ export function setupComplianceRoutes(): Router {
         const { data: allChecks } = await supabase
           .from('datacorp_checks')
           .select('*')
+          .eq('tenant_id', sessionTenantId)  // SEGURANÇA: filtrar por tenant
           .order('consulted_at', { ascending: false })
           .limit(500);
         
@@ -968,8 +1004,8 @@ export function setupComplianceRoutes(): Router {
         });
       }
       
-      const sessionTenantUUID = tenantIdToUUID(sessionTenantId);
-      const formattedChecks = results.map(convertSupabaseCheckToCamelCase);
+      const sessionTenantUUID = sessionTenantId; // slug direto
+      const formattedChecks = results.map(convertSupabaseCheckToCamelCase).map(({ payload, ...rest }: any) => rest);
       
       return res.json({
         success: true,
@@ -999,7 +1035,14 @@ export function setupComplianceRoutes(): Router {
     try {
       const { id } = req.params;
       const { processado_whatsapp_n8n } = req.body;
-      
+
+      // SEGURANÇA: Aceitar sessão autenticada OU header de serviço interno N8N
+      const isAuthenticated = !!req.session?.userId;
+      const isInternalService = req.headers['x-internal-service'] === (process.env.INTERNAL_SERVICE_KEY || 'n8n-internal');
+      if (!isAuthenticated && !isInternalService) {
+        return res.status(401).json({ error: "Não autorizado" });
+      }
+
       if (typeof processado_whatsapp_n8n !== 'boolean') {
         return res.status(400).json({ error: "processado_whatsapp_n8n must be a boolean" });
       }

@@ -1042,4 +1042,35 @@ router.get('/test-diagnostico', authenticateToken, async (req: AuthRequest, res)
   }
 });
 
+// ─────────────────────────────────────────────────────────────────────
+// GET /api/evolution/connection
+// Retorna status da conexao Evolution para a revendedora.
+// Usado pelo useChat.ts do front-end revendedora (sem autenticacao estrita).
+// ─────────────────────────────────────────────────────────────────────
+router.get('/connection', async (req, res) => {
+  try {
+    const companyId = req.query.companyId as string;
+    if (!companyId) return res.json({ success: true, connection: null });
+
+    const config = getEvolutionConfig(companyId);
+    if (!config) return res.json({ success: true, connection: null });
+
+    return res.json({
+      success: true,
+      connection: {
+        id: companyId,
+        company_id: companyId,
+        instance_name: config.instance,
+        status: 'connected',
+        phone_number: null,
+        connected_at: new Date().toISOString(),
+      },
+    });
+  } catch (err: any) {
+    console.error('[evolution] /connection erro:', err.message);
+    res.json({ success: true, connection: null });
+  }
+});
+
 export default router;
+

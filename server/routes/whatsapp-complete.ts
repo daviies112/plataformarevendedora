@@ -1007,19 +1007,25 @@ export function registerWhatsAppCompleteRoutes(app: Express) {
       
       // Importar serviços necessários
       const { leadSyncService } = await import('../formularios/services/leadSync.js');
-      const { getDynamicSupabaseClient } = await import('../formularios/utils/supabaseClient.js');
+      const { getDynamicSupabaseClient } = await import('../lib/multiTenantSupabase.js');
       
-      // Buscar cliente Supabase
-      const supabase = await getDynamicSupabaseClient();
+      // 🔐 MULTI-TENANT: obter tenantId da sessão
+      const tenantId = req.session?.tenantId;
+      if (!tenantId) {
+        return res.status(401).json({ success: false, error: 'Sessão sem tenantId' });
+      }
+      
+      // Buscar cliente Supabase isolado por tenant
+      const supabase = await getDynamicSupabaseClient(tenantId);
       
       if (!supabase) {
         return res.status(400).json({ 
           success: false, 
-          error: 'Supabase não configurado' 
+          error: 'Supabase não configurado para este tenant' 
         });
       }
       
-      // Buscar TODAS as submissions do Supabase
+      // Buscar submissions do Supabase (client já isolado por tenant)
       console.log('📡 [SYNC] Buscando submissions do Supabase...');
       const { data: submissions, error } = await supabase
         .from('form_submissions')

@@ -864,7 +864,8 @@ router.patch('/:leadId', async (req, res) => {
       const data = validation.data;
       
       // Require tenantId for multi-tenant isolation in Supabase-only mode
-      const tenantId = req.body.tenantId || req.query.tenantId;
+      // 🔐 SEGURANÇA: priorizar sessão/middleware sobre body/query
+      const tenantId = (req as any).tenantId || req.session?.tenantId || req.body.tenantId || req.query.tenantId;
       if (!tenantId || typeof tenantId !== 'string') {
         return res.status(400).json({
           success: false,

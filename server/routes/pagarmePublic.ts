@@ -664,6 +664,12 @@ router.post('/setup-company-recipient', async (req, res) => {
       });
     }
 
+    // LEGADO: endpoint substituido. Dados hardcoded removidos por segurança multitenancy.
+    return res.status(410).json({
+      success: false,
+      error: 'Endpoint legado descontinuado. Use POST /api/asaas/onboarding-empresa.',
+      deprecated: true,
+    });
     const recipient = await pagarmeService.createCorporateRecipient({
       code: 'NEXUS_COMPANY',
       company_name: '53.462.690 DAVI DE OLIVEIRA EMERICK',
